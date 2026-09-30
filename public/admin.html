@@ -3,591 +3,444 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin Panel</title>
+<title>Admin — The Green Leaf Café</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f7f5f2;color:#1a1a1a}
-body[dir=rtl]{font-family:'Noto Nastaliq Urdu','Segoe UI',Tahoma,sans-serif}
+:root{
+  --navy:#0a1628;--navy-2:#0f2038;--gold:#c9a961;--gold-2:#e0c584;--gold-3:#a8874a;
+  --cream:#f7f3ea;--cream-2:#ebe4d3;--ink:#121212;--muted:#7a7264;--line:#e2d9c5;
+  --white:#ffffff;--green:#3d6b4a;--red:#b8443a;--orange:#d97706;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--cream);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,select,textarea{font-family:inherit}
 
-/* Login */
-.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-.lcard{background:#fff;border-radius:16px;padding:32px;max-width:380px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.06)}
-.lcard h1{font-size:1.4rem;margin-bottom:6px}
-.lcard p{color:#888;font-size:.9rem;margin-bottom:20px}
-.lcard input{width:100%;padding:12px 14px;border:1px solid #e5e0da;border-radius:10px;font-size:.95rem;font-family:inherit;margin-bottom:12px;background:#faf8f5}
-.lcard input:focus{outline:none;border-color:#c2410c}
-.lbtn{width:100%;padding:13px;background:#c2410c;color:#fff;border:0;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit}
-.lerr{color:#dc2626;font-size:.85rem;margin-top:10px;text-align:center;min-height:18px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes pulseRed{0%,100%{box-shadow:0 0 0 0 rgba(184,68,58,.5)}50%{box-shadow:0 0 0 12px rgba(184,68,58,0)}}
+@keyframes pulseGold{0%,100%{box-shadow:0 0 0 0 rgba(201,169,97,.5)}50%{box-shadow:0 0 0 10px rgba(201,169,97,0)}}
 
-/* Header */
-.hdr{background:#fff;border-bottom:1px solid #eee;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:50}
-.hdr h1{font-size:1.1rem}
-.nav{display:flex;gap:6px;flex-wrap:wrap}
-.nb{padding:7px 14px;border-radius:8px;border:1px solid #e5e0da;background:#fff;font-size:.88rem;cursor:pointer;font-family:inherit;color:#333}
-.nb.on{background:#c2410c;color:#fff;border-color:#c2410c}
+/* ========== LOGIN ========== */
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--navy)}
+.lcard{background:var(--white);border-radius:20px;padding:36px 28px;max-width:400px;width:100%;animation:popIn .4s ease both}
+.lcard .brand{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:.16em;font-size:.72rem;color:var(--gold-3);text-transform:uppercase;margin-bottom:24px;text-align:center}
+.lcard h1{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.6rem;letter-spacing:-.02em;margin-bottom:6px;text-align:center}
+.lcard p{color:var(--muted);font-size:.86rem;margin-bottom:24px;text-align:center}
+.lcard input{width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:12px;font-size:.95rem;margin-bottom:12px;background:var(--cream);transition:border-color .18s}
+.lcard input:focus{outline:none;border-color:var(--gold)}
+.lcard .lbtn{width:100%;padding:15px;background:var(--navy);color:var(--white);border-radius:12px;font-size:.95rem;font-weight:700;letter-spacing:.02em;transition:background .18s}
+.lcard .lbtn:hover{background:var(--gold);color:var(--navy)}
+.lerr{color:var(--red);font-size:.85rem;margin-top:12px;text-align:center;min-height:18px}
 
-.view{display:none;padding:20px;max-width:1100px;margin:0 auto}
+/* ========== APP LAYOUT ========== */
+.app{display:none;min-height:100vh;padding-bottom:90px}
+.app.on{display:block}
+
+.topbar{background:var(--navy);color:var(--white);padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:0;z-index:60;border-bottom:1px solid rgba(201,169,97,.15)}
+.topbar-left{display:flex;align-items:center;gap:12px;min-width:0}
+.topbar .brand{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:.08em;font-size:.9rem;color:var(--white);text-transform:uppercase;white-space:nowrap}
+.topbar .brand .dot{color:var(--gold)}
+.topbar .rname{font-size:.8rem;color:rgba(255,255,255,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.logout{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:var(--white);display:flex;align-items:center;justify-content:center}
+
+/* Side rail (desktop) */
+.rail{display:none}
+.rail-btn{padding:10px 16px;border-radius:10px;color:rgba(255,255,255,.6);font-size:.85rem;font-weight:600;text-align:left;display:flex;align-items:center;gap:12px;transition:all .18s;width:100%}
+.rail-btn:hover{background:rgba(255,255,255,.05);color:var(--white)}
+.rail-btn.on{background:rgba(201,169,97,.12);color:var(--gold)}
+.rail-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* Content */
+.content{padding:22px;max-width:1200px;margin:0 auto}
+.view{display:none;animation:fadeUp .35s ease both}
 .view.on{display:block}
 
-.filters{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
-.filters select,.filters button{padding:9px 14px;border-radius:8px;border:1px solid #e5e0da;background:#fff;font-size:.9rem;cursor:pointer;font-family:inherit}
-.live{color:#16a34a;font-size:.85rem;font-weight:600}
+.page-head{margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.page-head .eyebrow{font-family:'Archivo',sans-serif;font-weight:700;font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-3);margin-bottom:8px}
+.page-head h1{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.7rem;letter-spacing:-.02em;line-height:1.1}
 
-/* Requests */
-.reqs{margin-bottom:20px}
-.req{background:#fff4ed;border:1px solid #fed7aa;border-radius:12px;padding:12px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.req button{padding:7px 14px;background:#c2410c;color:#fff;border:0;border-radius:8px;font-size:.85rem;cursor:pointer;font-family:inherit}
+/* ========== SERVICE REQUESTS BANNER ========== */
+.reqs-banner{
+  background:linear-gradient(90deg, rgba(184,68,58,.06), rgba(184,68,58,.02));
+  border:1px solid rgba(184,68,58,.35);
+  border-radius:14px;
+  padding:14px 18px;
+  margin-bottom:18px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  animation:pulseRed 1.6s ease infinite;
+}
+.reqs-banner.empty{display:none}
+.reqs-banner .rb-icon{
+  width:40px;height:40px;flex-shrink:0;
+  border-radius:10px;background:var(--red);color:var(--white);
+  display:flex;align-items:center;justify-content:center;
+}
+.reqs-banner .rb-body{flex:1;min-width:0}
+.reqs-banner .rb-title{font-family:'Archivo',sans-serif;font-weight:800;font-size:.92rem;color:var(--red);margin-bottom:2px}
+.reqs-banner .rb-list{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.req-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;background:var(--white);border-radius:99px;
+  font-size:.78rem;font-weight:600;color:var(--ink);
+  border:1px solid var(--line);
+}
+.req-chip button{
+  background:var(--red);color:var(--white);border-radius:99px;
+  padding:2px 10px;font-size:.7rem;font-weight:800;margin-left:4px;
+}
 
-/* Orders */
-.orders{display:flex;flex-direction:column;gap:12px}
-.oc{background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05);border-left:4px solid #f59e0b}
-.oc.s-preparing{border-left-color:#3b82f6}
-.oc.s-ready{border-left-color:#16a34a}
-.oc.s-served{border-left-color:#9ca3af;opacity:.75}
-.oh{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-.ot{font-weight:700;font-size:1.05rem}
-.os{font-size:.72rem;font-weight:700;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:#fff3ed;color:#c2410c}
-.s-preparing .os{background:#dbeafe;color:#1e40af}
-.s-ready .os{background:#dcfce7;color:#166534}
-.s-served .os{background:#f3f4f6;color:#6b7280}
-.oti{font-size:.8rem;color:#888}
-.oit{display:flex;flex-direction:column;gap:3px;font-size:.9rem;margin-bottom:10px;color:#444}
-.of{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #f0ebe4;padding-top:10px;flex-wrap:wrap;gap:8px}
-.otot{font-weight:700;color:#c2410c;font-size:1.05rem}
-.oact{display:flex;gap:6px;flex-wrap:wrap}
-.oact button{padding:7px 12px;border:0;border-radius:7px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit}
-.oact .go{background:#c2410c;color:#fff}
-.oact .end{background:#fee2e2;color:#991b1b}
+/* ========== ORDER CARDS ========== */
+.orders-list{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:900px){.orders-list{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1300px){.orders-list{grid-template-columns:repeat(3,1fr)}}
 
-/* Menu admin */
-.addbtn{padding:11px 20px;border:0;border-radius:10px;background:#c2410c;color:#fff;font-weight:600;font-size:.92rem;cursor:pointer;margin-bottom:16px;font-family:inherit}
-.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-.mc{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.mci{aspect-ratio:16/10;background:#f0ece6}
-.mci img{width:100%;height:100%;object-fit:cover}
-.mci .noimg{display:flex;align-items:center;justify-content:center;height:100%;font-size:2rem;opacity:.3}
-.mcinfo{padding:12px}
-.mcinfo h4{font-size:.95rem;margin-bottom:3px}
-.mcinfo p{font-size:.85rem;font-weight:700;color:#c2410c;margin-bottom:4px}
-.tag{display:inline-block;font-size:.7rem;padding:2px 8px;border-radius:10px;background:#fff3ed;color:#c2410c}
-.mact{display:flex;gap:6px;padding:10px;border-top:1px solid #f0ebe4}
-.mact button{flex:1;padding:7px;border:1px solid #e5e0da;border-radius:7px;background:#fff;font-size:.82rem;cursor:pointer;font-family:inherit}
-.mact button.del{color:#dc2626;border-color:#fecaca}
+.order-card{
+  background:var(--white);
+  border-radius:16px;
+  border:1px solid var(--line);
+  padding:18px;
+  transition:transform .18s ease;
+  animation:fadeUp .4s ease both;
+  position:relative;
+  overflow:hidden;
+}
+.order-card::before{
+  content:'';position:absolute;top:0;left:0;width:4px;height:100%;
+  background:var(--orange);
+}
+.order-card.s-preparing::before{background:#3b82f6}
+.order-card.s-ready::before{background:var(--green)}
+.order-card.s-served::before{background:#9ca3af;opacity:.6}
+.order-card.s-served{opacity:.75}
 
-/* Tables */
-.tctrl{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
-.tctrl input{width:80px;padding:9px 12px;border:1px solid #e5e0da;border-radius:8px;font-size:.9rem;font-family:inherit}
-.tctrl button{padding:9px 16px;background:#c2410c;color:#fff;border:0;border-radius:8px;font-size:.88rem;cursor:pointer;font-family:inherit}
-.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
-.tc{background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.tc h4{margin-bottom:10px;font-size:1rem}
-.tc img{width:150px;height:150px;margin:0 auto 10px;display:block}
-.tc .pin{font-size:.9rem;font-weight:700;color:#c2410c;margin-bottom:8px}
-.tc a{display:inline-block;color:#c2410c;font-size:.83rem;font-weight:600;text-decoration:none;margin-bottom:6px}
+.oc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:10px}
+.oc-table{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.15rem;letter-spacing:-.01em}
+.oc-table .k{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;display:block;margin-bottom:2px;font-family:'Inter',sans-serif}
+.oc-status{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:5px 10px;border-radius:99px;background:rgba(217,119,6,.12);color:var(--orange);white-space:nowrap}
+.s-preparing .oc-status{background:rgba(59,130,246,.12);color:#1e40af}
+.s-ready .oc-status{background:rgba(61,107,74,.12);color:var(--green)}
+.s-served .oc-status{background:rgba(0,0,0,.06);color:var(--muted)}
+.oc-time{font-size:.72rem;color:var(--muted);display:block;margin-top:3px}
 
-/* Settings form */
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:600px){.frow{grid-template-columns:1fr}}
-.fg{margin-bottom:14px}
-.fg label{display:block;font-size:.85rem;font-weight:600;margin-bottom:5px}
-.fg input,.fg textarea,.fg select{width:100%;padding:10px 12px;border:1px solid #e5e0da;border-radius:8px;font-size:.92rem;font-family:inherit;background:#faf8f5}
-.fg input:focus,.fg textarea:focus{outline:none;border-color:#c2410c}
-.fg small{color:#888;font-size:.78rem;display:block;margin-top:4px}
-.savebtn{padding:12px 24px;background:#c2410c;color:#fff;border:0;border-radius:10px;font-weight:600;font-size:.95rem;cursor:pointer;font-family:inherit}
+.oc-items{list-style:none;margin-bottom:14px;padding:12px;background:var(--cream);border-radius:10px;display:flex;flex-direction:column;gap:6px}
+.oc-items li{display:flex;justify-content:space-between;font-size:.86rem;color:var(--ink-2)}
+.oc-items li .qty{font-weight:700;color:var(--ink)}
 
-/* Modal */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:300;padding:20px;overflow-y:auto}
+.oc-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding-top:12px;border-top:1px dashed var(--line)}
+.oc-total{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.2rem;color:var(--navy);letter-spacing:-.01em}
+.oc-actions{display:flex;gap:6px;flex-wrap:wrap}
+.oc-actions button{
+  padding:8px 14px;border-radius:9px;font-size:.78rem;font-weight:700;
+  transition:all .15s;
+}
+.oc-actions .go{background:var(--navy);color:var(--white)}
+.oc-actions .go:hover{background:var(--gold);color:var(--navy)}
+.oc-actions .end{background:rgba(184,68,58,.1);color:var(--red)}
+.oc-actions .end:hover{background:var(--red);color:var(--white)}
+
+/* ========== MENU ADMIN ========== */
+.addbtn{
+  padding:12px 22px;background:var(--navy);color:var(--white);border-radius:11px;
+  font-size:.88rem;font-weight:700;letter-spacing:.02em;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.addbtn:hover{background:var(--gold);color:var(--navy)}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.menu-card{background:var(--white);border-radius:14px;overflow:hidden;border:1px solid var(--line);animation:fadeUp .4s ease both}
+.menu-card .mi{aspect-ratio:1/1;background:var(--cream-2);overflow:hidden}
+.menu-card .mi img{width:100%;height:100%;object-fit:cover}
+.menu-card .mi .noimg{display:flex;align-items:center;justify-content:center;height:100%;font-size:2.4rem;opacity:.4}
+.menu-card .mb{padding:12px 14px 14px}
+.menu-card h4{font-size:.9rem;font-weight:700;margin-bottom:3px;line-height:1.3}
+.menu-card .pr{font-family:'Archivo',sans-serif;font-weight:900;font-size:1rem;color:var(--navy)}
+.menu-card .cat{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:99px;background:var(--cream-2);color:var(--ink-2);display:inline-block;margin-top:6px}
+.menu-card .acts{display:flex;gap:6px;padding:10px 14px;border-top:1px solid var(--line)}
+.menu-card .acts button{flex:1;padding:8px;border:1px solid var(--line);background:var(--white);border-radius:8px;font-size:.78rem;font-weight:600}
+.menu-card .acts button:hover{background:var(--cream)}
+.menu-card .acts button.del{color:var(--red);border-color:rgba(184,68,58,.3)}
+
+/* ========== ANALYTICS ========== */
+.stats-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:20px}
+@media(min-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1000px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+
+.stat-card{
+  background:var(--white);border:1px solid var(--line);border-radius:16px;
+  padding:22px;animation:fadeUp .4s ease both;
+}
+.stat-card .lbl{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:10px}
+.stat-card .amt{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.8rem;letter-spacing:-.02em;color:var(--navy);line-height:1;margin-bottom:10px}
+.stat-card .sub{display:flex;gap:14px;font-size:.78rem;color:var(--muted)}
+.stat-card .sub .it{font-weight:700;color:var(--ink-2)}
+
+.top-items-card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;margin-top:18px}
+.top-items-card h3{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.15rem;letter-spacing:-.01em;margin-bottom:16px}
+.top-list{display:flex;flex-direction:column;gap:2px}
+.top-row{display:flex;align-items:center;gap:14px;padding:12px 4px;border-bottom:1px solid var(--line)}
+.top-row:last-child{border:0}
+.top-rank{font-family:'Archivo',sans-serif;font-weight:900;font-size:.9rem;color:var(--gold);width:24px}
+.top-name{flex:1;font-weight:600;font-size:.9rem}
+.top-qty{font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;color:var(--navy)}
+.top-rev{font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;color:var(--gold-3);min-width:80px;text-align:right}
+
+/* ========== TABLES ========== */
+.table-controls{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.table-controls label{font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:8px}
+.table-controls input{width:80px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;font-size:.9rem;background:var(--white)}
+.table-controls button{padding:10px 18px;background:var(--navy);color:var(--white);border-radius:10px;font-size:.85rem;font-weight:700}
+.table-controls button:hover{background:var(--gold);color:var(--navy)}
+
+.tables-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.table-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;animation:fadeUp .4s ease both}
+.table-card h4{font-family:'Archivo',sans-serif;font-weight:800;font-size:.9rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.table-card img{width:100%;max-width:160px;margin:0 auto 12px;display:block;border-radius:8px}
+.table-card .pin{font-family:'Archivo',sans-serif;font-weight:900;font-size:.95rem;letter-spacing:.1em;color:var(--gold-3);margin-bottom:10px}
+.table-card a{display:inline-block;padding:8px 14px;background:var(--cream);border-radius:8px;color:var(--ink);font-size:.78rem;font-weight:600;text-decoration:none}
+
+/* ========== SETTINGS ========== */
+.settings-form{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px;max-width:720px}
+.form-row{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}
+@media(min-width:600px){.form-row.two{grid-template-columns:1fr 1fr}}
+.fg{display:flex;flex-direction:column}
+.fg label{font-size:.8rem;font-weight:700;margin-bottom:6px;color:var(--ink-2)}
+.fg input,.fg textarea,.fg select{padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:.9rem;background:var(--cream);transition:border-color .18s}
+.fg input:focus,.fg textarea:focus{outline:none;border-color:var(--gold);background:var(--white)}
+.fg textarea{resize:vertical;min-height:72px}
+.fg small{color:var(--muted);font-size:.74rem;margin-top:4px}
+.fg.check{flex-direction:row;align-items:center;gap:10px;padding:12px 0}
+.fg.check input{width:auto}
+.save-btn{padding:13px 26px;background:var(--navy);color:var(--white);border-radius:11px;font-size:.9rem;font-weight:700;letter-spacing:.02em;margin-top:8px}
+.save-btn:hover{background:var(--gold);color:var(--navy)}
+
+/* ========== MODAL ========== */
+.ov{position:fixed;inset:0;background:rgba(10,22,40,.7);display:none;align-items:center;justify-content:center;z-index:300;padding:20px;backdrop-filter:blur(6px)}
 .ov.on{display:flex}
-.mod{background:#fff;border-radius:16px;padding:24px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto}
-.mod h2{margin-bottom:16px;font-size:1.15rem}
-.mact2{display:flex;gap:10px;margin-top:16px}
-.mact2 button{flex:1;padding:12px;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid #e5e0da;background:#fff;color:#333}
-.mact2 .save{flex:2;background:#c2410c;color:#fff;border-color:#c2410c}
-.prev{margin-top:10px}
-.prev img{max-width:180px;border-radius:8px}
+.mod{background:var(--white);border-radius:20px;padding:28px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;animation:popIn .3s ease both}
+.mod h2{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.3rem;letter-spacing:-.01em;margin-bottom:20px}
+.mod-acts{display:flex;gap:10px;margin-top:16px}
+.mod-acts button{flex:1;padding:13px;border-radius:11px;font-size:.9rem;font-weight:700;border:1px solid var(--line);background:var(--white);color:var(--ink)}
+.mod-acts button.save{flex:2;background:var(--navy);color:var(--white);border-color:var(--navy)}
+.mod-acts button.save:hover{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.img-preview{margin-top:10px}
+.img-preview img{max-width:180px;border-radius:10px;border:1px solid var(--line)}
 
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:12px 22px;border-radius:30px;font-size:.88rem;opacity:0;transition:.3s;z-index:500;pointer-events:none}
+/* ========== BOTTOM NAV (mobile) ========== */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--navy);
+  border-top:1px solid rgba(201,169,97,.15);
+  padding:6px 0 max(6px,env(safe-area-inset-bottom));
+  z-index:90;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  max-width:720px;margin:0 auto;
+}
+@media(min-width:900px){.bottom-nav{display:none}}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;color:rgba(255,255,255,.55);font-size:.6rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;transition:color .18s}
+.nav-item.on,.nav-item:hover{color:var(--gold)}
+.nav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.nav-item .badge{position:absolute;top:8px;right:calc(50% - 20px);background:var(--red);color:#fff;font-size:.6rem;font-weight:800;border-radius:99px;padding:1px 6px}
+
+/* ========== DESKTOP LAYOUT ========== */
+@media(min-width:900px){
+  .app{display:grid !important;grid-template-columns:220px 1fr;grid-template-rows:auto 1fr;grid-template-areas:"rail top" "rail content";min-height:100vh;padding-bottom:0}
+  .app.on{display:grid !important}
+  .topbar{grid-area:top;position:sticky;top:0}
+  .rail{grid-area:rail;display:flex;flex-direction:column;background:var(--navy);padding:20px 12px;gap:4px;border-right:1px solid rgba(201,169,97,.15);position:sticky;top:0;height:100vh}
+  .rail .rail-brand{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:.1em;font-size:.75rem;color:var(--gold);text-transform:uppercase;padding:8px 16px 20px;border-bottom:1px solid rgba(201,169,97,.15);margin-bottom:14px}
+  .content{grid-area:content;max-width:none}
+  .bottom-nav{display:none !important}
+}
+
+/* ========== TOAST ========== */
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:var(--white);padding:13px 22px;border-radius:12px;font-size:.85rem;font-weight:600;opacity:0;transition:all .3s;z-index:500;pointer-events:none;border:1px solid rgba(201,169,97,.3);max-width:calc(100% - 40px)}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Empty states */
+.empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:.9rem}
+.empty .big{font-size:2.6rem;opacity:.35;margin-bottom:14px}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ========== LOGIN ========== -->
 <div class="login" id="loginView">
   <div class="lcard">
-    <h1>Restaurant Admin</h1>
-    <p>Sign in to manage orders & menu</p>
-    <input id="lslug" placeholder="Restaurant slug">
-    <input id="lpass" type="password" placeholder="Password">
+    <div class="brand">— ADMIN PANEL —</div>
+    <h1>Welcome back</h1>
+    <p>Sign in to manage your restaurant</p>
+    <input id="lslug" placeholder="Restaurant slug" autocomplete="username">
+    <input id="lpass" type="password" placeholder="Password" autocomplete="current-password">
     <button class="lbtn" id="lbtn">Sign In</button>
     <div class="lerr" id="lerr"></div>
   </div>
 </div>
 
-<!-- ADMIN -->
-<div id="adminView" style="display:none">
-  <div class="hdr">
-    <h1 id="rname">Restaurant</h1>
-    <div class="nav">
-      <button class="nb on" data-v="orders">📋 Orders</button>
-      <button class="nb" data-v="menu">🍽️ Menu</button>
-      <button class="nb" data-v="tables">📱 Tables</button>
-      <button class="nb" data-v="settings">⚙️ Settings</button>
+<!-- ========== APP ========== -->
+<div class="app" id="app">
+
+  <!-- Side rail (desktop) -->
+  <aside class="rail">
+    <div class="rail-brand">GREEN LEAF · ADMIN</div>
+    <button class="rail-btn on" data-v="orders">
+      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>Orders</span>
+    </button>
+    <button class="rail-btn" data-v="analytics">
+      <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+      <span>Analytics</span>
+    </button>
+    <button class="rail-btn" data-v="menu">
+      <svg viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2z"/></svg>
+      <span>Menu</span>
+    </button>
+    <button class="rail-btn" data-v="tables">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span>Tables & QR</span>
+    </button>
+    <button class="rail-btn" data-v="settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Settings</span>
+    </button>
+  </aside>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="brand">GREEN LEAF<span class="dot">.</span></div>
+      <div class="rname" id="rname">—</div>
     </div>
-  </div>
-
-  <!-- ORDERS -->
-  <div class="view on" id="v-orders">
-    <div class="filters">
-      <select id="fs">
-        <option value="">All Orders</option>
-        <option value="pending">Pending</option>
-        <option value="preparing">Preparing</option>
-        <option value="ready">Ready</option>
-        <option value="served">Served</option>
-      </select>
-      <button id="refresh">Refresh</button>
-      <span class="live">● Live</span>
+    <div class="topbar-right">
+      <button class="logout" id="logoutBtn" title="Logout">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
     </div>
-    <div class="reqs" id="reqs"></div>
-    <div class="orders" id="orders"></div>
-  </div>
+  </header>
 
-  <!-- MENU -->
-  <div class="view" id="v-menu">
-    <button class="addbtn" id="addBtn">+ Add Menu Item</button>
-    <div class="mg" id="menuGrid"></div>
-  </div>
+  <!-- Content -->
+  <main class="content">
 
-  <!-- TABLES -->
-  <div class="view" id="v-tables">
-    <h2 style="margin-bottom:10px;font-size:1.1rem">QR Codes per Table</h2>
-    <p style="color:#888;font-size:.88rem;margin-bottom:16px">
-      Print these QR codes. Each one already has the table number and security signature. <br>
-      Customers who photograph and share the QR can still be blocked by the table PIN.
-    </p>
-    <div class="tctrl">
-      <label>Tables: <input type="number" id="tcount" min="1" max="200" value="10"></label>
-      <button id="genBtn">Regenerate with new PINs</button>
-    </div>
-    <div class="tg" id="tg"></div>
-  </div>
-
-  <!-- SETTINGS -->
-  <div class="view" id="v-settings">
-    <form id="setForm">
-      <div class="frow">
-        <div class="fg"><label>Restaurant Name (English)</label><input id="s-name" required></div>
-        <div class="fg"><label>Restaurant Name (Urdu)</label><input id="s-name_ur" dir="rtl"></div>
-      </div>
-      <div class="frow">
-        <div class="fg"><label>Address</label><input id="s-address"></div>
-        <div class="fg"><label>Phone</label><input id="s-phone"></div>
-      </div>
-      <div class="frow">
-        <div class="fg">
-          <label>Google Place ID</label>
-          <input id="s-gpid" placeholder="ChIJ...">
-          <small>Find at developers.google.com/maps/documentation/places</small>
+    <!-- ORDERS -->
+    <section class="view on" id="v-orders">
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">Live Operations</div>
+          <h1>Orders</h1>
         </div>
-        <div class="fg">
-          <label>Currency</label>
-          <input id="s-cur" value="Rs">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <select id="fs" style="padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--white);font-size:.85rem;font-weight:600">
+            <option value="">All Orders</option>
+            <option value="pending">Pending</option>
+            <option value="preparing">Preparing</option>
+            <option value="ready">Ready</option>
+            <option value="served">Served</option>
+          </select>
+          <button id="refresh" style="padding:10px 16px;background:var(--white);border:1px solid var(--line);border-radius:10px;font-size:.85rem;font-weight:700">Refresh</button>
         </div>
       </div>
-      <div class="frow">
-        <div class="fg">
-          <label>Cloudinary Cloud Name</label>
-          <input id="s-cloud" placeholder="e.g. my-restaurant">
+
+      <div class="reqs-banner empty" id="reqsBanner">
+        <div class="rb-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         </div>
-        <div class="fg">
-          <label>Cloudinary Upload Preset (unsigned)</label>
-          <input id="s-preset" placeholder="e.g. menu_upload">
-        </div>
-      </div>
-      <div class="fg">
-        <label style="display:flex;align-items:center;gap:8px;font-weight:600">
-          <input type="checkbox" id="s-pin" style="width:auto">
-          Require 4-digit table PIN (recommended — blocks remote spam orders)
-        </label>
-      </div>
-      <button class="savebtn" type="submit">Save Settings</button>
-    </form>
-  </div>
-
-  <!-- Item Modal -->
-  <div class="ov" id="itemModal">
-    <div class="mod">
-      <h2 id="imTitle">Add Menu Item</h2>
-      <form id="itemForm">
-        <div class="frow">
-          <div class="fg"><label>Name (English)</label><input id="i-name" required></div>
-          <div class="fg"><label>Name (Urdu)</label><input id="i-name_ur" dir="rtl"></div>
-        </div>
-        <div class="frow">
-          <div class="fg"><label>Description (English)</label><textarea id="i-desc" rows="2"></textarea></div>
-          <div class="fg"><label>Description (Urdu)</label><textarea id="i-desc_ur" rows="2" dir="rtl"></textarea></div>
-        </div>
-        <div class="frow">
-          <div class="fg"><label>Price</label><input id="i-price" type="number" step="0.01" required></div>
-          <div class="fg"><label>Category</label><input id="i-cat" required placeholder="e.g. Main Course"></div>
-        </div>
-        <div class="fg"><label>Category (Urdu)</label><input id="i-cat_ur" dir="rtl" placeholder="مثلاً مین کورس"></div>
-        <div class="fg">
-          <label>Photo</label>
-          <input type="file" id="i-img" accept="image/*">
-          <div class="prev" id="i-prev"></div>
-        </div>
-        <div class="mact2">
-          <button type="button" id="i-cancel">Cancel</button>
-          <button type="submit" class="save">Save</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="toast" id="toast"></div>
-</div>
-
-<script>
-const API = '/api';
-let token = localStorage.getItem('admin_token');
-let slug = localStorage.getItem('admin_slug');
-let menuItems = [], tables = [];
-let editId = null, pendingImg = null;
-let lastCount = 0;
-let audio = null;
-let cloudName = '', uploadPreset = '';
-
-const $ = id => document.getElementById(id);
-const toast = m => { const t = $('toast'); t.textContent = m; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2000); };
-const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]);
-
-async function api(path, opts = {}) {
-  const headers = { ...(opts.headers || {}) };
-  if (token) headers.Authorization = 'Bearer ' + token;
-  if (opts.body && !(opts.body instanceof FormData)) {
-    headers['Content-Type'] = 'application/json';
-  }
-  const r = await fetch(API + path, { ...opts, headers });
-  if (r.status === 401) { logout(); throw new Error('Unauthorized'); }
-  return r.json();
-}
-
-// ---------- LOGIN ----------
-async function login() {
-  const s = $('lslug').value.trim(), p = $('lpass').value;
-  try {
-    const r = await fetch(`${API}/admin/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ slug: s, password: p }),
-    });
-    const d = await r.json();
-    if (!r.ok) { $('lerr').textContent = d.error || 'Login failed'; return; }
-    token = d.token; slug = d.slug;
-    localStorage.setItem('admin_token', token);
-    localStorage.setItem('admin_slug', slug);
-    startAdmin(d.name);
-  } catch { $('lerr').textContent = 'Connection failed'; }
-}
-
-function logout() {
-  token = slug = null;
-  localStorage.removeItem('admin_token');
-  localStorage.removeItem('admin_slug');
-  $('adminView').style.display = 'none';
-  $('loginView').style.display = 'flex';
-}
-
-function startAdmin(name) {
-  $('loginView').style.display = 'none';
-  $('adminView').style.display = 'block';
-  $('rname').textContent = name;
-
-  // Notification sound
-  audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
-
-  loadSettings();
-  loadOrders();
-  loadRequests();
-  setInterval(() => { loadOrders(); loadRequests(); }, 5000);
-  setInterval(loadRequests, 5000);
-}
-
-// ---------- ORDERS ----------
-async function loadOrders() {
-  const s = $('fs').value;
-  const orders = await api('/admin/orders' + (s ? '?status=' + s : ''));
-  const list = $('orders');
-  if (!orders.length) { list.innerHTML = '<div style="text-align:center;padding:40px;color:#999">No orders yet.</div>'; return; }
-
-  // Sound on new
-  if (lastCount > 0 && orders.length > lastCount) audio.play().catch(() => {});
-  lastCount = orders.length;
-
-  list.innerHTML = orders.map(o => {
-    let items = [];
-    try { items = JSON.parse(o.items || '[]'); } catch {}
-    return `
-      <div class="oc s-${o.status}">
-        <div class="oh">
-          <span class="ot">Table ${o.table_num}</span>
-          <span class="os">${o.status}</span>
-          <span class="oti">${new Date(o.created_at).toLocaleTimeString()}</span>
-        </div>
-        <div class="oit">${items.map(i => `<span>${esc(i.name)} × ${i.qty}</span>`).join('')}</div>
-        <div class="of">
-          <span class="otot">Rs ${o.total}</span>
-          <div class="oact">
-            ${o.status === 'pending' ? `<button class="go" data-id="${o.id}" data-st="preparing">Start Preparing</button>` : ''}
-            ${o.status === 'preparing' ? `<button class="go" data-id="${o.id}" data-st="ready">Mark Ready</button>` : ''}
-            ${o.status === 'ready' ? `<button class="go" data-id="${o.id}" data-st="served">Mark Served</button>` : ''}
-            <button class="end" data-table="${o.table_num}">End Session</button>
-          </div>
+        <div class="rb-body">
+          <div class="rb-title" id="reqsTitle">Service Requests</div>
+          <div class="rb-list" id="reqsList"></div>
         </div>
       </div>
-    `;
-  }).join('');
 
-  list.querySelectorAll('button[data-st]').forEach(b => {
-    b.onclick = async () => {
-      await api('/admin/orders/' + b.dataset.id, {
-        method: 'PATCH',
-        body: JSON.stringify({ status: b.dataset.st }),
-      });
-      loadOrders();
-    };
-  });
-  list.querySelectorAll('button[data-table]').forEach(b => {
-    b.onclick = async () => {
-      if (!confirm(`End session for Table ${b.dataset.table}? Next order from this table will start fresh.`)) return;
-      await api('/admin/end-session', {
-        method: 'POST',
-        body: JSON.stringify({ table: b.dataset.table }),
-      });
-      toast('Session ended');
-      loadOrders();
-    };
-  });
-}
+      <div class="orders-list" id="ordersList"></div>
+    </section>
 
-async function loadRequests() {
-  const reqs = await api('/admin/requests');
-  const el = $('reqs');
-  if (!reqs.length) { el.innerHTML = ''; return; }
-  el.innerHTML = reqs.map(r => `
-    <div class="req">
-      <span>${r.type === 'call_waiter' ? '🔔' : '🧾'} Table ${r.table_num} — ${r.type === 'call_waiter' ? 'Calling waiter' : 'Requesting bill'}</span>
-      <button data-id="${r.id}">Done</button>
-    </div>
-  `).join('');
-  el.querySelectorAll('button').forEach(b => {
-    b.onclick = async () => {
-      await api('/admin/requests/' + b.dataset.id, { method: 'PATCH' });
-      loadRequests();
-    };
-  });
-}
-
-// ---------- MENU ----------
-async function loadMenu() {
-  menuItems = await api('/admin/menu');
-  const g = $('menuGrid');
-  if (!menuItems.length) { g.innerHTML = '<div style="color:#999;padding:20px">No items. Add your first.</div>'; return; }
-  g.innerHTML = menuItems.map(m => `
-    <div class="mc">
-      <div class="mci">${m.image_url ? `<img src="${m.image_url}">` : '<div class="noimg">🍽️</div>'}</div>
-      <div class="mcinfo">
-        <h4>${esc(m.name)}</h4>
-        <p>Rs ${m.price}</p>
-        <span class="tag">${esc(m.category)}</span>
+    <!-- ANALYTICS -->
+    <section class="view" id="v-analytics">
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">Performance</div>
+          <h1>Analytics</h1>
+        </div>
+        <button id="refreshAnalytics" style="padding:10px 16px;background:var(--white);border:1px solid var(--line);border-radius:10px;font-size:.85rem;font-weight:700">Refresh</button>
       </div>
-      <div class="mact">
-        <button data-edit="${m.id}">Edit</button>
-        <button class="del" data-del="${m.id}">Delete</button>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="lbl">Today</div>
+          <div class="amt" id="statTodayAmt">Rs 0</div>
+          <div class="sub"><span>Orders <span class="it" id="statTodayOrders">0</span></span><span>Avg <span class="it" id="statTodayAvg">Rs 0</span></span></div>
+        </div>
+        <div class="stat-card">
+          <div class="lbl">Last 7 Days</div>
+          <div class="amt" id="statWeekAmt">Rs 0</div>
+          <div class="sub"><span>Orders <span class="it" id="statWeekOrders">0</span></span><span>Avg <span class="it" id="statWeekAvg">Rs 0</span></span></div>
+        </div>
+        <div class="stat-card">
+          <div class="lbl">This Month</div>
+          <div class="amt" id="statMonthAmt">Rs 0</div>
+          <div class="sub"><span>Orders <span class="it" id="statMonthOrders">0</span></span><span>Avg <span class="it" id="statMonthAvg">Rs 0</span></span></div>
+        </div>
+        <div class="stat-card">
+          <div class="lbl">All Time</div>
+          <div class="amt" id="statAllAmt">Rs 0</div>
+          <div class="sub"><span>Orders <span class="it" id="statAllOrders">0</span></span><span>Avg <span class="it" id="statAllAvg">Rs 0</span></span></div>
+        </div>
       </div>
-    </div>
-  `).join('');
 
-  g.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => openItem(parseInt(b.dataset.edit)));
-  g.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
-    if (!confirm('Delete this item?')) return;
-    await api('/admin/menu/' + b.dataset.del, { method: 'DELETE' });
-    toast('Deleted');
-    loadMenu();
-  });
-}
-
-function openItem(id) {
-  editId = id || null;
-  const m = id ? menuItems.find(x => x.id === id) : {};
-  $('imTitle').textContent = id ? 'Edit Item' : 'Add Menu Item';
-  $('i-name').value = m.name || '';
-  $('i-name_ur').value = m.name_urdu || '';
-  $('i-desc').value = m.description || '';
-  $('i-desc_ur').value = m.description_urdu || '';
-  $('i-price').value = m.price || '';
-  $('i-cat').value = m.category || '';
-  $('i-cat_ur').value = m.category_urdu || '';
-  $('i-prev').innerHTML = m.image_url ? `<img src="${m.image_url}">` : '';
-  pendingImg = null;
-  $('i-img').value = '';
-  $('itemModal').classList.add('on');
-}
-
-async function uploadImg(file) {
-  if (!cloudName || !uploadPreset) throw new Error('Cloudinary not configured in Settings');
-  const fd = new FormData();
-  fd.append('file', file);
-  fd.append('upload_preset', uploadPreset);
-  const r = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-    method: 'POST', body: fd,
-  });
-  const d = await r.json();
-  if (!d.secure_url) throw new Error(d.error?.message || 'Upload failed');
-  return d.secure_url;
-}
-
-// ---------- TABLES ----------
-async function loadTables() {
-  tables = await api('/admin/tables');
-  $('tcount').value = tables.length || 10;
-  const g = $('tg');
-  g.innerHTML = tables.map(t => {
-    const qr = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(t.url)}`;
-    return `
-      <div class="tc">
-        <h4>Table ${t.number}</h4>
-        <img src="${qr}" alt="QR">
-        <div class="pin">PIN: <strong>${t.pin}</strong></div>
-        <a href="${qr}" download="table-${t.number}-qr.png">Download QR</a>
+      <div class="top-items-card">
+        <h3>Top Items · This Month</h3>
+        <div class="top-list" id="topList"><div class="empty">No sales data yet</div></div>
       </div>
-    `;
-  }).join('');
-}
+    </section>
 
-async function regenerateTables() {
-  const c = parseInt($('tcount').value);
-  if (!confirm(`Regenerate ${c} tables with new PINs? Existing QR codes still work — only PINs change.`)) return;
-  await api('/admin/tables/regenerate', {
-    method: 'POST',
-    body: JSON.stringify({ count: c }),
-  });
-  toast('Tables regenerated');
-  loadTables();
-}
+    <!-- MENU -->
+    <section class="view" id="v-menu">
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">Catalogue</div>
+          <h1>Menu Items</h1>
+        </div>
+        <button class="addbtn" id="addBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Item
+        </button>
+      </div>
+      <div class="menu-grid" id="menuGrid"></div>
+    </section>
 
-// ---------- SETTINGS ----------
-async function loadSettings() {
-  const s = await api('/admin/settings');
-  $('s-name').value = s.name;
-  $('s-name_ur').value = s.name_urdu || '';
-  $('s-address').value = s.address || '';
-  $('s-phone').value = s.phone || '';
-  $('s-gpid').value = s.google_place_id || '';
-  $('s-cur').value = s.currency || 'Rs';
-  $('s-cloud').value = s.cloud_name || '';
-  $('s-preset').value = s.upload_preset || '';
-  $('s-pin').checked = !!s.pin_enabled;
-  cloudName = s.cloud_name || '';
-  uploadPreset = s.upload_preset || '';
-  $('rname').textContent = s.name;
-}
+    <!-- TABLES -->
+    <section class="view" id="v-tables">
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">QR Codes</div>
+          <h1>Tables</h1>
+        </div>
+      </div>
+      <div class="table-controls">
+        <label>Tables: <input type="number" id="tcount" min="1" max="200" value="10"></label>
+        <button id="genBtn">Regenerate with New PINs</button>
+      </div>
+      <div class="tables-grid" id="tg"></div>
+    </section>
 
-async function saveSettings(e) {
-  e.preventDefault();
-  const body = {
-    name: $('s-name').value,
-    name_urdu: $('s-name_ur').value,
-    address: $('s-address').value,
-    phone: $('s-phone').value,
-    google_place_id: $('s-gpid').value,
-    currency: $('s-cur').value,
-    cloud_name: $('s-cloud').value,
-    upload_preset: $('s-preset').value,
-    pin_enabled: $('s-pin').checked,
-  };
-  await api('/admin/settings', { method: 'PUT', body: JSON.stringify(body) });
-  cloudName = body.cloud_name;
-  uploadPreset = body.upload_preset;
-  $('rname').textContent = body.name;
-  toast('Settings saved');
-}
-
-// ---------- EVENTS ----------
-$('lbtn').onclick = login;
-$('lpass').onkeydown = e => { if (e.key === 'Enter') login(); };
-
-document.querySelectorAll('.nb').forEach(b => {
-  b.onclick = () => {
-    document.querySelectorAll('.nb').forEach(x => x.classList.remove('on'));
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
-    b.classList.add('on');
-    $('v-' + b.dataset.v).classList.add('on');
-    if (b.dataset.v === 'menu') loadMenu();
-    if (b.dataset.v === 'tables') loadTables();
-    if (b.dataset.v === 'settings') loadSettings();
-  };
-});
-
-$('fs').onchange = loadOrders;
-$('refresh').onclick = loadOrders;
-$('addBtn').onclick = () => openItem(null);
-$('i-cancel').onclick = () => $('itemModal').classList.remove('on');
-$('i-img').onchange = e => {
-  const f = e.target.files[0];
-  if (!f) return;
-  pendingImg = f;
-  const rd = new FileReader();
-  rd.onload = ev => $('i-prev').innerHTML = `<img src="${ev.target.result}">`;
-  rd.readAsDataURL(f);
-};
-
-$('itemForm').onsubmit = async e => {
-  e.preventDefault();
-  let imgUrl = '';
-  if (pendingImg) {
-    try { imgUrl = await uploadImg(pendingImg); }
-    catch (err) { toast('Photo: ' + err.message); return; }
-  } else if (editId) {
-    imgUrl = menuItems.find(m => m.id === editId)?.image_url || '';
-  }
-
-  const body = {
-    name: $('i-name').value,
-    name_urdu: $('i-name_ur').value,
-    description: $('i-desc').value,
-    description_urdu: $('i-desc_ur').value,
-    price: parseFloat($('i-price').value),
-    category: $('i-cat').value,
-    category_urdu: $('i-cat_ur').value,
-    image_url: imgUrl,
-    available: true,
-  };
-
-  if (editId) {
-    await api('/admin/menu/' + editId, { method: 'PUT', body: JSON.stringify(body) });
-  } else {
-    await api('/admin/menu', { method: 'POST', body: JSON.stringify(body) });
-  }
-  $('itemModal').classList.remove('on');
-  toast('Saved');
-  loadMenu();
-};
-
-$('setForm').onsubmit = saveSettings;
-$('genBtn').onclick = regenerateTables;
-
-// ---------- INIT ----------
-(async () => {
-  if (token && slug) {
-    try {
-      const r = await api('/admin/settings');
-      startAdmin(r.name);
-    } catch { logout(); }
-  }
-})();
-</script>
-</body>
-</html>
+    <!-- SETTINGS -->
+    <section class="view" id="v-settings">
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">Configuration</div>
+          <h1>Settings</h1>
+        </div>
+      </div>
+      <form class="settings-form" id="setForm">
+        <div class="form-row two">
+          <div class="fg"><label>Restaurant Name (English)</label><input id="s-name" required></div>
+          <div class="fg"><label>Restaurant Name (Urdu)</label><input id="s-name_ur" dir="rtl"></div>
+        </div>
+        <div class="form-row two">
+          <div class="fg"><label>Address</label><input id="s-address"></div>
+          <div class="fg"><label>Phone</label><input id="s-phone"></div>
+        </div>
+        <div class="form-row two">
