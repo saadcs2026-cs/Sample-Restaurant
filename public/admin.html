@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Panel</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f7f5f2;color:#1a1a1a}
+body[dir=rtl]{font-family:'Noto Nastaliq Urdu','Segoe UI',Tahoma,sans-serif}
+
+/* Login */
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.lcard{background:#fff;border-radius:16px;padding:32px;max-width:380px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.06)}
+.lcard h1{font-size:1.4rem;margin-bottom:6px}
+.lcard p{color:#888;font-size:.9rem;margin-bottom:20px}
+.lcard input{width:100%;padding:12px 14px;border:1px solid #e5e0da;border-radius:10px;font-size:.95rem;font-family:inherit;margin-bottom:12px;background:#faf8f5}
+.lcard input:focus{outline:none;border-color:#c2410c}
+.lbtn{width:100%;padding:13px;background:#c2410c;color:#fff;border:0;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit}
+.lerr{color:#dc2626;font-size:.85rem;margin-top:10px;text-align:center;min-height:18px}
+
+/* Header */
+.hdr{background:#fff;border-bottom:1px solid #eee;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:50}
+.hdr h1{font-size:1.1rem}
+.nav{display:flex;gap:6px;flex-wrap:wrap}
+.nb{padding:7px 14px;border-radius:8px;border:1px solid #e5e0da;background:#fff;font-size:.88rem;cursor:pointer;font-family:inherit;color:#333}
+.nb.on{background:#c2410c;color:#fff;border-color:#c2410c}
+
+.view{display:none;padding:20px;max-width:1100px;margin:0 auto}
+.view.on{display:block}
+
+.filters{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filters select,.filters button{padding:9px 14px;border-radius:8px;border:1px solid #e5e0da;background:#fff;font-size:.9rem;cursor:pointer;font-family:inherit}
+.live{color:#16a34a;font-size:.85rem;font-weight:600}
+
+/* Requests */
+.reqs{margin-bottom:20px}
+.req{background:#fff4ed;border:1px solid #fed7aa;border-radius:12px;padding:12px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.req button{padding:7px 14px;background:#c2410c;color:#fff;border:0;border-radius:8px;font-size:.85rem;cursor:pointer;font-family:inherit}
+
+/* Orders */
+.orders{display:flex;flex-direction:column;gap:12px}
+.oc{background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05);border-left:4px solid #f59e0b}
+.oc.s-preparing{border-left-color:#3b82f6}
+.oc.s-ready{border-left-color:#16a34a}
+.oc.s-served{border-left-color:#9ca3af;opacity:.75}
+.oh{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.ot{font-weight:700;font-size:1.05rem}
+.os{font-size:.72rem;font-weight:700;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:#fff3ed;color:#c2410c}
+.s-preparing .os{background:#dbeafe;color:#1e40af}
+.s-ready .os{background:#dcfce7;color:#166534}
+.s-served .os{background:#f3f4f6;color:#6b7280}
+.oti{font-size:.8rem;color:#888}
+.oit{display:flex;flex-direction:column;gap:3px;font-size:.9rem;margin-bottom:10px;color:#444}
+.of{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #f0ebe4;padding-top:10px;flex-wrap:wrap;gap:8px}
+.otot{font-weight:700;color:#c2410c;font-size:1.05rem}
+.oact{display:flex;gap:6px;flex-wrap:wrap}
+.oact button{padding:7px 12px;border:0;border-radius:7px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit}
+.oact .go{background:#c2410c;color:#fff}
+.oact .end{background:#fee2e2;color:#991b1b}
+
+/* Menu admin */
+.addbtn{padding:11px 20px;border:0;border-radius:10px;background:#c2410c;color:#fff;font-weight:600;font-size:.92rem;cursor:pointer;margin-bottom:16px;font-family:inherit}
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.mc{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.mci{aspect-ratio:16/10;background:#f0ece6}
+.mci img{width:100%;height:100%;object-fit:cover}
+.mci .noimg{display:flex;align-items:center;justify-content:center;height:100%;font-size:2rem;opacity:.3}
+.mcinfo{padding:12px}
+.mcinfo h4{font-size:.95rem;margin-bottom:3px}
+.mcinfo p{font-size:.85rem;font-weight:700;color:#c2410c;margin-bottom:4px}
+.tag{display:inline-block;font-size:.7rem;padding:2px 8px;border-radius:10px;background:#fff3ed;color:#c2410c}
+.mact{display:flex;gap:6px;padding:10px;border-top:1px solid #f0ebe4}
+.mact button{flex:1;padding:7px;border:1px solid #e5e0da;border-radius:7px;background:#fff;font-size:.82rem;cursor:pointer;font-family:inherit}
+.mact button.del{color:#dc2626;border-color:#fecaca}
+
+/* Tables */
+.tctrl{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.tctrl input{width:80px;padding:9px 12px;border:1px solid #e5e0da;border-radius:8px;font-size:.9rem;font-family:inherit}
+.tctrl button{padding:9px 16px;background:#c2410c;color:#fff;border:0;border-radius:8px;font-size:.88rem;cursor:pointer;font-family:inherit}
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.tc{background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.tc h4{margin-bottom:10px;font-size:1rem}
+.tc img{width:150px;height:150px;margin:0 auto 10px;display:block}
+.tc .pin{font-size:.9rem;font-weight:700;color:#c2410c;margin-bottom:8px}
+.tc a{display:inline-block;color:#c2410c;font-size:.83rem;font-weight:600;text-decoration:none;margin-bottom:6px}
+
+/* Settings form */
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.frow{grid-template-columns:1fr}}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:.85rem;font-weight:600;margin-bottom:5px}
+.fg input,.fg textarea,.fg select{width:100%;padding:10px 12px;border:1px solid #e5e0da;border-radius:8px;font-size:.92rem;font-family:inherit;background:#faf8f5}
+.fg input:focus,.fg textarea:focus{outline:none;border-color:#c2410c}
+.fg small{color:#888;font-size:.78rem;display:block;margin-top:4px}
+.savebtn{padding:12px 24px;background:#c2410c;color:#fff;border:0;border-radius:10px;font-weight:600;font-size:.95rem;cursor:pointer;font-family:inherit}
+
+/* Modal */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:300;padding:20px;overflow-y:auto}
+.ov.on{display:flex}
+.mod{background:#fff;border-radius:16px;padding:24px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto}
+.mod h2{margin-bottom:16px;font-size:1.15rem}
+.mact2{display:flex;gap:10px;margin-top:16px}
+.mact2 button{flex:1;padding:12px;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid #e5e0da;background:#fff;color:#333}
+.mact2 .save{flex:2;background:#c2410c;color:#fff;border-color:#c2410c}
+.prev{margin-top:10px}
+.prev img{max-width:180px;border-radius:8px}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:12px 22px;border-radius:30px;font-size:.88rem;opacity:0;transition:.3s;z-index:500;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="loginView">
+  <div class="lcard">
+    <h1>Restaurant Admin</h1>
+    <p>Sign in to manage orders & menu</p>
+    <input id="lslug" placeholder="Restaurant slug">
+    <input id="lpass" type="password" placeholder="Password">
+    <button class="lbtn" id="lbtn">Sign In</button>
+    <div class="lerr" id="lerr"></div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="adminView" style="display:none">
+  <div class="hdr">
+    <h1 id="rname">Restaurant</h1>
+    <div class="nav">
+      <button class="nb on" data-v="orders">📋 Orders</button>
+      <button class="nb" data-v="menu">🍽️ Menu</button>
+      <button class="nb" data-v="tables">📱 Tables</button>
+      <button class="nb" data-v="settings">⚙️ Settings</button>
+    </div>
+  </div>
+
+  <!-- ORDERS -->
+  <div class="view on" id="v-orders">
+    <div class="filters">
+      <select id="fs">
+        <option value="">All Orders</option>
+        <option value="pending">Pending</option>
+        <option value="preparing">Preparing</option>
+        <option value="ready">Ready</option>
+        <option value="served">Served</option>
+      </select>
+      <button id="refresh">Refresh</button>
+      <span class="live">● Live</span>
+    </div>
+    <div class="reqs" id="reqs"></div>
+    <div class="orders" id="orders"></div>
+  </div>
+
+  <!-- MENU -->
+  <div class="view" id="v-menu">
+    <button class="addbtn" id="addBtn">+ Add Menu Item</button>
+    <div class="mg" id="menuGrid"></div>
+  </div>
+
+  <!-- TABLES -->
+  <div class="view" id="v-tables">
+    <h2 style="margin-bottom:10px;font-size:1.1rem">QR Codes per Table</h2>
+    <p style="color:#888;font-size:.88rem;margin-bottom:16px">
+      Print these QR codes. Each one already has the table number and security signature. <br>
+      Customers who photograph and share the QR can still be blocked by the table PIN.
+    </p>
+    <div class="tctrl">
+      <label>Tables: <input type="number" id="tcount" min="1" max="200" value="10"></label>
+      <button id="genBtn">Regenerate with new PINs</button>
+    </div>
+    <div class="tg" id="tg"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="view" id="v-settings">
+    <form id="setForm">
+      <div class="frow">
+        <div class="fg"><label>Restaurant Name (English)</label><input id="s-name" required></div>
+        <div class="fg"><label>Restaurant Name (Urdu)</label><input id="s-name_ur" dir="rtl"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label>Address</label><input id="s-address"></div>
+        <div class="fg"><label>Phone</label><input id="s-phone"></div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label>Google Place ID</label>
+          <input id="s-gpid" placeholder="ChIJ...">
+          <small>Find at developers.google.com/maps/documentation/places</small>
+        </div>
+        <div class="fg">
+          <label>Currency</label>
+          <input id="s-cur" value="Rs">
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label>Cloudinary Cloud Name</label>
+          <input id="s-cloud" placeholder="e.g. my-restaurant">
+        </div>
+        <div class="fg">
+          <label>Cloudinary Upload Preset (unsigned)</label>
+          <input id="s-preset" placeholder="e.g. menu_upload">
+        </div>
+      </div>
+      <div class="fg">
+        <label style="display:flex;align-items:center;gap:8px;font-weight:600">
+          <input type="checkbox" id="s-pin" style="width:auto">
+          Require 4-digit table PIN (recommended — blocks remote spam orders)
+        </label>
+      </div>
+      <button class="savebtn" type="submit">Save Settings</button>
+    </form>
+  </div>
+
+  <!-- Item Modal -->
+  <div class="ov" id="itemModal">
+    <div class="mod">
+      <h2 id="imTitle">Add Menu Item</h2>
+      <form id="itemForm">
+        <div class="frow">
+          <div class="fg"><label>Name (English)</label><input id="i-name" required></div>
+          <div class="fg"><label>Name (Urdu)</label><input id="i-name_ur" dir="rtl"></div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label>Description (English)</label><textarea id="i-desc" rows="2"></textarea></div>
+          <div class="fg"><label>Description (Urdu)</label><textarea id="i-desc_ur" rows="2" dir="rtl"></textarea></div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label>Price</label><input id="i-price" type="number" step="0.01" required></div>
+          <div class="fg"><label>Category</label><input id="i-cat" required placeholder="e.g. Main Course"></div>
+        </div>
+        <div class="fg"><label>Category (Urdu)</label><input id="i-cat_ur" dir="rtl" placeholder="مثلاً مین کورس"></div>
+        <div class="fg">
+          <label>Photo</label>
+          <input type="file" id="i-img" accept="image/*">
+          <div class="prev" id="i-prev"></div>
+        </div>
+        <div class="mact2">
+          <button type="button" id="i-cancel">Cancel</button>
+          <button type="submit" class="save">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+const API = '/api';
+let token = localStorage.getItem('admin_token');
+let slug = localStorage.getItem('admin_slug');
+let menuItems = [], tables = [];
+let editId = null, pendingImg = null;
+let lastCount = 0;
+let audio = null;
+let cloudName = '', uploadPreset = '';
+
+const $ = id => document.getElementById(id);
+const toast = m => { const t = $('toast'); t.textContent = m; t.classList.add('on'); setTimeout(() => t.classList.remove('on'), 2000); };
+const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]);
+
+async function api(path, opts = {}) {
+  const headers = { ...(opts.headers || {}) };
+  if (token) headers.Authorization = 'Bearer ' + token;
+  if (opts.body && !(opts.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
+  const r = await fetch(API + path, { ...opts, headers });
+  if (r.status === 401) { logout(); throw new Error('Unauthorized'); }
+  return r.json();
+}
+
+// ---------- LOGIN ----------
+async function login() {
+  const s = $('lslug').value.trim(), p = $('lpass').value;
+  try {
+    const r = await fetch(`${API}/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug: s, password: p }),
+    });
+    const d = await r.json();
+    if (!r.ok) { $('lerr').textContent = d.error || 'Login failed'; return; }
+    token = d.token; slug = d.slug;
+    localStorage.setItem('admin_token', token);
+    localStorage.setItem('admin_slug', slug);
+    startAdmin(d.name);
+  } catch { $('lerr').textContent = 'Connection failed'; }
+}
+
+function logout() {
+  token = slug = null;
+  localStorage.removeItem('admin_token');
+  localStorage.removeItem('admin_slug');
+  $('adminView').style.display = 'none';
+  $('loginView').style.display = 'flex';
+}
+
+function startAdmin(name) {
+  $('loginView').style.display = 'none';
+  $('adminView').style.display = 'block';
+  $('rname').textContent = name;
+
+  // Notification sound
+  audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT');
+
+  loadSettings();
+  loadOrders();
+  loadRequests();
+  setInterval(() => { loadOrders(); loadRequests(); }, 5000);
+  setInterval(loadRequests, 5000);
+}
+
+// ---------- ORDERS ----------
+async function loadOrders() {
+  const s = $('fs').value;
+  const orders = await api('/admin/orders' + (s ? '?status=' + s : ''));
+  const list = $('orders');
+  if (!orders.length) { list.innerHTML = '<div style="text-align:center;padding:40px;color:#999">No orders yet.</div>'; return; }
+
+  // Sound on new
+  if (lastCount > 0 && orders.length > lastCount) audio.play().catch(() => {});
+  lastCount = orders.length;
+
+  list.innerHTML = orders.map(o => {
+    let items = [];
+    try { items = JSON.parse(o.items || '[]'); } catch {}
+    return `
+      <div class="oc s-${o.status}">
+        <div class="oh">
+          <span class="ot">Table ${o.table_num}</span>
+          <span class="os">${o.status}</span>
+          <span class="oti">${new Date(o.created_at).toLocaleTimeString()}</span>
+        </div>
+        <div class="oit">${items.map(i => `<span>${esc(i.name)} × ${i.qty}</span>`).join('')}</div>
+        <div class="of">
+          <span class="otot">Rs ${o.total}</span>
+          <div class="oact">
+            ${o.status === 'pending' ? `<button class="go" data-id="${o.id}" data-st="preparing">Start Preparing</button>` : ''}
+            ${o.status === 'preparing' ? `<button class="go" data-id="${o.id}" data-st="ready">Mark Ready</button>` : ''}
+            ${o.status === 'ready' ? `<button class="go" data-id="${o.id}" data-st="served">Mark Served</button>` : ''}
+            <button class="end" data-table="${o.table_num}">End Session</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  list.querySelectorAll('button[data-st]').forEach(b => {
+    b.onclick = async () => {
+      await api('/admin/orders/' + b.dataset.id, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: b.dataset.st }),
+      });
+      loadOrders();
+    };
+  });
+  list.querySelectorAll('button[data-table]').forEach(b => {
+    b.onclick = async () => {
+      if (!confirm(`End session for Table ${b.dataset.table}? Next order from this table will start fresh.`)) return;
+      await api('/admin/end-session', {
+        method: 'POST',
+        body: JSON.stringify({ table: b.dataset.table }),
+      });
+      toast('Session ended');
+      loadOrders();
+    };
+  });
+}
+
+async function loadRequests() {
+  const reqs = await api('/admin/requests');
+  const el = $('reqs');
+  if (!reqs.length) { el.innerHTML = ''; return; }
+  el.innerHTML = reqs.map(r => `
+    <div class="req">
+      <span>${r.type === 'call_waiter' ? '🔔' : '🧾'} Table ${r.table_num} — ${r.type === 'call_waiter' ? 'Calling waiter' : 'Requesting bill'}</span>
+      <button data-id="${r.id}">Done</button>
+    </div>
+  `).join('');
+  el.querySelectorAll('button').forEach(b => {
+    b.onclick = async () => {
+      await api('/admin/requests/' + b.dataset.id, { method: 'PATCH' });
+      loadRequests();
+    };
+  });
+}
+
+// ---------- MENU ----------
+async function loadMenu() {
+  menuItems = await api('/admin/menu');
+  const g = $('menuGrid');
+  if (!menuItems.length) { g.innerHTML = '<div style="color:#999;padding:20px">No items. Add your first.</div>'; return; }
+  g.innerHTML = menuItems.map(m => `
+    <div class="mc">
+      <div class="mci">${m.image_url ? `<img src="${m.image_url}">` : '<div class="noimg">🍽️</div>'}</div>
+      <div class="mcinfo">
+        <h4>${esc(m.name)}</h4>
+        <p>Rs ${m.price}</p>
+        <span class="tag">${esc(m.category)}</span>
+      </div>
+      <div class="mact">
+        <button data-edit="${m.id}">Edit</button>
+        <button class="del" data-del="${m.id}">Delete</button>
+      </div>
+    </div>
+  `).join('');
+
+  g.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => openItem(parseInt(b.dataset.edit)));
+  g.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+    if (!confirm('Delete this item?')) return;
+    await api('/admin/menu/' + b.dataset.del, { method: 'DELETE' });
+    toast('Deleted');
+    loadMenu();
+  });
+}
+
+function openItem(id) {
+  editId = id || null;
+  const m = id ? menuItems.find(x => x.id === id) : {};
+  $('imTitle').textContent = id ? 'Edit Item' : 'Add Menu Item';
+  $('i-name').value = m.name || '';
+  $('i-name_ur').value = m.name_urdu || '';
+  $('i-desc').value = m.description || '';
+  $('i-desc_ur').value = m.description_urdu || '';
+  $('i-price').value = m.price || '';
+  $('i-cat').value = m.category || '';
+  $('i-cat_ur').value = m.category_urdu || '';
+  $('i-prev').innerHTML = m.image_url ? `<img src="${m.image_url}">` : '';
+  pendingImg = null;
+  $('i-img').value = '';
+  $('itemModal').classList.add('on');
+}
+
+async function uploadImg(file) {
+  if (!cloudName || !uploadPreset) throw new Error('Cloudinary not configured in Settings');
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', uploadPreset);
+  const r = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+    method: 'POST', body: fd,
+  });
+  const d = await r.json();
+  if (!d.secure_url) throw new Error(d.error?.message || 'Upload failed');
+  return d.secure_url;
+}
+
+// ---------- TABLES ----------
+async function loadTables() {
+  tables = await api('/admin/tables');
+  $('tcount').value = tables.length || 10;
+  const g = $('tg');
+  g.innerHTML = tables.map(t => {
+    const qr = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(t.url)}`;
+    return `
+      <div class="tc">
+        <h4>Table ${t.number}</h4>
+        <img src="${qr}" alt="QR">
+        <div class="pin">PIN: <strong>${t.pin}</strong></div>
+        <a href="${qr}" download="table-${t.number}-qr.png">Download QR</a>
+      </div>
+    `;
+  }).join('');
+}
+
+async function regenerateTables() {
+  const c = parseInt($('tcount').value);
+  if (!confirm(`Regenerate ${c} tables with new PINs? Existing QR codes still work — only PINs change.`)) return;
+  await api('/admin/tables/regenerate', {
+    method: 'POST',
+    body: JSON.stringify({ count: c }),
+  });
+  toast('Tables regenerated');
+  loadTables();
+}
+
+// ---------- SETTINGS ----------
+async function loadSettings() {
+  const s = await api('/admin/settings');
+  $('s-name').value = s.name;
+  $('s-name_ur').value = s.name_urdu || '';
+  $('s-address').value = s.address || '';
+  $('s-phone').value = s.phone || '';
+  $('s-gpid').value = s.google_place_id || '';
+  $('s-cur').value = s.currency || 'Rs';
+  $('s-cloud').value = s.cloud_name || '';
+  $('s-preset').value = s.upload_preset || '';
+  $('s-pin').checked = !!s.pin_enabled;
+  cloudName = s.cloud_name || '';
+  uploadPreset = s.upload_preset || '';
+  $('rname').textContent = s.name;
+}
+
+async function saveSettings(e) {
+  e.preventDefault();
+  const body = {
+    name: $('s-name').value,
+    name_urdu: $('s-name_ur').value,
+    address: $('s-address').value,
+    phone: $('s-phone').value,
+    google_place_id: $('s-gpid').value,
+    currency: $('s-cur').value,
+    cloud_name: $('s-cloud').value,
+    upload_preset: $('s-preset').value,
+    pin_enabled: $('s-pin').checked,
+  };
+  await api('/admin/settings', { method: 'PUT', body: JSON.stringify(body) });
+  cloudName = body.cloud_name;
+  uploadPreset = body.upload_preset;
+  $('rname').textContent = body.name;
+  toast('Settings saved');
+}
+
+// ---------- EVENTS ----------
+$('lbtn').onclick = login;
+$('lpass').onkeydown = e => { if (e.key === 'Enter') login(); };
+
+document.querySelectorAll('.nb').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('.nb').forEach(x => x.classList.remove('on'));
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
+    b.classList.add('on');
+    $('v-' + b.dataset.v).classList.add('on');
+    if (b.dataset.v === 'menu') loadMenu();
+    if (b.dataset.v === 'tables') loadTables();
+    if (b.dataset.v === 'settings') loadSettings();
+  };
+});
+
+$('fs').onchange = loadOrders;
+$('refresh').onclick = loadOrders;
+$('addBtn').onclick = () => openItem(null);
+$('i-cancel').onclick = () => $('itemModal').classList.remove('on');
+$('i-img').onchange = e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  pendingImg = f;
+  const rd = new FileReader();
+  rd.onload = ev => $('i-prev').innerHTML = `<img src="${ev.target.result}">`;
+  rd.readAsDataURL(f);
+};
+
+$('itemForm').onsubmit = async e => {
+  e.preventDefault();
+  let imgUrl = '';
+  if (pendingImg) {
+    try { imgUrl = await uploadImg(pendingImg); }
+    catch (err) { toast('Photo: ' + err.message); return; }
+  } else if (editId) {
+    imgUrl = menuItems.find(m => m.id === editId)?.image_url || '';
+  }
+
+  const body = {
+    name: $('i-name').value,
+    name_urdu: $('i-name_ur').value,
+    description: $('i-desc').value,
+    description_urdu: $('i-desc_ur').value,
+    price: parseFloat($('i-price').value),
+    category: $('i-cat').value,
+    category_urdu: $('i-cat_ur').value,
+    image_url: imgUrl,
+    available: true,
+  };
+
+  if (editId) {
+    await api('/admin/menu/' + editId, { method: 'PUT', body: JSON.stringify(body) });
+  } else {
+    await api('/admin/menu', { method: 'POST', body: JSON.stringify(body) });
+  }
+  $('itemModal').classList.remove('on');
+  toast('Saved');
+  loadMenu();
+};
+
+$('setForm').onsubmit = saveSettings;
+$('genBtn').onclick = regenerateTables;
+
+// ---------- INIT ----------
+(async () => {
+  if (token && slug) {
+    try {
+      const r = await api('/admin/settings');
+      startAdmin(r.name);
+    } catch { logout(); }
+  }
+})();
+</script>
+</body>
+</html>
