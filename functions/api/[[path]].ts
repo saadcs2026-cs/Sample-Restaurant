@@ -65,8 +65,8 @@ export const onRequest = async (context: any) => {
     if (m && method === 'GET') {
       const slug = m[1];
       const r: any = await env.DB.prepare(
-        'SELECT id, name, name_urdu, currency, pin_enabled FROM restaurants WHERE slug=?'
-      ).bind(slug).first();
+  'SELECT id, name, name_urdu, currency, pin_enabled, address, phone, google_place_id FROM restaurants WHERE slug=?'
+).bind(slug).first();
       if (!r) return json({ error: 'Restaurant not found' }, 404, CORS);
 
       const items = await env.DB.prepare(
@@ -74,15 +74,17 @@ export const onRequest = async (context: any) => {
       ).bind(r.id).all();
 
       return json({
-        restaurant: {
-          name: r.name,
-          name_urdu: r.name_urdu,
-          currency: r.currency,
-          pin_enabled: !!r.pin_enabled,
-        },
-        items: items.results,
-      }, 200, CORS);
-    }
+  restaurant: {
+    name: r.name,
+    name_urdu: r.name_urdu,
+    currency: r.currency,
+    pin_enabled: !!r.pin_enabled,
+    address: r.address || '',
+    phone: r.phone || '',
+    google_place_id: r.google_place_id || '',
+  },
+  items: items.results,
+}, 200, CORS);
 
     // POST /api/session
     if (path === '/session' && method === 'POST') {
