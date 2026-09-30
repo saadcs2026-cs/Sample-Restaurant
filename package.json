@@ -1,0 +1,11 @@
+{
+  "name": "myrestaurant",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "wrangler pages dev public --d1 DB --kv SESSIONS",
+    "deploy": "wrangler pages deploy public",
+    "db": "wrangler d1 execute qr-restaurant-db --file=schema.sql --remote"
+  },
+  "dependencies": { "hono": "^4.4.0" },
+  "devDependencies": { "wrangler": "^3.60.0" }
+}
