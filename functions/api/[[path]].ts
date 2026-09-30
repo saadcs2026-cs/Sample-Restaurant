@@ -1,5 +1,4 @@
-// Pure Cloudflare Worker — zero dependencies, no build step needed
-
+// Pure Cloudflare Worker — zero dependencies
 type E = { DB: D1Database; SESSIONS: KVNamespace; SUPER_KEY: string };
 
 const json = (data: any, status = 200, headers: any = {}) =>
@@ -43,7 +42,6 @@ export const onRequest = async (context: any) => {
   const path = '/' + (params.path || []).join('/');
   const method = request.method;
 
-  // CORS preflight
   if (method === 'OPTIONS') {
     return new Response(null, {
       headers: {
@@ -54,13 +52,11 @@ export const onRequest = async (context: any) => {
       },
     });
   }
-
   const CORS = { 'Access-Control-Allow-Origin': '*' };
 
   try {
     // ==================== PUBLIC ====================
 
-    // GET /api/menu/:slug
     let m = path.match(/^\/menu\/([^/]+)$/);
     if (m && method === 'GET') {
       const slug = m[1];
@@ -75,29 +71,21 @@ export const onRequest = async (context: any) => {
 
       return json({
         restaurant: {
-          name: r.name,
-          name_urdu: r.name_urdu,
-          currency: r.currency,
-          pin_enabled: !!r.pin_enabled,
-          address: r.address || '',
-          phone: r.phone || '',
+          name: r.name, name_urdu: r.name_urdu,
+          currency: r.currency, pin_enabled: !!r.pin_enabled,
+          address: r.address || '', phone: r.phone || '',
           google_place_id: r.google_place_id || '',
         },
         items: items.results,
       }, 200, CORS);
     }
 
-    // POST /api/session
     if (path === '/session' && method === 'POST') {
       const b: any = await request.json();
-      const r: any = await env.DB.prepare(
-        'SELECT * FROM restaurants WHERE slug=?'
-      ).bind(b.slug).first();
+      const r: any = await env.DB.prepare('SELECT * FROM restaurants WHERE slug=?').bind(b.slug).first();
       if (!r) return json({ error: 'Restaurant not found' }, 404, CORS);
-
       const expected = await sign(b.slug, b.table, env.SUPER_KEY);
       if (b.k !== expected) return json({ error: 'Invalid QR code' }, 403, CORS);
-
       if (r.pin_enabled) {
         const t: any = await env.DB.prepare(
           'SELECT pin FROM tables WHERE rid=? AND number=?'
@@ -105,25 +93,19 @@ export const onRequest = async (context: any) => {
         if (!t) return json({ error: 'Table not found' }, 400, CORS);
         if (t.pin !== b.pin) return json({ error: 'Wrong PIN' }, 403, CORS);
       }
-
       const token = crypto.randomUUID();
-      await env.SESSIONS.put(
-        `s:${token}`,
+      await env.SESSIONS.put(`s:${token}`,
         JSON.stringify({ rid: r.id, slug: b.slug, table: b.table }),
-        { expirationTtl: 10800 }
-      );
-
+        { expirationTtl: 10800 });
       return json({ ok: true, table: b.table }, 200, {
         ...CORS,
         'Set-Cookie': `sid=${token}; HttpOnly; Secure; Path=/; SameSite=Lax; Max-Age=10800`,
       });
     }
 
-    // POST /api/order
     if (path === '/order' && method === 'POST') {
       const s: any = await getSession(request, env);
       if (!s) return json({ error: 'Session required' }, 401, CORS);
-
       const body: any = await request.json();
       const items = body.items || [];
       if (!items.length) return json({ error: 'Cart is empty' }, 400, CORS);
@@ -144,22 +126,18 @@ export const onRequest = async (context: any) => {
         total += mi.price * it.qty;
         valid.push({ id: mi.id, qty: it.qty, price: mi.price });
       }
-
       const o: any = await env.DB.prepare(
         'INSERT INTO orders (rid, table_num, session, total) VALUES (?,?,?,?)'
       ).bind(s.rid, s.table, s.token, total).run();
       const oid = o.meta.last_row_id;
-
       for (const v of valid) {
         await env.DB.prepare(
           'INSERT INTO order_items (order_id, item_id, qty, price) VALUES (?,?,?,?)'
         ).bind(oid, v.id, v.qty, v.price).run();
       }
-
       return json({ order_id: oid, total, table: s.table }, 201, CORS);
     }
 
-    // GET /api/my-orders
     if (path === '/my-orders' && method === 'GET') {
       const s: any = await getSession(request, env);
       if (!s) return json([], 200, CORS);
@@ -169,7 +147,6 @@ export const onRequest = async (context: any) => {
       return json(r.results, 200, CORS);
     }
 
-    // POST /api/request
     if (path === '/request' && method === 'POST') {
       const s: any = await getSession(request, env);
       if (!s) return json({ error: 'Session required' }, 401, CORS);
@@ -184,7 +161,6 @@ export const onRequest = async (context: any) => {
 
     // ==================== ADMIN ====================
 
-    // POST /api/admin/login
     if (path === '/admin/login' && method === 'POST') {
       const b: any = await request.json();
       const r: any = await env.DB.prepare(
@@ -193,17 +169,14 @@ export const onRequest = async (context: any) => {
       if (!r) return json({ error: 'Restaurant not found' }, 404, CORS);
       if ((await sha(b.password)) !== r.password_hash)
         return json({ error: 'Wrong password' }, 401, CORS);
-
       const token = crypto.randomUUID();
-      await env.SESSIONS.put(
-        `a:${token}`,
+      await env.SESSIONS.put(`a:${token}`,
         JSON.stringify({ rid: r.id, slug: b.slug }),
-        { expirationTtl: 43200 }
-      );
+        { expirationTtl: 43200 });
       return json({ token, name: r.name, slug: b.slug }, 200, CORS);
     }
 
-    // GET /api/admin/orders
+    // Order list — only non-archived
     if (path === '/admin/orders' && method === 'GET') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -211,7 +184,7 @@ export const onRequest = async (context: any) => {
       let sql = `SELECT o.*, (SELECT json_group_array(json_object(
         'name', m.name, 'name_urdu', m.name_urdu, 'qty', oi.qty, 'price', oi.price))
         FROM order_items oi JOIN menu_items m ON oi.item_id=m.id WHERE oi.order_id=o.id)
-        AS items FROM orders o WHERE o.rid=?`;
+        AS items FROM orders o WHERE o.rid=? AND o.archived=0`;
       const p: any[] = [a.rid];
       if (status) { sql += ' AND o.status=?'; p.push(status); }
       sql += ' ORDER BY o.id DESC LIMIT 100';
@@ -219,7 +192,6 @@ export const onRequest = async (context: any) => {
       return json(r.results, 200, CORS);
     }
 
-    // PATCH /api/admin/orders/:id
     m = path.match(/^\/admin\/orders\/(\d+)$/);
     if (m && method === 'PATCH') {
       const a: any = await getAdmin(request, env);
@@ -231,24 +203,70 @@ export const onRequest = async (context: any) => {
       return json({ ok: true }, 200, CORS);
     }
 
-    // POST /api/admin/end-session
+    // End session — archives orders + deletes session
     if (path === '/admin/end-session' && method === 'POST') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
       const b: any = await request.json();
+      const table = String(b.table);
+
+      // Archive all orders for this table that aren't already archived
+      await env.DB.prepare(
+        'UPDATE orders SET archived=1 WHERE rid=? AND table_num=? AND archived=0'
+      ).bind(a.rid, table).run();
+
+      // Delete matching sessions from KV
       const list = await env.SESSIONS.list({ prefix: 's:' });
       for (const k of list.keys) {
         const v = await env.SESSIONS.get(k.name);
         if (v) {
           const d = JSON.parse(v);
-          if (d.rid === a.rid && d.table === b.table)
+          if (d.rid === a.rid && String(d.table) === table)
             await env.SESSIONS.delete(k.name);
         }
       }
       return json({ ok: true }, 200, CORS);
     }
 
-    // GET /api/admin/menu
+    // ==================== ANALYTICS ====================
+    if (path === '/admin/analytics' && method === 'GET') {
+      const a: any = await getAdmin(request, env);
+      if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
+
+      const stats = async (since: string) => {
+        const r: any = await env.DB.prepare(
+          `SELECT COUNT(*) as orders, COALESCE(SUM(total),0) as revenue
+           FROM orders WHERE rid=? AND created_at >= ?`
+        ).bind(a.rid, since).first();
+        const orders = r.orders || 0;
+        const revenue = r.revenue || 0;
+        return { orders, revenue, avg: orders ? Math.round(revenue / orders) : 0 };
+      };
+
+      const today: any = await stats("date('now')");
+      const week: any = await stats("date('now','-6 days')");
+      const month: any = await stats("date('now','start of month')");
+      const allTime: any = await stats("1970-01-01");
+
+      const top = await env.DB.prepare(
+        `SELECT m.name, m.name_urdu,
+                SUM(oi.qty) as qty,
+                SUM(oi.qty * oi.price) as revenue
+         FROM order_items oi
+         JOIN menu_items m ON oi.item_id=m.id
+         JOIN orders o ON oi.order_id=o.id
+         WHERE o.rid=? AND o.created_at >= date('now','start of month')
+         GROUP BY m.id
+         ORDER BY qty DESC LIMIT 8`
+      ).bind(a.rid).all();
+
+      return json({
+        today, week, month, allTime,
+        top_items: top.results,
+      }, 200, CORS);
+    }
+
+    // ==================== MENU CRUD ====================
     if (path === '/admin/menu' && method === 'GET') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -258,7 +276,6 @@ export const onRequest = async (context: any) => {
       return json(r.results, 200, CORS);
     }
 
-    // POST /api/admin/menu
     if (path === '/admin/menu' && method === 'POST') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -271,7 +288,6 @@ export const onRequest = async (context: any) => {
       return json({ id: r.meta.last_row_id }, 201, CORS);
     }
 
-    // PUT /api/admin/menu/:id
     m = path.match(/^\/admin\/menu\/(\d+)$/);
     if (m && method === 'PUT') {
       const a: any = await getAdmin(request, env);
@@ -286,18 +302,14 @@ export const onRequest = async (context: any) => {
       return json({ ok: true }, 200, CORS);
     }
 
-    // DELETE /api/admin/menu/:id
-    m = path.match(/^\/admin\/menu\/(\d+)$/);
     if (m && method === 'DELETE') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
-      await env.DB.prepare(
-        'DELETE FROM menu_items WHERE id=? AND rid=?'
-      ).bind(m[1], a.rid).run();
+      await env.DB.prepare('DELETE FROM menu_items WHERE id=? AND rid=?').bind(m[1], a.rid).run();
       return json({ ok: true }, 200, CORS);
     }
 
-    // GET /api/admin/tables
+    // Tables
     if (path === '/admin/tables' && method === 'GET') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -307,16 +319,11 @@ export const onRequest = async (context: any) => {
       const origin = url.origin;
       const urls = await Promise.all((tables.results as any[]).map(async (t) => {
         const k = await sign(a.slug, t.number, env.SUPER_KEY);
-        return {
-          number: t.number,
-          pin: t.pin,
-          url: `${origin}/?r=${a.slug}&t=${t.number}&k=${k}`,
-        };
+        return { number: t.number, pin: t.pin, url: `${origin}/?r=${a.slug}&t=${t.number}&k=${k}` };
       }));
       return json(urls, 200, CORS);
     }
 
-    // POST /api/admin/tables/regenerate
     if (path === '/admin/tables/regenerate' && method === 'POST') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -328,13 +335,11 @@ export const onRequest = async (context: any) => {
           'INSERT INTO tables (rid, number, pin) VALUES (?,?,?)'
         ).bind(a.rid, String(i), pin).run();
       }
-      await env.DB.prepare(
-        'UPDATE restaurants SET table_count=? WHERE id=?'
-      ).bind(b.count, a.rid).run();
+      await env.DB.prepare('UPDATE restaurants SET table_count=? WHERE id=?').bind(b.count, a.rid).run();
       return json({ ok: true }, 200, CORS);
     }
 
-    // GET /api/admin/settings
+    // Settings
     if (path === '/admin/settings' && method === 'GET') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -344,7 +349,6 @@ export const onRequest = async (context: any) => {
       return json(r, 200, CORS);
     }
 
-    // PUT /api/admin/settings
     if (path === '/admin/settings' && method === 'PUT') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -357,7 +361,7 @@ export const onRequest = async (context: any) => {
       return json({ ok: true }, 200, CORS);
     }
 
-    // GET /api/admin/requests
+    // Service requests
     if (path === '/admin/requests' && method === 'GET') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -367,54 +371,41 @@ export const onRequest = async (context: any) => {
       return json(r.results, 200, CORS);
     }
 
-    // PATCH /api/admin/requests/:id
     m = path.match(/^\/admin\/requests\/(\d+)$/);
     if (m && method === 'PATCH') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
-      await env.DB.prepare(
-        'UPDATE requests SET done=1 WHERE id=? AND rid=?'
-      ).bind(m[1], a.rid).run();
+      await env.DB.prepare('UPDATE requests SET done=1 WHERE id=? AND rid=?').bind(m[1], a.rid).run();
       return json({ ok: true }, 200, CORS);
     }
 
-    // ==================== SUPER ADMIN ====================
-
-    // POST /api/super/restaurant
+    // Super admin
     if (path === '/super/restaurant' && method === 'POST') {
       if (request.headers.get('X-Super-Key') !== env.SUPER_KEY)
         return json({ error: 'Forbidden' }, 403, CORS);
       const b: any = await request.json();
       if (!b.slug || !b.name || !b.password)
         return json({ error: 'slug, name, password required' }, 400, CORS);
-
       try {
         const hash = await sha(b.password);
         const r: any = await env.DB.prepare(
           'INSERT INTO restaurants (slug, name, name_urdu, address, phone, google_place_id, table_count, pin_enabled, currency, password_hash, cloud_name, upload_preset) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)'
-        ).bind(b.slug, b.name, b.name_urdu || '', b.address || '',
-          b.phone || '', b.google_place_id || '', b.table_count || 10,
-          1, b.currency || 'Rs', hash, b.cloud_name || '',
-          b.upload_preset || '').run();
-
+        ).bind(b.slug, b.name, b.name_urdu || '', b.address || '', b.phone || '',
+          b.google_place_id || '', b.table_count || 10, 1, b.currency || 'Rs',
+          hash, b.cloud_name || '', b.upload_preset || '').run();
         const rid = r.meta.last_row_id;
         for (let i = 1; i <= (b.table_count || 10); i++) {
           const pin = String(Math.floor(1000 + Math.random() * 9000));
-          await env.DB.prepare(
-            'INSERT INTO tables (rid, number, pin) VALUES (?,?,?)'
-          ).bind(rid, String(i), pin).run();
+          await env.DB.prepare('INSERT INTO tables (rid, number, pin) VALUES (?,?,?)').bind(rid, String(i), pin).run();
         }
         return json({ ok: true, slug: b.slug }, 200, CORS);
       } catch (e: any) {
-        if (String(e).includes('UNIQUE'))
-          return json({ error: 'Slug already exists' }, 409, CORS);
+        if (String(e).includes('UNIQUE')) return json({ error: 'Slug already exists' }, 409, CORS);
         return json({ error: 'Create failed: ' + String(e) }, 500, CORS);
       }
     }
 
-    // GET /api/health
     if (path === '/health') return json({ ok: true }, 200, CORS);
-
     return json({ error: 'Not found', path }, 404, CORS);
   } catch (e: any) {
     return json({ error: String(e?.message || e) }, 500, CORS);
