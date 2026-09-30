@@ -444,3 +444,465 @@ input,select,textarea{font-family:inherit}
           <div class="fg"><label>Phone</label><input id="s-phone"></div>
         </div>
         <div class="form-row two">
+          <div class="fg">
+            <label>Google Place ID</label>
+            <input id="s-gpid" placeholder="ChIJ...">
+            <small>Get it at developers.google.com/maps/documentation/places</small>
+          </div>
+          <div class="fg"><label>Currency</label><input id="s-cur" value="Rs"></div>
+        </div>
+        <div class="form-row two">
+          <div class="fg">
+            <label>Cloudinary Cloud Name</label>
+            <input id="s-cloud" placeholder="e.g. dxyz1234">
+            <small>From your Cloudinary dashboard</small>
+          </div>
+          <div class="fg">
+            <label>Cloudinary Upload Preset (unsigned)</label>
+            <input id="s-preset" placeholder="e.g. menu_upload">
+            <small>Settings → Upload → Add unsigned preset</small>
+          </div>
+        </div>
+        <div class="fg check">
+          <input type="checkbox" id="s-pin">
+          <label for="s-pin" style="margin:0;cursor:pointer">Require 4-digit table PIN (blocks remote spam)</label>
+        </div>
+        <button type="submit" class="save-btn">Save Settings</button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- Bottom nav (mobile) -->
+  <nav class="bottom-nav">
+    <button class="nav-item on" data-v="orders">
+      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>Orders</span>
+    </button>
+    <button class="nav-item" data-v="analytics">
+      <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+      <span>Stats</span>
+    </button>
+    <button class="nav-item" data-v="menu">
+      <svg viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2z"/></svg>
+      <span>Menu</span>
+    </button>
+    <button class="nav-item" data-v="tables">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span>QR</span>
+    </button>
+    <button class="nav-item" data-v="settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Settings</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ========== ITEM MODAL ========== -->
+<div class="ov" id="itemModal">
+  <div class="mod">
+    <h2 id="imTitle">Add Menu Item</h2>
+    <form id="itemForm">
+      <div class="form-row two">
+        <div class="fg"><label>Name (English)</label><input id="i-name" required></div>
+        <div class="fg"><label>Name (Urdu)</label><input id="i-name_ur" dir="rtl"></div>
+      </div>
+      <div class="form-row two">
+        <div class="fg"><label>Description (English)</label><textarea id="i-desc" rows="2"></textarea></div>
+        <div class="fg"><label>Description (Urdu)</label><textarea id="i-desc_ur" rows="2" dir="rtl"></textarea></div>
+      </div>
+      <div class="form-row two">
+        <div class="fg"><label>Price</label><input id="i-price" type="number" step="0.01" required></div>
+        <div class="fg"><label>Category</label><input id="i-cat" required placeholder="e.g. Main Course"></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Category (Urdu)</label><input id="i-cat_ur" dir="rtl"></div>
+      </div>
+      <div class="fg">
+        <label>Photo</label>
+        <input type="file" id="i-img" accept="image/*">
+        <div class="img-preview" id="i-prev"></div>
+      </div>
+      <div class="mod-acts">
+        <button type="button" id="i-cancel">Cancel</button>
+        <button type="submit" class="save">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '/api';
+let token = localStorage.getItem('admin_token');
+let slug = localStorage.getItem('admin_slug');
+let menuItems = [], tables = [];
+let editId = null, pendingImg = null;
+let lastOrderCount = 0, lastReqCount = 0;
+let cloudName = '', uploadPreset = '';
+let audio = null;
+
+const $ = id => document.getElementById(id);
+const toast = m => { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 2400); };
+const esc = s => String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const money = n => 'Rs ' + Number(n || 0).toLocaleString();
+
+async function api(path, opts = {}) {
+  const headers = { ...(opts.headers || {}) };
+  if (token) headers.Authorization = 'Bearer ' + token;
+  if (opts.body && !(opts.body instanceof FormData)) headers['Content-Type'] = 'application/json';
+  const r = await fetch(API + path, { ...opts, headers });
+  if (r.status === 401) { logout(); throw new Error('Unauthorized'); }
+  return r.json();
+}
+
+// ========== LOGIN ==========
+async function login() {
+  const s = $('lslug').value.trim(), p = $('lpass').value;
+  try {
+    const r = await fetch(`${API}/admin/login`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug: s, password: p }),
+    });
+    const d = await r.json();
+    if (!r.ok) { $('lerr').textContent = d.error || 'Login failed'; return; }
+    token = d.token; slug = d.slug;
+    localStorage.setItem('admin_token', token);
+    localStorage.setItem('admin_slug', slug);
+    startAdmin(d.name);
+  } catch { $('lerr').textContent = 'Connection failed'; }
+}
+function logout() {
+  token = slug = null;
+  localStorage.removeItem('admin_token'); localStorage.removeItem('admin_slug');
+  $('app').classList.remove('on');
+  $('loginView').style.display = 'flex';
+}
+
+function startAdmin(name) {
+  $('loginView').style.display = 'none';
+  $('app').classList.add('on');
+  $('rname').textContent = name;
+
+  // Notification sound (short beep via data URI)
+  audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQBvT18AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==');
+  audio.volume = 0.4;
+
+  loadSettings();
+  loadOrders();
+  loadRequests();
+  setInterval(() => { loadOrders(); loadRequests(); }, 5000);
+}
+
+// ========== ORDERS ==========
+async function loadOrders() {
+  const s = $('fs').value;
+  const orders = await api('/admin/orders' + (s ? '?status=' + s : ''));
+  const list = $('ordersList');
+  if (!orders.length) {
+    list.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🧾</div><div>No orders yet</div></div>';
+    lastOrderCount = 0;
+    return;
+  }
+  if (lastOrderCount > 0 && orders.length > lastOrderCount) audio.play().catch(() => {});
+  lastOrderCount = orders.length;
+
+  list.innerHTML = orders.map(o => {
+    let items = [];
+    try { items = JSON.parse(o.items || '[]'); } catch {}
+    const time = new Date(o.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return `
+      <div class="order-card s-${o.status}">
+        <div class="oc-head">
+          <div>
+            <div class="oc-table"><span class="k">Table</span>${esc(o.table_num)}</div>
+            <span class="oc-time">${time}</span>
+          </div>
+          <span class="oc-status">${o.status}</span>
+        </div>
+        <ul class="oc-items">
+          ${items.map(i => `<li><span>${esc(i.name)}</span><span class="qty">×${i.qty}</span></li>`).join('')}
+        </ul>
+        <div class="oc-foot">
+          <div class="oc-total">${money(o.total)}</div>
+          <div class="oc-actions">
+            ${o.status === 'pending' ? `<button class="go" data-id="${o.id}" data-st="preparing">Start</button>` : ''}
+            ${o.status === 'preparing' ? `<button class="go" data-id="${o.id}" data-st="ready">Ready</button>` : ''}
+            ${o.status === 'ready' ? `<button class="go" data-id="${o.id}" data-st="served">Served</button>` : ''}
+            <button class="end" data-table="${o.table_num}">End Session</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  list.querySelectorAll('button[data-st]').forEach(b => {
+    b.onclick = async () => {
+      await api('/admin/orders/' + b.dataset.id, {
+        method: 'PATCH', body: JSON.stringify({ status: b.dataset.st }),
+      });
+      loadOrders();
+    };
+  });
+  list.querySelectorAll('button[data-table]').forEach(b => {
+    b.onclick = async () => {
+      if (!confirm(`End session for Table ${b.dataset.table}? This will archive all orders and free the table.`)) return;
+      await api('/admin/end-session', {
+        method: 'POST', body: JSON.stringify({ table: b.dataset.table }),
+      });
+      toast(`Table ${b.dataset.table} session ended`);
+      loadOrders();
+    };
+  });
+}
+
+// ========== SERVICE REQUESTS ==========
+async function loadRequests() {
+  const reqs = await api('/admin/requests');
+  const banner = $('reqsBanner');
+  const list = $('reqsList');
+
+  if (!reqs.length) {
+    banner.classList.add('empty');
+    lastReqCount = 0;
+    return;
+  }
+  if (lastReqCount > 0 && reqs.length > lastReqCount) audio.play().catch(() => {});
+  lastReqCount = reqs.length;
+
+  banner.classList.remove('empty');
+  list.innerHTML = reqs.map(r => `
+    <span class="req-chip">
+      ${r.type === 'call_waiter' ? '🔔 Waiter' : '🧾 Bill'} · Table ${esc(r.table_num)}
+      <button data-id="${r.id}">✓</button>
+    </span>
+  `).join('');
+  list.querySelectorAll('button').forEach(b => {
+    b.onclick = async () => {
+      await api('/admin/requests/' + b.dataset.id, { method: 'PATCH' });
+      loadRequests();
+    };
+  });
+}
+
+// ========== ANALYTICS ==========
+async function loadAnalytics() {
+  try {
+    const a = await api('/admin/analytics');
+    $('statTodayAmt').textContent = money(a.today.revenue);
+    $('statTodayOrders').textContent = a.today.orders;
+    $('statTodayAvg').textContent = money(a.today.avg);
+
+    $('statWeekAmt').textContent = money(a.week.revenue);
+    $('statWeekOrders').textContent = a.week.orders;
+    $('statWeekAvg').textContent = money(a.week.avg);
+
+    $('statMonthAmt').textContent = money(a.month.revenue);
+    $('statMonthOrders').textContent = a.month.orders;
+    $('statMonthAvg').textContent = money(a.month.avg);
+
+    $('statAllAmt').textContent = money(a.allTime.revenue);
+    $('statAllOrders').textContent = a.allTime.orders;
+    $('statAllAvg').textContent = money(a.allTime.avg);
+
+    const topList = $('topList');
+    if (!a.top_items.length) {
+      topList.innerHTML = '<div class="empty">No sales data yet</div>';
+    } else {
+      topList.innerHTML = a.top_items.map((t, i) => `
+        <div class="top-row">
+          <span class="top-rank">${String(i + 1).padStart(2, '0')}</span>
+          <span class="top-name">${esc(t.name)}</span>
+          <span class="top-qty">${t.qty} sold</span>
+          <span class="top-rev">${money(t.revenue)}</span>
+        </div>
+      `).join('');
+    }
+  } catch (e) { toast('Analytics failed to load'); }
+}
+
+// ========== MENU ==========
+async function loadMenu() {
+  menuItems = await api('/admin/menu');
+  const g = $('menuGrid');
+  if (!menuItems.length) {
+    g.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🍽️</div><div>No menu items yet. Add your first.</div></div>';
+    return;
+  }
+  g.innerHTML = menuItems.map(m => `
+    <div class="menu-card">
+      <div class="mi">${m.image_url ? `<img src="${m.image_url}">` : '<div class="noimg">🍽️</div>'}</div>
+      <div class="mb">
+        <h4>${esc(m.name)}</h4>
+        <div class="pr">${money(m.price)}</div>
+        <span class="cat">${esc(m.category)}</span>
+      </div>
+      <div class="acts">
+        <button data-edit="${m.id}">Edit</button>
+        <button class="del" data-del="${m.id}">Delete</button>
+      </div>
+    </div>
+  `).join('');
+  g.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => openItem(parseInt(b.dataset.edit)));
+  g.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+    if (!confirm('Delete this item?')) return;
+    await api('/admin/menu/' + b.dataset.del, { method: 'DELETE' });
+    toast('Deleted'); loadMenu();
+  });
+}
+
+function openItem(id) {
+  editId = id || null;
+  const m = id ? menuItems.find(x => x.id === id) : {};
+  $('imTitle').textContent = id ? 'Edit Menu Item' : 'Add Menu Item';
+  $('i-name').value = m.name || '';
+  $('i-name_ur').value = m.name_urdu || '';
+  $('i-desc').value = m.description || '';
+  $('i-desc_ur').value = m.description_urdu || '';
+  $('i-price').value = m.price || '';
+  $('i-cat').value = m.category || '';
+  $('i-cat_ur').value = m.category_urdu || '';
+  $('i-prev').innerHTML = m.image_url ? `<img src="${m.image_url}">` : '';
+  pendingImg = null;
+  $('i-img').value = '';
+  $('itemModal').classList.add('on');
+}
+
+async function uploadImg(file) {
+  if (!cloudName || !uploadPreset) throw new Error('Cloudinary not configured in Settings');
+  const fd = new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', uploadPreset);
+  const r = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, { method: 'POST', body: fd });
+  const d = await r.json();
+  if (!d.secure_url) throw new Error(d.error?.message || 'Upload failed');
+  return d.secure_url;
+}
+
+// ========== TABLES ==========
+async function loadTables() {
+  tables = await api('/admin/tables');
+  $('tcount').value = tables.length || 10;
+  const g = $('tg');
+  if (!tables.length) {
+    g.innerHTML = '<div class="empty">No tables yet. Set a count and click Regenerate.</div>';
+    return;
+  }
+  g.innerHTML = tables.map(t => {
+    const qr = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(t.url)}`;
+    return `
+      <div class="table-card">
+        <h4>Table ${t.number}</h4>
+        <img src="${qr}" alt="QR">
+        <div class="pin">PIN ${t.pin}</div>
+        <a href="${qr}" download="table-${t.number}-qr.png">Download QR</a>
+      </div>
+    `;
+  }).join('');
+}
+
+async function regenerateTables() {
+  const c = parseInt($('tcount').value);
+  if (!confirm(`Regenerate ${c} tables with new PINs? QR codes still work — only PINs change.`)) return;
+  await api('/admin/tables/regenerate', { method: 'POST', body: JSON.stringify({ count: c }) });
+  toast('Tables regenerated'); loadTables();
+}
+
+// ========== SETTINGS ==========
+async function loadSettings() {
+  const s = await api('/admin/settings');
+  $('s-name').value = s.name;
+  $('s-name_ur').value = s.name_urdu || '';
+  $('s-address').value = s.address || '';
+  $('s-phone').value = s.phone || '';
+  $('s-gpid').value = s.google_place_id || '';
+  $('s-cur').value = s.currency || 'Rs';
+  $('s-cloud').value = s.cloud_name || '';
+  $('s-preset').value = s.upload_preset || '';
+  $('s-pin').checked = !!s.pin_enabled;
+  cloudName = s.cloud_name || '';
+  uploadPreset = s.upload_preset || '';
+  $('rname').textContent = s.name;
+}
+
+async function saveSettings(e) {
+  e.preventDefault();
+  const body = {
+    name: $('s-name').value, name_urdu: $('s-name_ur').value,
+    address: $('s-address').value, phone: $('s-phone').value,
+    google_place_id: $('s-gpid').value, currency: $('s-cur').value,
+    cloud_name: $('s-cloud').value, upload_preset: $('s-preset').value,
+    pin_enabled: $('s-pin').checked,
+  };
+  await api('/admin/settings', { method: 'PUT', body: JSON.stringify(body) });
+  cloudName = body.cloud_name;
+  uploadPreset = body.upload_preset;
+  $('rname').textContent = body.name;
+  toast('Settings saved');
+}
+
+// ========== NAV ==========
+function switchView(v) {
+  document.querySelectorAll('.rail-btn, .nav-item').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  document.querySelectorAll('.view').forEach(x => x.classList.remove('on'));
+  $('v-' + v).classList.add('on');
+  if (v === 'menu') loadMenu();
+  if (v === 'tables') loadTables();
+  if (v === 'settings') loadSettings();
+  if (v === 'analytics') loadAnalytics();
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll('.rail-btn, .nav-item').forEach(b => {
+  b.onclick = () => switchView(b.dataset.v);
+});
+
+// ========== EVENTS ==========
+$('lbtn').onclick = login;
+$('lpass').onkeydown = e => { if (e.key === 'Enter') login(); };
+$('logoutBtn').onclick = () => { if (confirm('Logout?')) logout(); };
+$('fs').onchange = loadOrders;
+$('refresh').onclick = loadOrders;
+$('refreshAnalytics').onclick = loadAnalytics;
+$('addBtn').onclick = () => openItem(null);
+$('i-cancel').onclick = () => $('itemModal').classList.remove('on');
+$('i-img').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  pendingImg = f;
+  const rd = new FileReader();
+  rd.onload = ev => $('i-prev').innerHTML = `<img src="${ev.target.result}">`;
+  rd.readAsDataURL(f);
+};
+$('itemForm').onsubmit = async e => {
+  e.preventDefault();
+  let imgUrl = '';
+  if (pendingImg) {
+    try { imgUrl = await uploadImg(pendingImg); }
+    catch (err) { toast('Photo: ' + err.message); return; }
+  } else if (editId) {
+    imgUrl = menuItems.find(m => m.id === editId)?.image_url || '';
+  }
+  const body = {
+    name: $('i-name').value, name_urdu: $('i-name_ur').value,
+    description: $('i-desc').value, description_urdu: $('i-desc_ur').value,
+    price: parseFloat($('i-price').value), category: $('i-cat').value,
+    category_urdu: $('i-cat_ur').value, image_url: imgUrl, available: true,
+  };
+  if (editId) await api('/admin/menu/' + editId, { method: 'PUT', body: JSON.stringify(body) });
+  else await api('/admin/menu', { method: 'POST', body: JSON.stringify(body) });
+  $('itemModal').classList.remove('on');
+  toast('Saved'); loadMenu();
+};
+$('setForm').onsubmit = saveSettings;
+$('genBtn').onclick = regenerateTables;
+
+// ========== INIT ==========
+(async () => {
+  if (token && slug) {
+    try { const r = await api('/admin/settings'); startAdmin(r.name); }
+    catch { logout(); }
+  }
+})();
+</script>
+</body>
+</html>
