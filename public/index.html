@@ -761,7 +761,7 @@ async function placeOrder(){
     });
     const d = await r.json();
     if (r.ok) {
-      $('okNum').textContent = d.order_id;
+      $('okNum').textContent = d.daily_number || d.order_id;
       $('okModal').classList.add('on');
       sessionPlacedTotal += Number(d.total || 0);
       cart = []; saveCart(); updateCart();
