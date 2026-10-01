@@ -21,9 +21,8 @@ input,select,textarea{font-family:inherit}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes popIn{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 @keyframes pulseRed{0%,100%{box-shadow:0 0 0 0 rgba(184,68,58,.5)}50%{box-shadow:0 0 0 12px rgba(184,68,58,0)}}
-@keyframes pulseGold{0%,100%{box-shadow:0 0 0 0 rgba(201,169,97,.5)}50%{box-shadow:0 0 0 10px rgba(201,169,97,0)}}
 
-/* ========== LOGIN ========== */
+/* LOGIN */
 .login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--navy)}
 .lcard{background:var(--white);border-radius:20px;padding:36px 28px;max-width:400px;width:100%;animation:popIn .4s ease both}
 .lcard .brand{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:.16em;font-size:.72rem;color:var(--gold-3);text-transform:uppercase;margin-bottom:24px;text-align:center}
@@ -35,7 +34,7 @@ input,select,textarea{font-family:inherit}
 .lcard .lbtn:hover{background:var(--gold);color:var(--navy)}
 .lerr{color:var(--red);font-size:.85rem;margin-top:12px;text-align:center;min-height:18px}
 
-/* ========== APP LAYOUT ========== */
+/* APP */
 .app{display:none;min-height:100vh;padding-bottom:90px}
 .app.on{display:block}
 
@@ -47,14 +46,12 @@ input,select,textarea{font-family:inherit}
 .topbar-right{display:flex;align-items:center;gap:8px}
 .logout{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:var(--white);display:flex;align-items:center;justify-content:center}
 
-/* Side rail (desktop) */
 .rail{display:none}
 .rail-btn{padding:10px 16px;border-radius:10px;color:rgba(255,255,255,.6);font-size:.85rem;font-weight:600;text-align:left;display:flex;align-items:center;gap:12px;transition:all .18s;width:100%}
 .rail-btn:hover{background:rgba(255,255,255,.05);color:var(--white)}
 .rail-btn.on{background:rgba(201,169,97,.12);color:var(--gold)}
 .rail-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 
-/* Content */
 .content{padding:22px;max-width:1200px;margin:0 auto}
 .view{display:none;animation:fadeUp .35s ease both}
 .view.on{display:block}
@@ -63,62 +60,26 @@ input,select,textarea{font-family:inherit}
 .page-head .eyebrow{font-family:'Archivo',sans-serif;font-weight:700;font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-3);margin-bottom:8px}
 .page-head h1{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.7rem;letter-spacing:-.02em;line-height:1.1}
 
-/* ========== SERVICE REQUESTS BANNER ========== */
-.reqs-banner{
-  background:linear-gradient(90deg, rgba(184,68,58,.06), rgba(184,68,58,.02));
-  border:1px solid rgba(184,68,58,.35);
-  border-radius:14px;
-  padding:14px 18px;
-  margin-bottom:18px;
-  display:flex;
-  align-items:center;
-  gap:14px;
-  animation:pulseRed 1.6s ease infinite;
-}
+/* REQUESTS BANNER */
+.reqs-banner{background:linear-gradient(90deg,rgba(184,68,58,.06),rgba(184,68,58,.02));border:1px solid rgba(184,68,58,.35);border-radius:14px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;animation:pulseRed 1.6s ease infinite}
 .reqs-banner.empty{display:none}
-.reqs-banner .rb-icon{
-  width:40px;height:40px;flex-shrink:0;
-  border-radius:10px;background:var(--red);color:var(--white);
-  display:flex;align-items:center;justify-content:center;
-}
+.reqs-banner .rb-icon{width:40px;height:40px;flex-shrink:0;border-radius:10px;background:var(--red);color:var(--white);display:flex;align-items:center;justify-content:center}
 .reqs-banner .rb-body{flex:1;min-width:0}
 .reqs-banner .rb-title{font-family:'Archivo',sans-serif;font-weight:800;font-size:.92rem;color:var(--red);margin-bottom:2px}
 .reqs-banner .rb-list{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-.req-chip{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:6px 12px;background:var(--white);border-radius:99px;
-  font-size:.78rem;font-weight:600;color:var(--ink);
-  border:1px solid var(--line);
-}
-.req-chip button{
-  background:var(--red);color:var(--white);border-radius:99px;
-  padding:2px 10px;font-size:.7rem;font-weight:800;margin-left:4px;
-}
+.req-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--white);border-radius:99px;font-size:.78rem;font-weight:600;color:var(--ink);border:1px solid var(--line)}
+.req-chip button{background:var(--red);color:var(--white);border-radius:99px;padding:2px 10px;font-size:.7rem;font-weight:800;margin-left:4px}
 
-/* ========== ORDER CARDS ========== */
+/* ORDERS */
 .orders-list{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:900px){.orders-list{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1300px){.orders-list{grid-template-columns:repeat(3,1fr)}}
-
-.order-card{
-  background:var(--white);
-  border-radius:16px;
-  border:1px solid var(--line);
-  padding:18px;
-  transition:transform .18s ease;
-  animation:fadeUp .4s ease both;
-  position:relative;
-  overflow:hidden;
-}
-.order-card::before{
-  content:'';position:absolute;top:0;left:0;width:4px;height:100%;
-  background:var(--orange);
-}
+.order-card{background:var(--white);border-radius:16px;border:1px solid var(--line);padding:18px;transition:transform .18s ease;animation:fadeUp .4s ease both;position:relative;overflow:hidden}
+.order-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--orange)}
 .order-card.s-preparing::before{background:#3b82f6}
 .order-card.s-ready::before{background:var(--green)}
 .order-card.s-served::before{background:#9ca3af;opacity:.6}
 .order-card.s-served{opacity:.75}
-
 .oc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:10px}
 .oc-table{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.15rem;letter-spacing:-.01em}
 .oc-table .k{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;display:block;margin-bottom:2px;font-family:'Inter',sans-serif}
@@ -127,58 +88,51 @@ input,select,textarea{font-family:inherit}
 .s-ready .oc-status{background:rgba(61,107,74,.12);color:var(--green)}
 .s-served .oc-status{background:rgba(0,0,0,.06);color:var(--muted)}
 .oc-time{font-size:.72rem;color:var(--muted);display:block;margin-top:3px}
-
 .oc-items{list-style:none;margin-bottom:14px;padding:12px;background:var(--cream);border-radius:10px;display:flex;flex-direction:column;gap:6px}
 .oc-items li{display:flex;justify-content:space-between;font-size:.86rem;color:var(--ink-2)}
 .oc-items li .qty{font-weight:700;color:var(--ink)}
-
 .oc-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding-top:12px;border-top:1px dashed var(--line)}
 .oc-total{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.2rem;color:var(--navy);letter-spacing:-.01em}
 .oc-actions{display:flex;gap:6px;flex-wrap:wrap}
-.oc-actions button{
-  padding:8px 14px;border-radius:9px;font-size:.78rem;font-weight:700;
-  transition:all .15s;
-}
+.oc-actions button{padding:8px 14px;border-radius:9px;font-size:.78rem;font-weight:700;transition:all .15s}
 .oc-actions .go{background:var(--navy);color:var(--white)}
 .oc-actions .go:hover{background:var(--gold);color:var(--navy)}
 .oc-actions .end{background:rgba(184,68,58,.1);color:var(--red)}
 .oc-actions .end:hover{background:var(--red);color:var(--white)}
 
-/* ========== MENU ADMIN ========== */
-.addbtn{
-  padding:12px 22px;background:var(--navy);color:var(--white);border-radius:11px;
-  font-size:.88rem;font-weight:700;letter-spacing:.02em;
-  display:inline-flex;align-items:center;gap:8px;
-}
+/* MENU — 3 in a row on mobile */
+.addbtn{padding:12px 22px;background:var(--navy);color:var(--white);border-radius:11px;font-size:.88rem;font-weight:700;letter-spacing:.02em;display:inline-flex;align-items:center;gap:8px}
 .addbtn:hover{background:var(--gold);color:var(--navy)}
-.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(min-width:640px){.menu-grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}}
 .menu-card{background:var(--white);border-radius:14px;overflow:hidden;border:1px solid var(--line);animation:fadeUp .4s ease both}
 .menu-card .mi{aspect-ratio:1/1;background:var(--cream-2);overflow:hidden}
 .menu-card .mi img{width:100%;height:100%;object-fit:cover}
-.menu-card .mi .noimg{display:flex;align-items:center;justify-content:center;height:100%;font-size:2.4rem;opacity:.4}
-.menu-card .mb{padding:12px 14px 14px}
-.menu-card h4{font-size:.9rem;font-weight:700;margin-bottom:3px;line-height:1.3}
-.menu-card .pr{font-family:'Archivo',sans-serif;font-weight:900;font-size:1rem;color:var(--navy)}
-.menu-card .cat{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border-radius:99px;background:var(--cream-2);color:var(--ink-2);display:inline-block;margin-top:6px}
-.menu-card .acts{display:flex;gap:6px;padding:10px 14px;border-top:1px solid var(--line)}
-.menu-card .acts button{flex:1;padding:8px;border:1px solid var(--line);background:var(--white);border-radius:8px;font-size:.78rem;font-weight:600}
+.menu-card .mi .noimg{display:flex;align-items:center;justify-content:center;height:100%;font-size:2rem;opacity:.4}
+.menu-card .mb{padding:8px 8px 10px}
+@media(min-width:640px){.menu-card .mb{padding:12px 14px 14px}}
+.menu-card h4{font-size:.72rem;font-weight:700;margin-bottom:2px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(min-width:640px){.menu-card h4{font-size:.9rem}}
+.menu-card .pr{font-family:'Archivo',sans-serif;font-weight:900;font-size:.82rem;color:var(--navy)}
+@media(min-width:640px){.menu-card .pr{font-size:1rem}}
+.menu-card .cat{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:99px;background:var(--cream-2);color:var(--ink-2);display:inline-block;margin-top:5px}
+@media(min-width:640px){.menu-card .cat{font-size:.66rem;padding:3px 9px}}
+.menu-card .acts{display:flex;gap:4px;padding:6px 8px;border-top:1px solid var(--line)}
+@media(min-width:640px){.menu-card .acts{gap:6px;padding:10px 14px}}
+.menu-card .acts button{flex:1;padding:6px;border:1px solid var(--line);background:var(--white);border-radius:6px;font-size:.68rem;font-weight:600}
+@media(min-width:640px){.menu-card .acts button{padding:8px;border-radius:8px;font-size:.78rem}}
 .menu-card .acts button:hover{background:var(--cream)}
 .menu-card .acts button.del{color:var(--red);border-color:rgba(184,68,58,.3)}
 
-/* ========== ANALYTICS ========== */
+/* ANALYTICS */
 .stats-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:20px}
 @media(min-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1000px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
-
-.stat-card{
-  background:var(--white);border:1px solid var(--line);border-radius:16px;
-  padding:22px;animation:fadeUp .4s ease both;
-}
+.stat-card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;animation:fadeUp .4s ease both}
 .stat-card .lbl{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:10px}
 .stat-card .amt{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.8rem;letter-spacing:-.02em;color:var(--navy);line-height:1;margin-bottom:10px}
 .stat-card .sub{display:flex;gap:14px;font-size:.78rem;color:var(--muted)}
 .stat-card .sub .it{font-weight:700;color:var(--ink-2)}
-
 .top-items-card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;margin-top:18px}
 .top-items-card h3{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.15rem;letter-spacing:-.01em;margin-bottom:16px}
 .top-list{display:flex;flex-direction:column;gap:2px}
@@ -189,21 +143,57 @@ input,select,textarea{font-family:inherit}
 .top-qty{font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;color:var(--navy)}
 .top-rev{font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;color:var(--gold-3);min-width:80px;text-align:right}
 
-/* ========== TABLES ========== */
-.table-controls{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
-.table-controls label{font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:8px}
-.table-controls input{width:80px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;font-size:.9rem;background:var(--white)}
-.table-controls button{padding:10px 18px;background:var(--navy);color:var(--white);border-radius:10px;font-size:.85rem;font-weight:700}
-.table-controls button:hover{background:var(--gold);color:var(--navy)}
+/* TABLES */
+.tables-toolbar{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap;justify-content:space-between}
+.tables-toolbar .info{font-size:.85rem;color:var(--muted)}
+.tables-toolbar .info strong{font-family:'Archivo',sans-serif;font-weight:900;color:var(--navy);font-size:1rem}
+.tables-toolbar button{padding:11px 18px;border-radius:10px;font-size:.85rem;font-weight:700;transition:all .15s}
+.tables-toolbar .add-t{background:var(--navy);color:var(--white)}
+.tables-toolbar .add-t:hover{background:var(--gold);color:var(--navy)}
+.tables-toolbar .regen{background:var(--white);color:var(--ink);border:1px solid var(--line)}
+.tables-toolbar .regen:hover{background:var(--cream-2)}
 
-.tables-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
-.table-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;animation:fadeUp .4s ease both}
-.table-card h4{font-family:'Archivo',sans-serif;font-weight:800;font-size:.9rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
-.table-card img{width:100%;max-width:160px;margin:0 auto 12px;display:block;border-radius:8px}
-.table-card .pin{font-family:'Archivo',sans-serif;font-weight:900;font-size:.95rem;letter-spacing:.1em;color:var(--gold-3);margin-bottom:10px}
-.table-card a{display:inline-block;padding:8px 14px;background:var(--cream);border-radius:8px;color:var(--ink);font-size:.78rem;font-weight:600;text-decoration:none}
+.tables-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:700px){.tables-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}}
+.table-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;animation:fadeUp .4s ease both;position:relative}
+@media(min-width:700px){.table-card{padding:18px}}
+.tc-num{font-family:'Archivo',sans-serif;font-weight:900;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;color:var(--navy)}
+@media(min-width:700px){.tc-num{font-size:1.1rem;margin-bottom:14px}}
+.tc-qr{width:100%;max-width:140px;margin:0 auto 10px;display:block;border-radius:8px}
+@media(min-width:700px){.tc-qr{max-width:170px;margin-bottom:14px}}
+.tc-pin-row{display:flex;align-items:center;gap:6px;justify-content:center;margin-bottom:10px;background:var(--cream);border-radius:9px;padding:6px 8px}
+.tc-pin-row label{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tc-pin-row input{
+  width:60px;text-align:center;
+  font-family:'Archivo',sans-serif;font-weight:900;font-size:1rem;
+  letter-spacing:.14em;
+  padding:6px 4px;border:1px solid var(--line);border-radius:7px;
+  background:var(--white);color:var(--navy);
+  outline:none;transition:border-color .18s;
+}
+.tc-pin-row input:focus{border-color:var(--gold)}
+.tc-pin-row button{
+  padding:6px 10px;border-radius:7px;
+  background:var(--navy);color:var(--white);
+  font-size:.7rem;font-weight:700;
+  transition:background .15s;
+}
+.tc-pin-row button:hover{background:var(--gold);color:var(--navy)}
+.tc-pin-row button.saved{background:var(--green);color:var(--white)}
+.tc-actions{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.tc-actions a,.tc-actions button{
+  padding:7px 12px;border-radius:8px;
+  font-size:.72rem;font-weight:600;
+  text-decoration:none;
+  display:inline-flex;align-items:center;gap:4px;
+  transition:all .15s;
+}
+.tc-actions a{background:var(--cream);color:var(--ink);border:1px solid var(--line)}
+.tc-actions a:hover{background:var(--cream-2)}
+.tc-actions .remove{background:rgba(184,68,58,.08);color:var(--red);border:1px solid transparent}
+.tc-actions .remove:hover{background:var(--red);color:var(--white)}
 
-/* ========== SETTINGS ========== */
+/* SETTINGS */
 .settings-form{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px;max-width:720px}
 .form-row{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}
 @media(min-width:600px){.form-row.two{grid-template-columns:1fr 1fr}}
@@ -218,7 +208,7 @@ input,select,textarea{font-family:inherit}
 .save-btn{padding:13px 26px;background:var(--navy);color:var(--white);border-radius:11px;font-size:.9rem;font-weight:700;letter-spacing:.02em;margin-top:8px}
 .save-btn:hover{background:var(--gold);color:var(--navy)}
 
-/* ========== MODAL ========== */
+/* MODAL */
 .ov{position:fixed;inset:0;background:rgba(10,22,40,.7);display:none;align-items:center;justify-content:center;z-index:300;padding:20px;backdrop-filter:blur(6px)}
 .ov.on{display:flex}
 .mod{background:var(--white);border-radius:20px;padding:28px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;animation:popIn .3s ease both}
@@ -230,23 +220,13 @@ input,select,textarea{font-family:inherit}
 .img-preview{margin-top:10px}
 .img-preview img{max-width:180px;border-radius:10px;border:1px solid var(--line)}
 
-/* ========== BOTTOM NAV (mobile) ========== */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;
-  background:var(--navy);
-  border-top:1px solid rgba(201,169,97,.15);
-  padding:6px 0 max(6px,env(safe-area-inset-bottom));
-  z-index:90;
-  display:grid;grid-template-columns:repeat(5,1fr);
-  max-width:720px;margin:0 auto;
-}
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--navy);border-top:1px solid rgba(201,169,97,.15);padding:6px 0 max(6px,env(safe-area-inset-bottom));z-index:90;display:grid;grid-template-columns:repeat(5,1fr);max-width:720px;margin:0 auto}
 @media(min-width:900px){.bottom-nav{display:none}}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;color:rgba(255,255,255,.55);font-size:.6rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;transition:color .18s}
 .nav-item.on,.nav-item:hover{color:var(--gold)}
 .nav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.nav-item .badge{position:absolute;top:8px;right:calc(50% - 20px);background:var(--red);color:#fff;font-size:.6rem;font-weight:800;border-radius:99px;padding:1px 6px}
 
-/* ========== DESKTOP LAYOUT ========== */
 @media(min-width:900px){
   .app{display:grid !important;grid-template-columns:220px 1fr;grid-template-rows:auto 1fr;grid-template-areas:"rail top" "rail content";min-height:100vh;padding-bottom:0}
   .app.on{display:grid !important}
@@ -257,18 +237,15 @@ input,select,textarea{font-family:inherit}
   .bottom-nav{display:none !important}
 }
 
-/* ========== TOAST ========== */
 .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:var(--white);padding:13px 22px;border-radius:12px;font-size:.85rem;font-weight:600;opacity:0;transition:all .3s;z-index:500;pointer-events:none;border:1px solid rgba(201,169,97,.3);max-width:calc(100% - 40px)}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* Empty states */
 .empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:.9rem}
 .empty .big{font-size:2.6rem;opacity:.35;margin-bottom:14px}
 </style>
 </head>
 <body>
 
-<!-- ========== LOGIN ========== -->
 <div class="login" id="loginView">
   <div class="lcard">
     <div class="brand">— ADMIN PANEL —</div>
@@ -281,10 +258,7 @@ input,select,textarea{font-family:inherit}
   </div>
 </div>
 
-<!-- ========== APP ========== -->
 <div class="app" id="app">
-
-  <!-- Side rail (desktop) -->
   <aside class="rail">
     <div class="rail-brand">GREEN LEAF · ADMIN</div>
     <button class="rail-btn on" data-v="orders">
@@ -309,23 +283,19 @@ input,select,textarea{font-family:inherit}
     </button>
   </aside>
 
-  <!-- Topbar -->
   <header class="topbar">
     <div class="topbar-left">
       <div class="brand">GREEN LEAF<span class="dot">.</span></div>
       <div class="rname" id="rname">—</div>
     </div>
     <div class="topbar-right">
-      <button class="logout" id="logoutBtn" title="Logout">
+      <button class="logout" id="logoutBtn">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       </button>
     </div>
   </header>
 
-  <!-- Content -->
   <main class="content">
-
-    <!-- ORDERS -->
     <section class="view on" id="v-orders">
       <div class="page-head">
         <div>
@@ -357,7 +327,6 @@ input,select,textarea{font-family:inherit}
       <div class="orders-list" id="ordersList"></div>
     </section>
 
-    <!-- ANALYTICS -->
     <section class="view" id="v-analytics">
       <div class="page-head">
         <div>
@@ -396,7 +365,6 @@ input,select,textarea{font-family:inherit}
       </div>
     </section>
 
-    <!-- MENU -->
     <section class="view" id="v-menu">
       <div class="page-head">
         <div>
@@ -411,7 +379,6 @@ input,select,textarea{font-family:inherit}
       <div class="menu-grid" id="menuGrid"></div>
     </section>
 
-    <!-- TABLES -->
     <section class="view" id="v-tables">
       <div class="page-head">
         <div>
@@ -419,14 +386,21 @@ input,select,textarea{font-family:inherit}
           <h1>Tables</h1>
         </div>
       </div>
-      <div class="table-controls">
-        <label>Tables: <input type="number" id="tcount" min="1" max="200" value="10"></label>
-        <button id="genBtn">Regenerate with New PINs</button>
+
+      <div class="tables-toolbar">
+        <div class="info">Total tables: <strong id="tableCountDisplay">0</strong> · QRs stay the same forever. Only PINs change.</div>
+        <div style="display:flex;gap:8px">
+          <button class="add-t" id="addTableBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;margin-right:4px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Table
+          </button>
+          <button class="regen" id="regenAllBtn">Reset All PINs</button>
+        </div>
       </div>
+
       <div class="tables-grid" id="tg"></div>
     </section>
 
-    <!-- SETTINGS -->
     <section class="view" id="v-settings">
       <div class="page-head">
         <div>
@@ -470,10 +444,8 @@ input,select,textarea{font-family:inherit}
         <button type="submit" class="save-btn">Save Settings</button>
       </form>
     </section>
-
   </main>
 
-  <!-- Bottom nav (mobile) -->
   <nav class="bottom-nav">
     <button class="nav-item on" data-v="orders">
       <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
@@ -498,7 +470,6 @@ input,select,textarea{font-family:inherit}
   </nav>
 </div>
 
-<!-- ========== ITEM MODAL ========== -->
 <div class="ov" id="itemModal">
   <div class="mod">
     <h2 id="imTitle">Add Menu Item</h2>
@@ -557,7 +528,6 @@ async function api(path, opts = {}) {
   return r.json();
 }
 
-// ========== LOGIN ==========
 async function login() {
   const s = $('lslug').value.trim(), p = $('lpass').value;
   try {
@@ -579,35 +549,28 @@ function logout() {
   $('app').classList.remove('on');
   $('loginView').style.display = 'flex';
 }
-
 function startAdmin(name) {
   $('loginView').style.display = 'none';
   $('app').classList.add('on');
   $('rname').textContent = name;
-
-  // Notification sound (short beep via data URI)
-  audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQBvT18AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==');
+  audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQBvT18AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==');
   audio.volume = 0.4;
-
   loadSettings();
   loadOrders();
   loadRequests();
   setInterval(() => { loadOrders(); loadRequests(); }, 5000);
 }
 
-// ========== ORDERS ==========
 async function loadOrders() {
   const s = $('fs').value;
   const orders = await api('/admin/orders' + (s ? '?status=' + s : ''));
   const list = $('ordersList');
   if (!orders.length) {
     list.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🧾</div><div>No orders yet</div></div>';
-    lastOrderCount = 0;
-    return;
+    lastOrderCount = 0; return;
   }
   if (lastOrderCount > 0 && orders.length > lastOrderCount) audio.play().catch(() => {});
   lastOrderCount = orders.length;
-
   list.innerHTML = orders.map(o => {
     let items = [];
     try { items = JSON.parse(o.items || '[]'); } catch {}
@@ -636,41 +599,29 @@ async function loadOrders() {
       </div>
     `;
   }).join('');
-
   list.querySelectorAll('button[data-st]').forEach(b => {
     b.onclick = async () => {
-      await api('/admin/orders/' + b.dataset.id, {
-        method: 'PATCH', body: JSON.stringify({ status: b.dataset.st }),
-      });
+      await api('/admin/orders/' + b.dataset.id, { method: 'PATCH', body: JSON.stringify({ status: b.dataset.st }) });
       loadOrders();
     };
   });
   list.querySelectorAll('button[data-table]').forEach(b => {
     b.onclick = async () => {
       if (!confirm(`End session for Table ${b.dataset.table}? This will archive all orders and free the table.`)) return;
-      await api('/admin/end-session', {
-        method: 'POST', body: JSON.stringify({ table: b.dataset.table }),
-      });
+      await api('/admin/end-session', { method: 'POST', body: JSON.stringify({ table: b.dataset.table }) });
       toast(`Table ${b.dataset.table} session ended`);
       loadOrders();
     };
   });
 }
 
-// ========== SERVICE REQUESTS ==========
 async function loadRequests() {
   const reqs = await api('/admin/requests');
   const banner = $('reqsBanner');
   const list = $('reqsList');
-
-  if (!reqs.length) {
-    banner.classList.add('empty');
-    lastReqCount = 0;
-    return;
-  }
+  if (!reqs.length) { banner.classList.add('empty'); lastReqCount = 0; return; }
   if (lastReqCount > 0 && reqs.length > lastReqCount) audio.play().catch(() => {});
   lastReqCount = reqs.length;
-
   banner.classList.remove('empty');
   list.innerHTML = reqs.map(r => `
     <span class="req-chip">
@@ -686,48 +637,39 @@ async function loadRequests() {
   });
 }
 
-// ========== ANALYTICS ==========
 async function loadAnalytics() {
   try {
     const a = await api('/admin/analytics');
     $('statTodayAmt').textContent = money(a.today.revenue);
     $('statTodayOrders').textContent = a.today.orders;
     $('statTodayAvg').textContent = money(a.today.avg);
-
     $('statWeekAmt').textContent = money(a.week.revenue);
     $('statWeekOrders').textContent = a.week.orders;
     $('statWeekAvg').textContent = money(a.week.avg);
-
     $('statMonthAmt').textContent = money(a.month.revenue);
     $('statMonthOrders').textContent = a.month.orders;
     $('statMonthAvg').textContent = money(a.month.avg);
-
     $('statAllAmt').textContent = money(a.allTime.revenue);
     $('statAllOrders').textContent = a.allTime.orders;
     $('statAllAvg').textContent = money(a.allTime.avg);
-
     const topList = $('topList');
-    if (!a.top_items.length) {
-      topList.innerHTML = '<div class="empty">No sales data yet</div>';
-    } else {
-      topList.innerHTML = a.top_items.map((t, i) => `
-        <div class="top-row">
-          <span class="top-rank">${String(i + 1).padStart(2, '0')}</span>
-          <span class="top-name">${esc(t.name)}</span>
-          <span class="top-qty">${t.qty} sold</span>
-          <span class="top-rev">${money(t.revenue)}</span>
-        </div>
-      `).join('');
-    }
+    if (!a.top_items.length) topList.innerHTML = '<div class="empty">No sales data yet</div>';
+    else topList.innerHTML = a.top_items.map((t, i) => `
+      <div class="top-row">
+        <span class="top-rank">${String(i + 1).padStart(2, '0')}</span>
+        <span class="top-name">${esc(t.name)}</span>
+        <span class="top-qty">${t.qty} sold</span>
+        <span class="top-rev">${money(t.revenue)}</span>
+      </div>
+    `).join('');
   } catch (e) { toast('Analytics failed to load'); }
 }
 
-// ========== MENU ==========
 async function loadMenu() {
   menuItems = await api('/admin/menu');
   const g = $('menuGrid');
   if (!menuItems.length) {
-    g.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🍽️</div><div>No menu items yet. Add your first.</div></div>';
+    g.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🍽️</div><div>No menu items yet</div></div>';
     return;
   }
   g.innerHTML = menuItems.map(m => `
@@ -740,7 +682,7 @@ async function loadMenu() {
       </div>
       <div class="acts">
         <button data-edit="${m.id}">Edit</button>
-        <button class="del" data-del="${m.id}">Delete</button>
+        <button class="del" data-del="${m.id}">Del</button>
       </div>
     </div>
   `).join('');
@@ -780,36 +722,93 @@ async function uploadImg(file) {
   return d.secure_url;
 }
 
-// ========== TABLES ==========
 async function loadTables() {
   tables = await api('/admin/tables');
-  $('tcount').value = tables.length || 10;
+  $('tableCountDisplay').textContent = tables.length;
   const g = $('tg');
   if (!tables.length) {
-    g.innerHTML = '<div class="empty">No tables yet. Set a count and click Regenerate.</div>';
+    g.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">📱</div><div>No tables yet. Click "Add Table" to start.</div></div>';
     return;
   }
   g.innerHTML = tables.map(t => {
     const qr = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(t.url)}`;
     return `
       <div class="table-card">
-        <h4>Table ${t.number}</h4>
-        <img src="${qr}" alt="QR">
-        <div class="pin">PIN ${t.pin}</div>
-        <a href="${qr}" download="table-${t.number}-qr.png">Download QR</a>
+        <div class="tc-num">Table ${t.number}</div>
+        <img class="tc-qr" src="${qr}" alt="QR">
+        <div class="tc-pin-row">
+          <label>PIN</label>
+          <input type="text" value="${esc(t.pin)}" maxlength="4" inputmode="numeric" data-pin-input="${t.number}">
+          <button data-pin-save="${t.number}">Save</button>
+        </div>
+        <div class="tc-actions">
+          <a href="${qr}" download="table-${t.number}-qr.png">Download QR</a>
+          <button class="remove" data-remove="${t.number}">Remove</button>
+        </div>
       </div>
     `;
   }).join('');
+
+  // PIN save handlers
+  g.querySelectorAll('[data-pin-save]').forEach(btn => {
+    btn.onclick = async () => {
+      const num = btn.dataset.pinSave;
+      const input = g.querySelector(`[data-pin-input="${num}"]`);
+      const newPin = input.value.trim();
+      if (!/^\d{4}$/.test(newPin)) { toast('PIN must be 4 digits'); return; }
+      btn.textContent = '...'; btn.disabled = true;
+      try {
+        await api('/admin/tables/pin', { method: 'POST', body: JSON.stringify({ number: num, pin: newPin }) });
+        btn.textContent = 'Saved'; btn.classList.add('saved');
+        toast(`PIN updated for Table ${num}`);
+        setTimeout(() => { btn.textContent = 'Save'; btn.classList.remove('saved'); btn.disabled = false; }, 1500);
+      } catch {
+        btn.textContent = 'Save'; btn.disabled = false;
+        toast('Failed to update PIN');
+      }
+    };
+  });
+
+  // Allow Enter key to save
+  g.querySelectorAll('[data-pin-input]').forEach(inp => {
+    inp.onkeydown = e => {
+      if (e.key === 'Enter') {
+        const num = inp.dataset.pinInput;
+        g.querySelector(`[data-pin-save="${num}"]`).click();
+      }
+    };
+    // Auto-uppercase fix — only digits
+    inp.oninput = e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4); };
+  });
+
+  // Remove handlers
+  g.querySelectorAll('[data-remove]').forEach(btn => {
+    btn.onclick = async () => {
+      const num = btn.dataset.remove;
+      if (!confirm(`Remove Table ${num}? Its QR code will stop working. You can add it back later with the same number.`)) return;
+      await api('/admin/tables/remove', { method: 'POST', body: JSON.stringify({ number: num }) });
+      toast(`Table ${num} removed`);
+      loadTables();
+    };
+  });
 }
 
-async function regenerateTables() {
-  const c = parseInt($('tcount').value);
-  if (!confirm(`Regenerate ${c} tables with new PINs? QR codes still work — only PINs change.`)) return;
-  await api('/admin/tables/regenerate', { method: 'POST', body: JSON.stringify({ count: c }) });
-  toast('Tables regenerated'); loadTables();
+async function addTable() {
+  try {
+    const r = await api('/admin/tables/add', { method: 'POST', body: JSON.stringify({}) });
+    toast(`Table ${r.number} added · PIN ${r.pin}`);
+    loadTables();
+  } catch { toast('Failed to add table'); }
 }
 
-// ========== SETTINGS ==========
+async function regenAll() {
+  const count = tables.length;
+  if (!confirm(`Reset all ${count} PINs? QR codes stay the same — only PINs change.`)) return;
+  await api('/admin/tables/regenerate', { method: 'POST', body: JSON.stringify({ count }) });
+  toast('All PINs reset');
+  loadTables();
+}
+
 async function loadSettings() {
   const s = await api('/admin/settings');
   $('s-name').value = s.name;
@@ -842,7 +841,6 @@ async function saveSettings(e) {
   toast('Settings saved');
 }
 
-// ========== NAV ==========
 function switchView(v) {
   document.querySelectorAll('.rail-btn, .nav-item').forEach(b => b.classList.toggle('on', b.dataset.v === v));
   document.querySelectorAll('.view').forEach(x => x.classList.remove('on'));
@@ -857,7 +855,6 @@ document.querySelectorAll('.rail-btn, .nav-item').forEach(b => {
   b.onclick = () => switchView(b.dataset.v);
 });
 
-// ========== EVENTS ==========
 $('lbtn').onclick = login;
 $('lpass').onkeydown = e => { if (e.key === 'Enter') login(); };
 $('logoutBtn').onclick = () => { if (confirm('Logout?')) logout(); };
@@ -865,6 +862,8 @@ $('fs').onchange = loadOrders;
 $('refresh').onclick = loadOrders;
 $('refreshAnalytics').onclick = loadAnalytics;
 $('addBtn').onclick = () => openItem(null);
+$('addTableBtn').onclick = addTable;
+$('regenAllBtn').onclick = regenAll;
 $('i-cancel').onclick = () => $('itemModal').classList.remove('on');
 $('i-img').onchange = e => {
   const f = e.target.files[0]; if (!f) return;
@@ -873,14 +872,15 @@ $('i-img').onchange = e => {
   rd.onload = ev => $('i-prev').innerHTML = `<img src="${ev.target.result}">`;
   rd.readAsDataURL(f);
 };
+
 $('itemForm').onsubmit = async e => {
   e.preventDefault();
-  let imgUrl = '';
+  let oldImageUrl = '';
+  if (editId) oldImageUrl = menuItems.find(m => m.id === editId)?.image_url || '';
+  let imgUrl = oldImageUrl;
   if (pendingImg) {
     try { imgUrl = await uploadImg(pendingImg); }
     catch (err) { toast('Photo: ' + err.message); return; }
-  } else if (editId) {
-    imgUrl = menuItems.find(m => m.id === editId)?.image_url || '';
   }
   const body = {
     name: $('i-name').value, name_urdu: $('i-name_ur').value,
@@ -890,13 +890,23 @@ $('itemForm').onsubmit = async e => {
   };
   if (editId) await api('/admin/menu/' + editId, { method: 'PUT', body: JSON.stringify(body) });
   else await api('/admin/menu', { method: 'POST', body: JSON.stringify(body) });
+
+  // Delete old Cloudinary image if a new one was uploaded
+  if (pendingImg && oldImageUrl) {
+    const match = oldImageUrl.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.\w+)?$/);
+    if (match && match[1]) {
+      try {
+        await api('/admin/menu/delete-image', { method: 'POST', body: JSON.stringify({ public_id: match[1] }) });
+      } catch (err) { console.error('Failed to delete old image:', err); }
+    }
+  }
+
   $('itemModal').classList.remove('on');
   toast('Saved'); loadMenu();
 };
-$('setForm').onsubmit = saveSettings;
-$('genBtn').onclick = regenerateTables;
 
-// ========== INIT ==========
+$('setForm').onsubmit = saveSettings;
+
 (async () => {
   if (token && slug) {
     try { const r = await api('/admin/settings'); startAdmin(r.name); }
