@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#0a1628;--navy-2:#0f2038;--gold:#c9a961;--gold-2:#e0c584;--gold-3:#a8874a;
+  --navy:#0a1628;--gold:#c9a961;--gold-2:#e0c584;--gold-3:#a8874a;
   --cream:#f7f3ea;--cream-2:#ebe4d3;--ink:#121212;--muted:#7a7264;--line:#e2d9c5;
   --white:#ffffff;--green:#3d6b4a;--green-2:#4a8a5c;--red:#b8443a;--orange:#d97706;
 }
@@ -22,7 +22,6 @@ input,select,textarea{font-family:inherit}
 @keyframes popIn{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 @keyframes pulseRed{0%,100%{box-shadow:0 0 0 0 rgba(184,68,58,.5)}50%{box-shadow:0 0 0 12px rgba(184,68,58,0)}}
 
-/* LOGIN */
 .login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--navy)}
 .lcard{background:var(--white);border-radius:20px;padding:36px 28px;max-width:400px;width:100%;animation:popIn .4s ease both}
 .lcard .brand{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:.16em;font-size:.72rem;color:var(--gold-3);text-transform:uppercase;margin-bottom:24px;text-align:center}
@@ -34,7 +33,6 @@ input,select,textarea{font-family:inherit}
 .lcard .lbtn:hover{background:var(--gold);color:var(--navy)}
 .lerr{color:var(--red);font-size:.85rem;margin-top:12px;text-align:center;min-height:18px}
 
-/* APP */
 .app{display:none;min-height:100vh;padding-bottom:90px}
 .app.on{display:block}
 
@@ -60,6 +58,20 @@ input,select,textarea{font-family:inherit}
 .page-head .eyebrow{font-family:'Archivo',sans-serif;font-weight:700;font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-3);margin-bottom:8px}
 .page-head h1{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.7rem;letter-spacing:-.02em;line-height:1.1}
 
+/* Toolbar row */
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.toolbar select,.toolbar button{
+  padding:11px 16px;border-radius:11px;font-size:.85rem;font-weight:700;
+  background:var(--white);border:1.5px solid var(--line);color:var(--ink);
+  transition:all .15s;
+}
+.toolbar select:hover,.toolbar button:hover{border-color:var(--muted)}
+.toolbar .view-toggle{display:inline-flex;background:var(--white);border:1.5px solid var(--line);border-radius:11px;padding:3px}
+.toolbar .view-toggle button{padding:8px 14px;background:transparent;border:0;border-radius:8px;font-size:.82rem;font-weight:700;color:var(--muted)}
+.toolbar .view-toggle button.on{background:var(--navy);color:var(--white)}
+.toolbar .danger{background:var(--red);color:var(--white);border-color:var(--red)}
+.toolbar .danger:hover{background:#8f2f27;border-color:#8f2f27}
+
 /* REQUESTS BANNER */
 .reqs-banner{background:linear-gradient(90deg,rgba(184,68,58,.06),rgba(184,68,58,.02));border:1px solid rgba(184,68,58,.35);border-radius:14px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;animation:pulseRed 1.6s ease infinite}
 .reqs-banner.empty{display:none}
@@ -70,36 +82,87 @@ input,select,textarea{font-family:inherit}
 .req-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--white);border-radius:99px;font-size:.78rem;font-weight:600;color:var(--ink);border:1px solid var(--line)}
 .req-chip button{background:var(--red);color:var(--white);border-radius:99px;padding:4px 12px;font-size:.72rem;font-weight:800;margin-left:6px}
 
-/* ORDERS */
+/* ORDERS — CARD VIEW */
 .orders-list{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:900px){.orders-list{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1300px){.orders-list{grid-template-columns:repeat(3,1fr)}}
-.order-card{background:var(--white);border-radius:16px;border:1px solid var(--line);padding:18px;transition:transform .18s ease;animation:fadeUp .4s ease both;position:relative;overflow:hidden}
-.order-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--orange)}
+
+.order-card{
+  background:var(--white);border-radius:16px;border:1px solid var(--line);
+  padding:20px;animation:fadeUp .4s ease both;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:14px;
+}
+.order-card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--orange)}
 .order-card.s-taken::before{background:var(--green)}
-.order-card.s-taken{opacity:.85}
-.oc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:10px}
-.oc-table{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.15rem;letter-spacing:-.01em}
-.oc-table .k{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700;display:block;margin-bottom:2px;font-family:'Inter',sans-serif}
-.oc-status{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:5px 12px;border-radius:99px;background:rgba(217,119,6,.12);color:var(--orange);white-space:nowrap}
+.order-card.s-taken{background:linear-gradient(180deg,var(--white),#fbfcfa)}
+
+/* HUGE table number */
+.oc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.oc-table-block{display:flex;flex-direction:column;gap:2px}
+.oc-table-label{
+  font-family:'Archivo',sans-serif;font-weight:800;font-size:.62rem;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--muted);
+}
+.oc-table-num{
+  font-family:'Archivo',sans-serif;font-weight:900;
+  font-size:2.6rem;line-height:1;letter-spacing:-.04em;color:var(--navy);
+}
+.oc-side{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.oc-order-num{
+  font-family:'Archivo',sans-serif;font-weight:900;font-size:.95rem;
+  letter-spacing:.02em;color:var(--gold-3);
+}
+.oc-status{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;padding:5px 12px;border-radius:99px;background:rgba(217,119,6,.14);color:var(--orange);white-space:nowrap}
 .s-taken .oc-status{background:rgba(61,107,74,.14);color:var(--green)}
-.oc-time{font-size:.72rem;color:var(--muted);display:block;margin-top:3px}
-.oc-items{list-style:none;margin-bottom:14px;padding:12px;background:var(--cream);border-radius:10px;display:flex;flex-direction:column;gap:6px}
-.oc-items li{display:flex;justify-content:space-between;font-size:.86rem;color:#3a342b}
-.oc-items li .qty{font-weight:700;color:var(--ink)}
-.oc-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:14px;border-top:1px dashed var(--line)}
-.oc-total{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.25rem;color:var(--navy);letter-spacing:-.01em}
+.oc-time{font-size:.72rem;color:var(--muted)}
+
+.oc-items{list-style:none;padding:12px 14px;background:var(--cream);border-radius:12px;display:flex;flex-direction:column;gap:6px}
+.oc-items li{display:flex;justify-content:space-between;font-size:.87rem;color:#3a342b}
+.oc-items li .qty{font-weight:800;color:var(--ink)}
+
+.oc-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.oc-total{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.3rem;color:var(--navy);letter-spacing:-.01em}
 .oc-actions{display:flex;gap:8px;flex-wrap:wrap}
 .oc-actions button{
-  padding:12px 20px;border-radius:11px;font-size:.85rem;font-weight:800;letter-spacing:.03em;
+  padding:13px 22px;border-radius:11px;font-size:.86rem;font-weight:800;letter-spacing:.03em;
   transition:all .15s;display:inline-flex;align-items:center;gap:8px;
 }
-.oc-actions .take{background:var(--green);color:var(--white);box-shadow:0 2px 0 #2d5239}
+.oc-actions .take{background:var(--green);color:var(--white);box-shadow:0 3px 0 #2d5239}
 .oc-actions .take:hover{background:var(--green-2);transform:translateY(-1px)}
-.oc-actions .take:active{transform:translateY(1px);box-shadow:none}
+.oc-actions .take:active{transform:translateY(2px);box-shadow:none}
 .oc-actions .done{background:rgba(61,107,74,.12);color:var(--green);cursor:default;pointer-events:none}
-.oc-actions .end{background:var(--white);color:var(--red);border:2px solid rgba(184,68,58,.35)}
+.oc-actions .end{background:var(--white);color:var(--red);border:2px solid rgba(184,68,58,.35);padding:11px 18px}
 .oc-actions .end:hover{background:var(--red);color:var(--white);border-color:var(--red)}
+
+/* ORDERS — LIST VIEW */
+.orders-list.list-view{display:flex;flex-direction:column;gap:6px}
+.orders-list.list-view .order-card{
+  display:grid;
+  grid-template-columns:80px 100px 1fr auto auto;
+  align-items:center;
+  gap:16px;
+  padding:14px 18px;
+  border-radius:12px;
+}
+.orders-list.list-view .order-card::before{width:3px}
+.orders-list.list-view .oc-table-num{font-size:1.6rem}
+.orders-list.list-view .oc-table-label{display:none}
+.orders-list.list-view .oc-side{flex-direction:row;align-items:center;gap:10px;justify-content:flex-end}
+.orders-list.list-view .oc-items{
+  padding:0;background:transparent;
+  flex-direction:row;flex-wrap:wrap;gap:4px 12px;border-radius:0;
+}
+.orders-list.list-view .oc-items li{font-size:.78rem;gap:4px}
+.orders-list.list-view .oc-foot{flex-direction:row;gap:12px}
+.orders-list.list-view .oc-total{font-size:1.05rem}
+.orders-list.list-view .oc-actions button{padding:9px 14px;font-size:.78rem;box-shadow:none}
+.orders-list.list-view .oc-actions .take{box-shadow:none}
+@media(max-width:700px){
+  .orders-list.list-view .order-card{grid-template-columns:60px 1fr auto;gap:10px;padding:12px 14px}
+  .orders-list.list-view .oc-side{grid-column:3}
+  .orders-list.list-view .oc-items{display:none}
+  .orders-list.list-view .oc-table-num{font-size:1.4rem}
+}
 
 /* MENU */
 .addbtn{padding:13px 24px;background:var(--navy);color:var(--white);border-radius:12px;font-size:.9rem;font-weight:800;letter-spacing:.02em;display:inline-flex;align-items:center;gap:8px;box-shadow:0 3px 0 #050d17;transition:all .15s}
@@ -154,7 +217,6 @@ input,select,textarea{font-family:inherit}
 .tables-toolbar button{padding:12px 20px;border-radius:11px;font-size:.85rem;font-weight:800;letter-spacing:.02em;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
 .tables-toolbar .add-t{background:var(--navy);color:var(--white);box-shadow:0 3px 0 #050d17}
 .tables-toolbar .add-t:hover{background:var(--gold);color:var(--navy);box-shadow:0 3px 0 var(--gold-3)}
-.tables-toolbar .add-t:active{transform:translateY(2px);box-shadow:none}
 .tables-toolbar .regen{background:var(--white);color:var(--ink);border:1.5px solid var(--line)}
 .tables-toolbar .regen:hover{background:var(--cream-2);border-color:var(--muted)}
 
@@ -162,8 +224,8 @@ input,select,textarea{font-family:inherit}
 @media(min-width:700px){.tables-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}}
 .table-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;animation:fadeUp .4s ease both}
 @media(min-width:700px){.table-card{padding:18px}}
-.tc-num{font-family:'Archivo',sans-serif;font-weight:900;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;color:var(--navy)}
-@media(min-width:700px){.tc-num{font-size:1.1rem;margin-bottom:14px}}
+.tc-num{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.6rem;letter-spacing:-.02em;margin-bottom:10px;color:var(--navy)}
+@media(min-width:700px){.tc-num{font-size:1.8rem;margin-bottom:14px}}
 .tc-qr{width:100%;max-width:140px;margin:0 auto 10px;display:block;border-radius:8px}
 @media(min-width:700px){.tc-qr{max-width:170px;margin-bottom:14px}}
 .tc-pin-box{display:flex;flex-direction:column;gap:4px;align-items:center;margin-bottom:12px;background:var(--cream);border-radius:10px;padding:10px}
@@ -171,10 +233,7 @@ input,select,textarea{font-family:inherit}
 .tc-pin-box .val{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:.16em;color:var(--navy)}
 .tc-pin-box .helper{font-size:.65rem;color:var(--muted);margin-top:2px}
 .tc-actions{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
-.tc-actions a,.tc-actions button{
-  padding:9px 14px;border-radius:9px;font-size:.76rem;font-weight:700;
-  text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:all .15s;
-}
+.tc-actions a,.tc-actions button{padding:9px 14px;border-radius:9px;font-size:.76rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:all .15s}
 .tc-actions a{background:var(--navy);color:var(--white)}
 .tc-actions a:hover{background:var(--gold);color:var(--navy)}
 .tc-actions .remove{background:var(--white);color:var(--red);border:1.5px solid rgba(184,68,58,.3)}
@@ -292,14 +351,20 @@ input,select,textarea{font-family:inherit}
           <div class="eyebrow">Live Operations</div>
           <h1>Orders</h1>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <select id="fs" style="padding:11px 16px;border:1.5px solid var(--line);border-radius:11px;background:var(--white);font-size:.85rem;font-weight:700">
-            <option value="">All Orders</option>
-            <option value="pending">Pending</option>
-            <option value="taken">Taken</option>
-          </select>
-          <button id="refresh" style="padding:11px 18px;background:var(--white);border:1.5px solid var(--line);border-radius:11px;font-size:.85rem;font-weight:700">Refresh</button>
+      </div>
+
+      <div class="toolbar">
+        <select id="fs">
+          <option value="">All Orders</option>
+          <option value="pending">Pending</option>
+          <option value="taken">Taken</option>
+        </select>
+        <div class="view-toggle">
+          <button id="viewCards" class="on">Cards</button>
+          <button id="viewList">List</button>
         </div>
+        <button id="refresh">Refresh</button>
+        <button id="clearDayBtn" class="danger">Clear All Orders</button>
       </div>
 
       <div class="reqs-banner empty" id="reqsBanner">
@@ -376,7 +441,7 @@ input,select,textarea{font-family:inherit}
       </div>
 
       <div class="tables-toolbar">
-        <div class="info">Total tables: <strong id="tableCountDisplay">0</strong> · QRs never change · PIN auto-rotates after every 3rd session</div>
+        <div class="info">Total tables: <strong id="tableCountDisplay">0</strong> · QRs never change · PIN auto-rotates every 3rd session</div>
         <div style="display:flex;gap:8px">
           <button class="add-t" id="addTableBtn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -501,6 +566,7 @@ let editId = null, pendingImg = null;
 let lastOrderCount = 0, lastReqCount = 0;
 let cloudName = '', uploadPreset = '';
 let audio = null;
+let viewMode = localStorage.getItem('orders_view') || 'cards';
 
 const $ = id => document.getElementById(id);
 const toast = (m, green) => {
@@ -550,10 +616,19 @@ function startAdmin(name) {
   $('rname').textContent = name;
   audio = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQBvT18AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==');
   audio.volume = 0.4;
+  setViewMode(viewMode);
   loadSettings();
   loadOrders();
   loadRequests();
   setInterval(() => { loadOrders(); loadRequests(); }, 5000);
+}
+
+function setViewMode(mode) {
+  viewMode = mode;
+  localStorage.setItem('orders_view', mode);
+  $('viewCards').classList.toggle('on', mode === 'cards');
+  $('viewList').classList.toggle('on', mode === 'list');
+  $('ordersList').classList.toggle('list-view', mode === 'list');
 }
 
 async function loadOrders() {
@@ -566,19 +641,25 @@ async function loadOrders() {
   }
   if (lastOrderCount > 0 && orders.length > lastOrderCount) audio.play().catch(() => {});
   lastOrderCount = orders.length;
+
   list.innerHTML = orders.map(o => {
     let items = [];
     try { items = JSON.parse(o.items || '[]'); } catch {}
     const time = new Date(o.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const isTaken = o.status === 'taken';
+    const dailyNum = o.daily_number || o.id;
     return `
       <div class="order-card s-${o.status}">
-        <div class="oc-head">
-          <div>
-            <div class="oc-table"><span class="k">Table</span>${esc(o.table_num)}</div>
+        <div class="oc-top">
+          <div class="oc-table-block">
+            <span class="oc-table-label">Table</span>
+            <div class="oc-table-num">${esc(o.table_num)}</div>
+          </div>
+          <div class="oc-side">
+            <span class="oc-order-num">#${dailyNum}</span>
+            <span class="oc-status">${isTaken ? '✓ Taken' : 'Pending'}</span>
             <span class="oc-time">${time}</span>
           </div>
-          <span class="oc-status">${isTaken ? '✓ Taken' : 'Pending'}</span>
         </div>
         <ul class="oc-items">
           ${items.map(i => `<li><span>${esc(i.name)}</span><span class="qty">×${i.qty}</span></li>`).join('')}
@@ -590,7 +671,7 @@ async function loadOrders() {
               ? `<button class="done">✓ Order Taken</button>`
               : `<button class="take" data-id="${o.id}">
                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                   Mark Order Taken
+                   Mark Taken
                  </button>`}
             <button class="end" data-table="${o.table_num}">End Session</button>
           </div>
@@ -614,6 +695,13 @@ async function loadOrders() {
       loadOrders();
     };
   });
+}
+
+async function clearDay() {
+  if (!confirm('Clear all orders? They will be archived. New orders will start from #1.')) return;
+  await api('/admin/orders/clear', { method: 'POST', body: JSON.stringify({}) });
+  toast('All orders cleared. Order numbers reset to #1.', true);
+  loadOrders();
 }
 
 async function loadRequests() {
@@ -827,6 +915,9 @@ $('lpass').onkeydown = e => { if (e.key === 'Enter') login(); };
 $('logoutBtn').onclick = () => { if (confirm('Logout?')) logout(); };
 $('fs').onchange = loadOrders;
 $('refresh').onclick = loadOrders;
+$('clearDayBtn').onclick = clearDay;
+$('viewCards').onclick = () => setViewMode('cards');
+$('viewList').onclick = () => setViewMode('list');
 $('refreshAnalytics').onclick = loadAnalytics;
 $('addBtn').onclick = () => openItem(null);
 $('addTableBtn').onclick = addTable;
@@ -858,7 +949,6 @@ $('itemForm').onsubmit = async e => {
   if (editId) await api('/admin/menu/' + editId, { method: 'PUT', body: JSON.stringify(body) });
   else await api('/admin/menu', { method: 'POST', body: JSON.stringify(body) });
 
-  // Delete old Cloudinary image if new one was uploaded
   if (pendingImg && oldImageUrl) {
     const match = oldImageUrl.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.\w+)?$/);
     if (match && match[1]) {
