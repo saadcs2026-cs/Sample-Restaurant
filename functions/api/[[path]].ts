@@ -233,19 +233,41 @@ export const onRequest = async (context: any) => {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
 
+      // Compute dates in JS (Pakistan time, UTC+5) and pass plain strings
+      const PKT_OFFSET_MS = 5 * 60 * 60 * 1000;
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const dateStr = (d: Date) =>
+        `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
+
+      const nowPkt = new Date(Date.now() + PKT_OFFSET_MS);
+      const todayStr = dateStr(nowPkt);
+
+      const weekAgoPkt = new Date(nowPkt.getTime() - 6 * 24 * 60 * 60 * 1000);
+      const weekStr = dateStr(weekAgoPkt);
+
+      const monthStr = `${nowPkt.getUTCFullYear()}-${pad(nowPkt.getUTCMonth() + 1)}-01`;
+
       const stats = async (since: string) => {
+        // Compare against the start of that day, in UTC terms.
+        // Because created_at is stored by SQLite as UTC, we convert PKT midnight to UTC:
+        // e.g. "2026-10-01 00:00 PKT" = "2026-09-30 19:00 UTC"
+        const sinceUtc = new Date(`${since}T00:00:00+05:00`)
+          .toISOString()
+          .slice(0, 19)
+          .replace('T', ' ');
+
         const r: any = await env.DB.prepare(
           `SELECT COUNT(*) as orders, COALESCE(SUM(total),0) as revenue
            FROM orders WHERE rid=? AND created_at >= ?`
-        ).bind(a.rid, since).first();
+        ).bind(a.rid, sinceUtc).first();
         const orders = r.orders || 0;
         const revenue = r.revenue || 0;
         return { orders, revenue, avg: orders ? Math.round(revenue / orders) : 0 };
       };
 
-      const today: any = await stats("date('now')");
-      const week: any = await stats("date('now','-6 days')");
-      const month: any = await stats("date('now','start of month')");
+      const today: any = await stats(todayStr);
+      const week: any = await stats(weekStr);
+      const month: any = await stats(monthStr);
       const allTime: any = await stats("1970-01-01");
 
       const top = await env.DB.prepare(
