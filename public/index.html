@@ -151,42 +151,76 @@ a{color:inherit}
 
 .footer{text-align:center;padding:32px 20px 24px;color:var(--muted);font-size:.72rem;letter-spacing:.08em}
 
-/* ========== BOTTOM NAV (5 buttons — Menu in center, raised) ========== */
+/* ========== BOTTOM NAV — 5 buttons, Menu circle in center ========== */
 .bottom-nav{
   position:fixed;bottom:0;left:0;right:0;
+  height:64px;
   background:var(--navy);
   border-top:1px solid rgba(201,169,97,.15);
-  padding:6px 0 max(6px,env(safe-area-inset-bottom));
+  padding-bottom:env(safe-area-inset-bottom,0);
   z-index:90;
   display:grid;grid-template-columns:repeat(5,1fr);
   max-width:720px;margin:0 auto;
-  align-items:end;
+  overflow:visible;
 }
 .nav-item{
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:10px 4px;color:rgba(255,255,255,.55);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  color:rgba(255,255,255,.55);
   font-size:.6rem;font-weight:600;letter-spacing:.05em;
   transition:color .18s ease;text-transform:uppercase;
-  position:relative;
+  background:transparent;
 }
-.nav-item:hover,.nav-item:active{color:var(--gold)}
-.nav-item.on{color:var(--gold)}
-.nav-item .icn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--gold)}
+.nav-item:hover,.nav-item:active,.nav-item.on{color:var(--gold)}
+.nav-item .icn{width:24px;height:24px;display:flex;align-items:center;justify-content:center}
 .nav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .nav-item.flash .icn{animation:pulseGold 1s ease}
 
-/* Center Menu button — simple, gold tint */
-.nav-item.nav-center .icn{
-  color:var(--gold);
+/* Center slot — holds the circle button + the notch behind it */
+.nav-center-slot{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
 }
-.nav-item.nav-center .lbl{
-  color:var(--gold);
-  font-weight:800;
+/* Cream circle behind the button — this creates the cut-out appearance in the nav */
+.nav-center-slot::before{
+  content:'';
+  position:absolute;
+  width:80px;height:80px;
+  border-radius:50%;
+  background:var(--cream);
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) translateY(-18px);
+  z-index:0;
+  pointer-events:none;
 }
-.nav-item.nav-center.on .icn,
-.nav-item.nav-center:hover .icn,
-.nav-item.nav-center:active .icn{
-  color:var(--gold-2);
+/* Gold circle menu button */
+.circle-btn{
+  position:relative;
+  width:62px;height:62px;
+  border-radius:50%;
+  background:var(--gold);
+  color:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 16px rgba(201,169,97,.4);
+  z-index:1;
+  transform:translateY(-18px);
+  transition:transform .15s ease;
+  border:0;
+}
+.circle-btn:active{transform:translateY(-18px) scale(.94)}
+.circle-btn svg{
+  width:26px;height:26px;
+  stroke:currentColor;fill:none;
+  stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
+}
+/* Menu label below the circle */
+.nav-center-slot .menu-lbl{
+  position:absolute;
+  bottom:4px;left:50%;
+  transform:translateX(-50%);
+  color:var(--gold);
+  font-size:.6rem;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;
+  pointer-events:none;
 }
 
 /* ========== BILL / RECEIPT MODAL ========== */
@@ -538,14 +572,14 @@ body[dir=rtl] .quick-card .arr{transform:scaleX(-1)}
     <span class="icn"><svg viewBox="0 0 24 24"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2V2z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span>
     <span class="lbl" id="navBillTxt">Bill</span>
   </button>
-  <button class="nav-item nav-center" id="navMenu">
-    <span class="icn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <div class="nav-center-slot">
+    <button class="circle-btn" id="navMenu" aria-label="Menu">
+      <svg viewBox="0 0 24 24">
         <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2z"/>
       </svg>
-    </span>
-    <span class="lbl">Menu</span>
-  </button>
+    </button>
+    <span class="menu-lbl" id="navMenuTxt">Menu</span>
+  </div>
   <button class="nav-item" id="navSplit">
     <span class="icn"><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/></svg></span>
     <span class="lbl" id="navSplitTxt">Split</span>
@@ -734,6 +768,7 @@ function applyText(){
   $('lblHours2').textContent = lang === 'ur' ? 'اوقات' : 'Hours';
   $('lblPhone').textContent = lang === 'ur' ? 'رابطہ' : 'Call us';
   $('billClose').textContent = S.done[lang];
+  $('navMenuTxt').textContent = S.menu[lang];
 }
 function toast(msg){
   const el = $('toast'); el.textContent = msg; el.classList.add('on');
