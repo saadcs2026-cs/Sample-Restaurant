@@ -49,7 +49,6 @@ const getAdmin = async (req: Request, env: E) => {
   return d ? JSON.parse(d) : null;
 };
 
-// Generate a PIN that isn't used by any other table of this restaurant
 const generateUniquePin = async (env: E, rid: number, excludeNumber?: string) => {
   const others = await env.DB.prepare(
     'SELECT pin FROM tables WHERE rid=? AND number!=?'
@@ -61,6 +60,17 @@ const generateUniquePin = async (env: E, rid: number, excludeNumber?: string) =>
   }
   return String(Math.floor(1000 + Math.random() * 9000));
 };
+
+// Pakistan-time today as YYYY-MM-DD
+const pktToday = () => {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const nowPkt = new Date(Date.now() + 5 * 60 * 60 * 1000);
+  return `${nowPkt.getUTCFullYear()}-${pad(nowPkt.getUTCMonth() + 1)}-${pad(nowPkt.getUTCDate())}`;
+};
+
+// Convert YYYY-MM-DD (Pakistan midnight) → UTC datetime string
+const pktToUtc = (dateStr: string) =>
+  new Date(`${dateStr}T00:00:00+05:00`).toISOString().slice(0, 19).replace('T', ' ');
 
 export const onRequest = async (context: any) => {
   const { request, env, params } = context;
@@ -83,7 +93,6 @@ export const onRequest = async (context: any) => {
   try {
     // ==================== PUBLIC ====================
 
-    // GET /api/menu/:slug
     let m = path.match(/^\/menu\/([^/]+)$/);
     if (m && method === 'GET') {
       const slug = m[1];
@@ -98,19 +107,15 @@ export const onRequest = async (context: any) => {
 
       return json({
         restaurant: {
-          name: r.name,
-          name_urdu: r.name_urdu,
-          currency: r.currency,
-          pin_enabled: !!r.pin_enabled,
-          address: r.address || '',
-          phone: r.phone || '',
+          name: r.name, name_urdu: r.name_urdu,
+          currency: r.currency, pin_enabled: !!r.pin_enabled,
+          address: r.address || '', phone: r.phone || '',
           google_place_id: r.google_place_id || '',
         },
         items: items.results,
       }, 200, CORS);
     }
 
-    // POST /api/session — verify QR signature and PIN, create a session
     if (path === '/session' && method === 'POST') {
       const b: any = await request.json();
       const r: any = await env.DB.prepare(
@@ -142,7 +147,7 @@ export const onRequest = async (context: any) => {
       });
     }
 
-    // POST /api/order — place an order
+    // POST /order — with daily resetting order number
     if (path === '/order' && method === 'POST') {
       const s: any = await getSession(request, env);
       if (!s) return json({ error: 'Session required' }, 401, CORS);
@@ -151,13 +156,14 @@ export const onRequest = async (context: any) => {
       const items = body.items || [];
       if (!items.length) return json({ error: 'Cart is empty' }, 400, CORS);
 
-      // Rate limit: 3 orders per minute per table
+      // Rate limit
       const minute = Math.floor(Date.now() / 60000);
       const rlKey = `rl:${s.rid}:${s.table}:${minute}`;
       const cnt = parseInt((await env.SESSIONS.get(rlKey)) || '0');
       if (cnt >= 3) return json({ error: 'Too many orders, please wait.' }, 429, CORS);
       await env.SESSIONS.put(rlKey, String(cnt + 1), { expirationTtl: 120 });
 
+      // Validate items and compute total
       let total = 0;
       const valid: any[] = [];
       for (const it of items) {
@@ -169,9 +175,28 @@ export const onRequest = async (context: any) => {
         valid.push({ id: mi.id, qty: it.qty, price: mi.price });
       }
 
+      // Compute daily order number (resets at Pakistan midnight or on admin clear)
+      const today = pktToday();
+      const rest: any = await env.DB.prepare(
+        'SELECT order_seq_date, order_seq FROM restaurants WHERE id=?'
+      ).bind(s.rid).first();
+
+      let dailyNumber: number;
+      if (rest.order_seq_date !== today) {
+        dailyNumber = 1;
+        await env.DB.prepare(
+          'UPDATE restaurants SET order_seq_date=?, order_seq=? WHERE id=?'
+        ).bind(today, 1, s.rid).run();
+      } else {
+        dailyNumber = (rest.order_seq || 0) + 1;
+        await env.DB.prepare(
+          'UPDATE restaurants SET order_seq=? WHERE id=?'
+        ).bind(dailyNumber, s.rid).run();
+      }
+
       const o: any = await env.DB.prepare(
-        'INSERT INTO orders (rid, table_num, session, total) VALUES (?,?,?,?)'
-      ).bind(s.rid, s.table, s.token, total).run();
+        'INSERT INTO orders (rid, table_num, session, total, daily_number) VALUES (?,?,?,?,?)'
+      ).bind(s.rid, s.table, s.token, total, dailyNumber).run();
       const oid = o.meta.last_row_id;
 
       for (const v of valid) {
@@ -180,20 +205,23 @@ export const onRequest = async (context: any) => {
         ).bind(oid, v.id, v.qty, v.price).run();
       }
 
-      return json({ order_id: oid, total, table: s.table }, 201, CORS);
+      return json({
+        order_id: oid,
+        daily_number: dailyNumber,
+        total,
+        table: s.table,
+      }, 201, CORS);
     }
 
-    // GET /api/my-orders — orders for the current session
     if (path === '/my-orders' && method === 'GET') {
       const s: any = await getSession(request, env);
       if (!s) return json([], 200, CORS);
       const r = await env.DB.prepare(
-        'SELECT id, status, total, created_at FROM orders WHERE session=? ORDER BY id DESC'
+        'SELECT id, daily_number, status, total, created_at FROM orders WHERE session=? ORDER BY id DESC'
       ).bind(s.token).all();
       return json(r.results, 200, CORS);
     }
 
-    // POST /api/request — call waiter / request bill
     if (path === '/request' && method === 'POST') {
       const s: any = await getSession(request, env);
       if (!s) return json({ error: 'Session required' }, 401, CORS);
@@ -208,7 +236,6 @@ export const onRequest = async (context: any) => {
 
     // ==================== ADMIN ====================
 
-    // POST /api/admin/login
     if (path === '/admin/login' && method === 'POST') {
       const b: any = await request.json();
       const r: any = await env.DB.prepare(
@@ -227,7 +254,7 @@ export const onRequest = async (context: any) => {
       return json({ token, name: r.name, slug: b.slug }, 200, CORS);
     }
 
-    // GET /api/admin/orders — non-archived orders
+    // GET /admin/orders — non-archived orders
     if (path === '/admin/orders' && method === 'GET') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -238,12 +265,11 @@ export const onRequest = async (context: any) => {
         AS items FROM orders o WHERE o.rid=? AND o.archived=0`;
       const p: any[] = [a.rid];
       if (status) { sql += ' AND o.status=?'; p.push(status); }
-      sql += ' ORDER BY o.id DESC LIMIT 100';
+      sql += ' ORDER BY o.id DESC LIMIT 200';
       const r = await env.DB.prepare(sql).bind(...p).all();
       return json(r.results, 200, CORS);
     }
 
-    // PATCH /api/admin/orders/:id — update order status
     m = path.match(/^\/admin\/orders\/(\d+)$/);
     if (m && method === 'PATCH') {
       const a: any = await getAdmin(request, env);
@@ -255,19 +281,35 @@ export const onRequest = async (context: any) => {
       return json({ ok: true }, 200, CORS);
     }
 
-    // POST /api/admin/end-session — archive orders, delete sessions, rotate PIN every 3rd
+    // POST /admin/orders/clear — archive all non-archived orders + reset daily counter
+    if (path === '/admin/orders/clear' && method === 'POST') {
+      const a: any = await getAdmin(request, env);
+      if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
+
+      // Archive all non-archived orders
+      await env.DB.prepare(
+        'UPDATE orders SET archived=1 WHERE rid=? AND archived=0'
+      ).bind(a.rid).run();
+
+      // Reset daily counter to 0
+      await env.DB.prepare(
+        'UPDATE restaurants SET order_seq_date=?, order_seq=0 WHERE id=?'
+      ).bind(pktToday(), a.rid).run();
+
+      return json({ ok: true }, 200, CORS);
+    }
+
+    // POST /admin/end-session
     if (path === '/admin/end-session' && method === 'POST') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
       const b: any = await request.json();
       const table = String(b.table);
 
-      // 1. Archive all orders for this table
       await env.DB.prepare(
         'UPDATE orders SET archived=1 WHERE rid=? AND table_num=? AND archived=0'
       ).bind(a.rid, table).run();
 
-      // 2. Delete all matching sessions from KV
       const list = await env.SESSIONS.list({ prefix: 's:' });
       for (const k of list.keys) {
         const v = await env.SESSIONS.get(k.name);
@@ -279,7 +321,6 @@ export const onRequest = async (context: any) => {
         }
       }
 
-      // 3. Increment session count; rotate PIN every 3rd end
       const row: any = await env.DB.prepare(
         'SELECT session_count FROM tables WHERE rid=? AND number=?'
       ).bind(a.rid, table).first();
@@ -306,27 +347,17 @@ export const onRequest = async (context: any) => {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
 
-      // Compute date boundaries in Pakistan time (UTC+5)
-      const PKT_OFFSET_MS = 5 * 60 * 60 * 1000;
+      const todayStr = pktToday();
       const pad = (n: number) => String(n).padStart(2, '0');
-      const dateStr = (d: Date) =>
-        `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
-
-      const nowPkt = new Date(Date.now() + PKT_OFFSET_MS);
-      const todayStr = dateStr(nowPkt);
-
-      const weekAgoPkt = new Date(nowPkt.getTime() - 6 * 24 * 60 * 60 * 1000);
-      const weekStr = dateStr(weekAgoPkt);
-
+      const nowPkt = new Date(Date.now() + 5 * 60 * 60 * 1000);
+      const weekStr = (() => {
+        const d = new Date(nowPkt.getTime() - 6 * 24 * 60 * 60 * 1000);
+        return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
+      })();
       const monthStr = `${nowPkt.getUTCFullYear()}-${pad(nowPkt.getUTCMonth() + 1)}-01`;
 
-      const stats = async (since: string) => {
-        // Convert Pakistan midnight to UTC string so comparison works
-        const sinceUtc = new Date(`${since}T00:00:00+05:00`)
-          .toISOString()
-          .slice(0, 19)
-          .replace('T', ' ');
-
+      const stats = async (dateStr: string) => {
+        const sinceUtc = pktToUtc(dateStr);
         const r: any = await env.DB.prepare(
           `SELECT COUNT(*) as orders, COALESCE(SUM(total),0) as revenue
            FROM orders WHERE rid=? AND created_at >= ?`
@@ -336,10 +367,10 @@ export const onRequest = async (context: any) => {
         return { orders, revenue, avg: orders ? Math.round(revenue / orders) : 0 };
       };
 
-      const today: any = await stats(todayStr);
-      const week: any = await stats(weekStr);
-      const month: any = await stats(monthStr);
-      const allTime: any = await stats("1970-01-01");
+      const today = await stats(todayStr);
+      const week = await stats(weekStr);
+      const month = await stats(monthStr);
+      const allTime = await stats("1970-01-01");
 
       const top = await env.DB.prepare(
         `SELECT m.name, m.name_urdu,
@@ -351,17 +382,13 @@ export const onRequest = async (context: any) => {
          WHERE o.rid=? AND o.created_at >= ?
          GROUP BY m.id
          ORDER BY qty DESC LIMIT 8`
-      ).bind(a.rid, new Date(`${monthStr}T00:00:00+05:00`).toISOString().slice(0, 19).replace('T', ' ')).all();
+      ).bind(a.rid, pktToUtc(monthStr)).all();
 
-      return json({
-        today, week, month, allTime,
-        top_items: top.results,
-      }, 200, CORS);
+      return json({ today, week, month, allTime, top_items: top.results }, 200, CORS);
     }
 
     // ==================== MENU ====================
 
-    // GET /api/admin/menu
     if (path === '/admin/menu' && method === 'GET') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -371,7 +398,6 @@ export const onRequest = async (context: any) => {
       return json(r.results, 200, CORS);
     }
 
-    // POST /api/admin/menu — add item
     if (path === '/admin/menu' && method === 'POST') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -384,7 +410,6 @@ export const onRequest = async (context: any) => {
       return json({ id: r.meta.last_row_id }, 201, CORS);
     }
 
-    // PUT /api/admin/menu/:id — update item
     m = path.match(/^\/admin\/menu\/(\d+)$/);
     if (m && method === 'PUT') {
       const a: any = await getAdmin(request, env);
@@ -399,7 +424,6 @@ export const onRequest = async (context: any) => {
       return json({ ok: true }, 200, CORS);
     }
 
-    // DELETE /api/admin/menu/:id
     if (m && method === 'DELETE') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -409,11 +433,9 @@ export const onRequest = async (context: any) => {
       return json({ ok: true }, 200, CORS);
     }
 
-    // POST /api/admin/menu/delete-image — remove an image from Cloudinary
     if (path === '/admin/menu/delete-image' && method === 'POST') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
-
       const body: any = await request.json();
       const publicId = body.public_id;
       if (!publicId) return json({ error: 'public_id is required' }, 400, CORS);
@@ -421,16 +443,14 @@ export const onRequest = async (context: any) => {
       const cloudName = env.CLOUDINARY_CLOUD_NAME;
       const apiKey = env.CLOUDINARY_API_KEY;
       const apiSecret = env.CLOUDINARY_API_SECRET;
-
       if (!cloudName || !apiKey || !apiSecret) {
-        return json({ error: 'Cloudinary credentials not configured on the server' }, 500, CORS);
+        return json({ error: 'Cloudinary credentials not configured' }, 500, CORS);
       }
 
       try {
         const timestamp = Math.round(Date.now() / 1000);
         const paramsToSign = `public_id=${publicId}&timestamp=${timestamp}`;
         const signature = await sha1(paramsToSign + apiSecret);
-
         const formData = new FormData();
         formData.append('public_id', publicId);
         formData.append('timestamp', String(timestamp));
@@ -442,19 +462,17 @@ export const onRequest = async (context: any) => {
           { method: 'POST', body: formData }
         );
         const result = await response.json();
-
         if (result.result === 'ok' || result.result === 'not found') {
           return json({ ok: true, result: result.result }, 200, CORS);
         }
         return json({ error: 'Cloudinary deletion failed', details: result }, 500, CORS);
       } catch (e: any) {
-        return json({ error: 'Deletion request failed: ' + String(e.message || e) }, 500, CORS);
+        return json({ error: 'Deletion failed: ' + String(e.message || e) }, 500, CORS);
       }
     }
 
     // ==================== TABLES ====================
 
-    // GET /api/admin/tables
     if (path === '/admin/tables' && method === 'GET') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -474,14 +492,12 @@ export const onRequest = async (context: any) => {
       return json(urls, 200, CORS);
     }
 
-    // POST /api/admin/tables/regenerate — reset all PINs, keep same number of tables
     if (path === '/admin/tables/regenerate' && method === 'POST') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
       const b: any = await request.json();
       const count = parseInt(b.count);
 
-      // Delete all tables then re-create with same numbers
       const existing = await env.DB.prepare(
         'SELECT number FROM tables WHERE rid=? ORDER BY CAST(number AS INTEGER) LIMIT ?'
       ).bind(a.rid, count).all();
@@ -489,21 +505,19 @@ export const onRequest = async (context: any) => {
       const numbers = (existing.results as any[]).map(r => String(r.number));
       await env.DB.prepare('DELETE FROM tables WHERE rid=?').bind(a.rid).run();
 
-      for (let i = 0; i < numbers.length; i++) {
-        const pin = String(Math.floor(1000 + Math.random() * 9000));
+      for (const num of numbers) {
+        const pin = await generateUniquePin(env, a.rid);
         await env.DB.prepare(
           'INSERT INTO tables (rid, number, pin, session_count) VALUES (?,?,?,0)'
-        ).bind(a.rid, numbers[i], pin).run();
+        ).bind(a.rid, num, pin).run();
       }
 
       await env.DB.prepare(
         'UPDATE restaurants SET table_count=? WHERE id=?'
       ).bind(numbers.length, a.rid).run();
-
       return json({ ok: true, count: numbers.length }, 200, CORS);
     }
 
-    // POST /api/admin/tables/pin — change a single table's PIN (QR stays the same)
     if (path === '/admin/tables/pin' && method === 'POST') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -517,7 +531,6 @@ export const onRequest = async (context: any) => {
       return json({ ok: true }, 200, CORS);
     }
 
-    // POST /api/admin/tables/add — add a new table
     if (path === '/admin/tables/add' && method === 'POST') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -536,7 +549,6 @@ export const onRequest = async (context: any) => {
       return json({ ok: true, number: next, pin }, 200, CORS);
     }
 
-    // POST /api/admin/tables/remove — remove a table
     if (path === '/admin/tables/remove' && method === 'POST') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -553,7 +565,6 @@ export const onRequest = async (context: any) => {
 
     // ==================== SETTINGS ====================
 
-    // GET /api/admin/settings
     if (path === '/admin/settings' && method === 'GET') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -563,7 +574,6 @@ export const onRequest = async (context: any) => {
       return json(r, 200, CORS);
     }
 
-    // PUT /api/admin/settings
     if (path === '/admin/settings' && method === 'PUT') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -576,9 +586,8 @@ export const onRequest = async (context: any) => {
       return json({ ok: true }, 200, CORS);
     }
 
-    // ==================== SERVICE REQUESTS ====================
+    // ==================== REQUESTS ====================
 
-    // GET /api/admin/requests
     if (path === '/admin/requests' && method === 'GET') {
       const a: any = await getAdmin(request, env);
       if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
@@ -588,7 +597,6 @@ export const onRequest = async (context: any) => {
       return json(r.results, 200, CORS);
     }
 
-    // PATCH /api/admin/requests/:id — mark as done
     m = path.match(/^\/admin\/requests\/(\d+)$/);
     if (m && method === 'PATCH') {
       const a: any = await getAdmin(request, env);
@@ -601,7 +609,6 @@ export const onRequest = async (context: any) => {
 
     // ==================== SUPER ADMIN ====================
 
-    // POST /api/super/restaurant — create a new restaurant
     if (path === '/super/restaurant' && method === 'POST') {
       if (request.headers.get('X-Super-Key') !== env.SUPER_KEY)
         return json({ error: 'Forbidden' }, 403, CORS);
@@ -633,9 +640,7 @@ export const onRequest = async (context: any) => {
       }
     }
 
-    // ==================== HEALTH ====================
     if (path === '/health') return json({ ok: true }, 200, CORS);
-
     return json({ error: 'Not found', path }, 404, CORS);
   } catch (e: any) {
     return json({ error: String(e?.message || e) }, 500, CORS);
