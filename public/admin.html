@@ -263,7 +263,11 @@ input,select,textarea{font-family:inherit}
 .mod-acts{display:flex;gap:10px;margin-top:16px}
 .mod-acts button{flex:1;padding:14px;border-radius:11px;font-size:.92rem;font-weight:800;border:1.5px solid var(--line);background:var(--white);color:var(--ink);transition:all .15s}
 .mod-acts button:hover{background:var(--cream-2)}
-.mod-acts button.save{flex:2;background:var(--navy);color:var(--white);border-color:var(--navy);box-shadow:0 3px 0 #050d17}
+.mod-acts button.save{
+  min-height:52px;
+  font-size:1rem;
+  touch-action:manipulation;
+}
 .mod-acts button.save:hover{background:var(--gold);color:var(--navy);border-color:var(--gold);box-shadow:0 3px 0 var(--gold-3)}
 .img-preview{margin-top:10px}
 .img-preview img{max-width:180px;border-radius:10px;border:1px solid var(--line)}
@@ -549,7 +553,7 @@ input,select,textarea{font-family:inherit}
       </div>
       <div class="mod-acts">
         <button type="button" id="i-cancel">Cancel</button>
-        <button type="submit" class="save">Save</button>
+        <button type="button" id="saveItemBtn" class="save">Save</button>
       </div>
     </form>
   </div>
@@ -931,31 +935,100 @@ $('i-img').onchange = e => {
   rd.readAsDataURL(f);
 };
 
-$('itemForm').onsubmit = async e => {
-  e.preventDefault();
-  let oldImageUrl = '';
-  if (editId) oldImageUrl = menuItems.find(m => m.id === editId)?.image_url || '';
-  let imgUrl = oldImageUrl;
-  if (pendingImg) {
-    try { imgUrl = await uploadImg(pendingImg); }
-    catch (err) { toast('Photo: ' + err.message); return; }
-  }
-  const body = {
-    name: $('i-name').value, name_urdu: $('i-name_ur').value,
-    description: $('i-desc').value, description_urdu: $('i-desc_ur').value,
-    price: parseFloat($('i-price').value), category: $('i-cat').value,
-    category_urdu: $('i-cat_ur').value, image_url: imgUrl, available: true,
-  };
-  if (editId) await api('/admin/menu/' + editId, { method: 'PUT', body: JSON.stringify(body) });
-  else await api('/admin/menu', { method: 'POST', body: JSON.stringify(body) });
+// Save item — attached to button click, not form submit
+$('saveItemBtn').onclick = async () => {
+  const saveBtn = $('saveItemBtn');
+  const originalText = saveBtn.textContent;
 
-  if (pendingImg && oldImageUrl) {
-    const match = oldImageUrl.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.\w+)?$/);
-    if (match && match[1]) {
-      try { await api('/admin/menu/delete-image', { method: 'POST', body: JSON.stringify({ public_id: match[1] }) }); }
-      catch (err) { console.error('Failed to delete old image:', err); }
+  // Manual validation (works on mobile)
+  const name = $('i-name').value.trim();
+  const price = parseFloat($('i-price').value);
+  const category = $('i-cat').value.trim();
+
+  if (!name) { toast('Please enter a name'); $('i-name').focus(); return; }
+  if (!category) { toast('Please enter a category'); $('i-cat').focus(); return; }
+  if (!price || price <= 0) { toast('Please enter a valid price'); $('i-price').focus(); return; }
+
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Saving...';
+
+  try {
+    let oldImageUrl = '';
+    if (editId) oldImageUrl = menuItems.find(m => m.id === editId)?.image_url || '';
+    let imgUrl = oldImageUrl;
+
+    if (pendingImg) {
+      saveBtn.textContent = 'Uploading photo...';
+      try {
+        imgUrl = await uploadImg(pendingImg);
+      } catch (err) {
+        toast('Photo upload failed: ' + err.message);
+        saveBtn.disabled = false;
+        saveBtn.textContent = originalText;
+        return;
+      }
     }
+
+    saveBtn.textContent = 'Saving...';
+
+    const body = {
+      name,
+      name_urdu: $('i-name_ur').value,
+      description: $('i-desc').value,
+      description_urdu: $('i-desc_ur').value,
+      price,
+      category,
+      category_urdu: $('i-cat_ur').value,
+      image_url: imgUrl,
+      available: true,
+    };
+
+    if (editId) {
+      await api('/admin/menu/' + editId, { method: 'PUT', body: JSON.stringify(body) });
+    } else {
+      await api('/admin/menu', { method: 'POST', body: JSON.stringify(body) });
+    }
+
+    // Delete old Cloudinary image after successful save
+    if (pendingImg && oldImageUrl) {
+      const match = oldImageUrl.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.\w+)?$/);
+      if (match && match[1]) {
+        try {
+          await api('/admin/menu/delete-image', {
+            method: 'POST',
+            body: JSON.stringify({ public_id: match[1] })
+          });
+        } catch (err) {
+          console.error('Old image cleanup failed:', err);
+        }
+      }
+    }
+
+    $('itemModal').classList.remove('on');
+    toast('Saved ✓', true);
+    loadMenu();
+  } catch (err) {
+    console.error('Save error:', err);
+    toast('Failed: ' + err.message);
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = originalText;
   }
+};
+
+// Also allow Enter key in the form to trigger save (but not inside textarea)
+$('itemForm').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    $('saveItemBtn').click();
+  }
+});
+
+// Prevent default form submit (so mobile "Go" button doesn't reload page)
+$('itemForm').onsubmit = e => {
+  e.preventDefault();
+  $('saveItemBtn').click();
+};
 
   $('itemModal').classList.remove('on');
   toast('Saved', true); loadMenu();
