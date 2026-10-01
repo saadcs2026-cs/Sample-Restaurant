@@ -308,6 +308,53 @@ export const onRequest = async (context: any) => {
       await env.DB.prepare('DELETE FROM menu_items WHERE id=? AND rid=?').bind(m[1], a.rid).run();
       return json({ ok: true }, 200, CORS);
     }
+        // Change a single table's PIN (QR stays the same forever)
+    if (path === '/admin/tables/pin' && method === 'POST') {
+      const a: any = await getAdmin(request, env);
+      if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
+      const b: any = await request.json();
+      if (!b.number || !b.pin) return json({ error: 'number and pin required' }, 400, CORS);
+      if (!/^\d{4}$/.test(String(b.pin)))
+        return json({ error: 'PIN must be exactly 4 digits' }, 400, CORS);
+      await env.DB.prepare(
+        'UPDATE tables SET pin=? WHERE rid=? AND number=?'
+      ).bind(String(b.pin), a.rid, String(b.number)).run();
+      return json({ ok: true }, 200, CORS);
+    }
+
+    // Add a new table (gets next number + random PIN)
+    if (path === '/admin/tables/add' && method === 'POST') {
+      const a: any = await getAdmin(request, env);
+      if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
+      const existing = await env.DB.prepare(
+        'SELECT number FROM tables WHERE rid=?'
+      ).bind(a.rid).all();
+      const nums = (existing.results as any[]).map(r => parseInt(r.number));
+      const next = nums.length ? Math.max(...nums) + 1 : 1;
+      const pin = String(Math.floor(1000 + Math.random() * 9000));
+      await env.DB.prepare(
+        'INSERT INTO tables (rid, number, pin) VALUES (?,?,?)'
+      ).bind(a.rid, String(next), pin).run();
+      await env.DB.prepare(
+        'UPDATE restaurants SET table_count=(SELECT COUNT(*) FROM tables WHERE rid=?) WHERE id=?'
+      ).bind(a.rid, a.rid).run();
+      return json({ ok: true, number: next, pin }, 200, CORS);
+    }
+
+    // Remove a table (its QR becomes invalid — re-adding same number brings it back)
+    if (path === '/admin/tables/remove' && method === 'POST') {
+      const a: any = await getAdmin(request, env);
+      if (!a) return json({ error: 'Unauthorized' }, 401, CORS);
+      const b: any = await request.json();
+      if (!b.number) return json({ error: 'number required' }, 400, CORS);
+      await env.DB.prepare(
+        'DELETE FROM tables WHERE rid=? AND number=?'
+      ).bind(a.rid, String(b.number)).run();
+      await env.DB.prepare(
+        'UPDATE restaurants SET table_count=(SELECT COUNT(*) FROM tables WHERE rid=?) WHERE id=?'
+      ).bind(a.rid, a.rid).run();
+      return json({ ok: true }, 200, CORS);
+    }
 
     // Tables
     if (path === '/admin/tables' && method === 'GET') {
