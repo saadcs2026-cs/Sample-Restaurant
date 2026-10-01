@@ -106,9 +106,9 @@ a{color:inherit}
 /* 2-column grid ALWAYS */
 .grid{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-  max-width:720px;margin:0 auto;padding:0 20px;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  max-width:720px;margin:0 auto;padding:0 14px;
 }
 
 .card{background:var(--white);border-radius:14px;overflow:hidden;border:1px solid var(--line);transition:transform .2s ease, box-shadow .2s ease;animation:fadeUp .5s ease both}
@@ -117,8 +117,11 @@ a{color:inherit}
 .cimg img{width:100%;height:100%;object-fit:cover;display:block}
 .noimg{display:flex;align-items:center;justify-content:center;height:100%;font-size:2.4rem;opacity:.35}
 .cinfo{padding:12px 12px 14px}
-.cinfo h3{font-size:.86rem;font-weight:700;margin-bottom:3px;letter-spacing:-.005em;line-height:1.25;color:var(--ink);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
-.cinfo .dsc{font-size:.7rem;color:var(--muted);line-height:1.4;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.cinfo h3{font-size:.76rem;font-weight:700;margin-bottom:2px;...}
+.cinfo .dsc{font-size:.66rem;...}
+.price{font-family:'Archivo',sans-serif;font-weight:800;font-size:.82rem;...}
+.add{width:32px;height:32px;border-radius:9px;font-size:1.2rem;...}
+.cinfo{padding:10px 10px 12px}.cinfo .dsc{font-size:.7rem;color:var(--muted);line-height:1.4;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 .cbot{display:flex;justify-content:space-between;align-items:center;gap:6px}
 .price{font-family:'Archivo',sans-serif;font-weight:800;font-size:.9rem;color:var(--navy);letter-spacing:-.01em;white-space:nowrap}
 .add{width:36px;height:36px;border-radius:10px;flex-shrink:0;background:var(--navy);color:var(--white);font-size:1.35rem;font-weight:300;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .15s ease}
