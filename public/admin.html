@@ -58,7 +58,6 @@ input,select,textarea{font-family:inherit}
 .page-head .eyebrow{font-family:'Archivo',sans-serif;font-weight:700;font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-3);margin-bottom:8px}
 .page-head h1{font-family:'Archivo',sans-serif;font-weight:900;font-size:1.7rem;letter-spacing:-.02em;line-height:1.1}
 
-/* Toolbar row */
 .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
 .toolbar select,.toolbar button{
   padding:11px 16px;border-radius:11px;font-size:.85rem;font-weight:700;
@@ -72,7 +71,6 @@ input,select,textarea{font-family:inherit}
 .toolbar .danger{background:var(--red);color:var(--white);border-color:var(--red)}
 .toolbar .danger:hover{background:#8f2f27;border-color:#8f2f27}
 
-/* REQUESTS BANNER */
 .reqs-banner{background:linear-gradient(90deg,rgba(184,68,58,.06),rgba(184,68,58,.02));border:1px solid rgba(184,68,58,.35);border-radius:14px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;animation:pulseRed 1.6s ease infinite}
 .reqs-banner.empty{display:none}
 .reqs-banner .rb-icon{width:40px;height:40px;flex-shrink:0;border-radius:10px;background:var(--red);color:var(--white);display:flex;align-items:center;justify-content:center}
@@ -82,7 +80,6 @@ input,select,textarea{font-family:inherit}
 .req-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--white);border-radius:99px;font-size:.78rem;font-weight:600;color:var(--ink);border:1px solid var(--line)}
 .req-chip button{background:var(--red);color:var(--white);border-radius:99px;padding:4px 12px;font-size:.72rem;font-weight:800;margin-left:6px}
 
-/* ORDERS — CARD VIEW */
 .orders-list{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:900px){.orders-list{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1300px){.orders-list{grid-template-columns:repeat(3,1fr)}}
@@ -96,7 +93,6 @@ input,select,textarea{font-family:inherit}
 .order-card.s-taken::before{background:var(--green)}
 .order-card.s-taken{background:linear-gradient(180deg,var(--white),#fbfcfa)}
 
-/* HUGE table number */
 .oc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .oc-table-block{display:flex;flex-direction:column;gap:2px}
 .oc-table-label{
@@ -134,7 +130,6 @@ input,select,textarea{font-family:inherit}
 .oc-actions .end{background:var(--white);color:var(--red);border:2px solid rgba(184,68,58,.35);padding:11px 18px}
 .oc-actions .end:hover{background:var(--red);color:var(--white);border-color:var(--red)}
 
-/* ORDERS — LIST VIEW */
 .orders-list.list-view{display:flex;flex-direction:column;gap:6px}
 .orders-list.list-view .order-card{
   display:grid;
@@ -164,7 +159,6 @@ input,select,textarea{font-family:inherit}
   .orders-list.list-view .oc-table-num{font-size:1.4rem}
 }
 
-/* MENU */
 .addbtn{padding:13px 24px;background:var(--navy);color:var(--white);border-radius:12px;font-size:.9rem;font-weight:800;letter-spacing:.02em;display:inline-flex;align-items:center;gap:8px;box-shadow:0 3px 0 #050d17;transition:all .15s}
 .addbtn:hover{background:var(--gold);color:var(--navy);box-shadow:0 3px 0 var(--gold-3)}
 .addbtn:active{transform:translateY(2px);box-shadow:none}
@@ -191,7 +185,6 @@ input,select,textarea{font-family:inherit}
 .menu-card .acts button.del{color:var(--red);border-color:rgba(184,68,58,.3)}
 .menu-card .acts button.del:hover{background:var(--red);color:var(--white);border-color:var(--red)}
 
-/* ANALYTICS */
 .stats-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:20px}
 @media(min-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1000px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
@@ -210,7 +203,6 @@ input,select,textarea{font-family:inherit}
 .top-qty{font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;color:var(--navy)}
 .top-rev{font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;color:var(--gold-3);min-width:80px;text-align:right}
 
-/* TABLES */
 .tables-toolbar{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap;justify-content:space-between}
 .tables-toolbar .info{font-size:.85rem;color:var(--muted)}
 .tables-toolbar .info strong{font-family:'Archivo',sans-serif;font-weight:900;color:var(--navy);font-size:1rem}
@@ -239,7 +231,6 @@ input,select,textarea{font-family:inherit}
 .tc-actions .remove{background:var(--white);color:var(--red);border:1.5px solid rgba(184,68,58,.3)}
 .tc-actions .remove:hover{background:var(--red);color:var(--white);border-color:var(--red)}
 
-/* SETTINGS */
 .settings-form{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px;max-width:720px}
 .form-row{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}
 @media(min-width:600px){.form-row.two{grid-template-columns:1fr 1fr}}
@@ -255,7 +246,6 @@ input,select,textarea{font-family:inherit}
 .save-btn:hover{background:var(--gold);color:var(--navy);box-shadow:0 3px 0 var(--gold-3)}
 .save-btn:active{transform:translateY(2px);box-shadow:none}
 
-/* MODAL */
 .ov{position:fixed;inset:0;background:rgba(10,22,40,.7);display:none;align-items:center;justify-content:center;z-index:300;padding:20px;backdrop-filter:blur(6px)}
 .ov.on{display:flex}
 .mod{background:var(--white);border-radius:20px;padding:28px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;animation:popIn .3s ease both}
@@ -264,15 +254,20 @@ input,select,textarea{font-family:inherit}
 .mod-acts button{flex:1;padding:14px;border-radius:11px;font-size:.92rem;font-weight:800;border:1.5px solid var(--line);background:var(--white);color:var(--ink);transition:all .15s}
 .mod-acts button:hover{background:var(--cream-2)}
 .mod-acts button.save{
+  flex:2;
+  background:var(--navy);
+  color:var(--white);
+  border-color:var(--navy);
+  box-shadow:0 3px 0 #050d17;
   min-height:52px;
   font-size:1rem;
   touch-action:manipulation;
 }
 .mod-acts button.save:hover{background:var(--gold);color:var(--navy);border-color:var(--gold);box-shadow:0 3px 0 var(--gold-3)}
+.mod-acts button.save:disabled{opacity:.6;cursor:wait}
 .img-preview{margin-top:10px}
 .img-preview img{max-width:180px;border-radius:10px;border:1px solid var(--line)}
 
-/* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--navy);border-top:1px solid rgba(201,169,97,.15);padding:6px 0 max(6px,env(safe-area-inset-bottom));z-index:90;display:grid;grid-template-columns:repeat(5,1fr);max-width:720px;margin:0 auto}
 @media(min-width:900px){.bottom-nav{display:none}}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;color:rgba(255,255,255,.55);font-size:.6rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;transition:color .18s}
@@ -289,9 +284,10 @@ input,select,textarea{font-family:inherit}
   .bottom-nav{display:none !important}
 }
 
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:var(--white);padding:13px 22px;border-radius:12px;font-size:.85rem;font-weight:600;opacity:0;transition:all .3s;z-index:500;pointer-events:none;border:1px solid rgba(201,169,97,.3);max-width:calc(100% - 40px)}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:var(--white);padding:13px 22px;border-radius:12px;font-size:.85rem;font-weight:600;opacity:0;transition:all .3s;z-index:500;pointer-events:none;border:1px solid rgba(201,169,97,.3);max-width:calc(100% - 40px);text-align:center}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.green{background:var(--green);border-color:var(--green-2)}
+.toast.red{background:var(--red);border-color:#8f2f27}
 
 .empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:.9rem}
 .empty .big{font-size:2.6rem;opacity:.35;margin-bottom:14px}
@@ -467,7 +463,7 @@ input,select,textarea{font-family:inherit}
       </div>
       <form class="settings-form" id="setForm">
         <div class="form-row two">
-          <div class="fg"><label>Restaurant Name (English)</label><input id="s-name" required></div>
+          <div class="fg"><label>Restaurant Name (English)</label><input id="s-name"></div>
           <div class="fg"><label>Restaurant Name (Urdu)</label><input id="s-name_ur" dir="rtl"></div>
         </div>
         <div class="form-row two">
@@ -530,21 +526,21 @@ input,select,textarea{font-family:inherit}
 <div class="ov" id="itemModal">
   <div class="mod">
     <h2 id="imTitle">Add Menu Item</h2>
-    <form id="itemForm">
+    <form id="itemForm" novalidate>
       <div class="form-row two">
-        <div class="fg"><label>Name (English)</label><input id="i-name" required></div>
-        <div class="fg"><label>Name (Urdu)</label><input id="i-name_ur" dir="rtl"></div>
+        <div class="fg"><label>Name (English)</label><input id="i-name" autocomplete="off"></div>
+        <div class="fg"><label>Name (Urdu)</label><input id="i-name_ur" dir="rtl" autocomplete="off"></div>
       </div>
       <div class="form-row two">
         <div class="fg"><label>Description (English)</label><textarea id="i-desc" rows="2"></textarea></div>
         <div class="fg"><label>Description (Urdu)</label><textarea id="i-desc_ur" rows="2" dir="rtl"></textarea></div>
       </div>
       <div class="form-row two">
-        <div class="fg"><label>Price</label><input id="i-price" type="number" step="0.01" required></div>
-        <div class="fg"><label>Category</label><input id="i-cat" required placeholder="e.g. Main Course"></div>
+        <div class="fg"><label>Price</label><input id="i-price" type="number" step="0.01" inputmode="decimal" autocomplete="off"></div>
+        <div class="fg"><label>Category</label><input id="i-cat" placeholder="e.g. Main Course" autocomplete="off"></div>
       </div>
       <div class="form-row">
-        <div class="fg"><label>Category (Urdu)</label><input id="i-cat_ur" dir="rtl"></div>
+        <div class="fg"><label>Category (Urdu)</label><input id="i-cat_ur" dir="rtl" autocomplete="off"></div>
       </div>
       <div class="fg">
         <label>Photo</label>
@@ -573,13 +569,18 @@ let audio = null;
 let viewMode = localStorage.getItem('orders_view') || 'cards';
 
 const $ = id => document.getElementById(id);
-const toast = (m, green) => {
+const toast = (m, kind) => {
   const t = $('toast');
   t.textContent = m;
-  t.classList.toggle('green', !!green);
+  t.classList.toggle('green', kind === 'green' || kind === true);
+  t.classList.toggle('red', kind === 'red');
   t.classList.add('on');
   clearTimeout(t._t);
-  t._t = setTimeout(() => { t.classList.remove('on'); t.classList.remove('green'); }, 2400);
+  t._t = setTimeout(() => {
+    t.classList.remove('on');
+    t.classList.remove('green');
+    t.classList.remove('red');
+  }, 2600);
 };
 const esc = s => String(s || '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
 const money = n => 'Rs ' + Number(n || 0).toLocaleString();
@@ -589,8 +590,12 @@ async function api(path, opts = {}) {
   if (token) headers.Authorization = 'Bearer ' + token;
   if (opts.body && !(opts.body instanceof FormData)) headers['Content-Type'] = 'application/json';
   const r = await fetch(API + path, { ...opts, headers });
-  if (r.status === 401) { logout(); throw new Error('Unauthorized'); }
-  return r.json();
+  if (r.status === 401) { logout(); throw new Error('Session expired — please log in again'); }
+  let data;
+  try { data = await r.json(); }
+  catch { throw new Error(`Server error ${r.status}`); }
+  if (!r.ok) throw new Error(data.error || `Request failed (${r.status})`);
+  return data;
 }
 
 async function login() {
@@ -636,98 +641,108 @@ function setViewMode(mode) {
 }
 
 async function loadOrders() {
-  const s = $('fs').value;
-  const orders = await api('/admin/orders' + (s ? '?status=' + s : ''));
-  const list = $('ordersList');
-  if (!orders.length) {
-    list.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🧾</div><div>No orders yet</div></div>';
-    lastOrderCount = 0; return;
-  }
-  if (lastOrderCount > 0 && orders.length > lastOrderCount) audio.play().catch(() => {});
-  lastOrderCount = orders.length;
+  try {
+    const s = $('fs').value;
+    const orders = await api('/admin/orders' + (s ? '?status=' + s : ''));
+    const list = $('ordersList');
+    if (!orders.length) {
+      list.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🧾</div><div>No orders yet</div></div>';
+      lastOrderCount = 0; return;
+    }
+    if (lastOrderCount > 0 && orders.length > lastOrderCount) audio.play().catch(() => {});
+    lastOrderCount = orders.length;
 
-  list.innerHTML = orders.map(o => {
-    let items = [];
-    try { items = JSON.parse(o.items || '[]'); } catch {}
-    const time = new Date(o.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const isTaken = o.status === 'taken';
-    const dailyNum = o.daily_number || o.id;
-    return `
-      <div class="order-card s-${o.status}">
-        <div class="oc-top">
-          <div class="oc-table-block">
-            <span class="oc-table-label">Table</span>
-            <div class="oc-table-num">${esc(o.table_num)}</div>
+    list.innerHTML = orders.map(o => {
+      let items = [];
+      try { items = JSON.parse(o.items || '[]'); } catch {}
+      const time = new Date(o.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const isTaken = o.status === 'taken';
+      const dailyNum = o.daily_number || o.id;
+      return `
+        <div class="order-card s-${o.status}">
+          <div class="oc-top">
+            <div class="oc-table-block">
+              <span class="oc-table-label">Table</span>
+              <div class="oc-table-num">${esc(o.table_num)}</div>
+            </div>
+            <div class="oc-side">
+              <span class="oc-order-num">#${dailyNum}</span>
+              <span class="oc-status">${isTaken ? '✓ Taken' : 'Pending'}</span>
+              <span class="oc-time">${time}</span>
+            </div>
           </div>
-          <div class="oc-side">
-            <span class="oc-order-num">#${dailyNum}</span>
-            <span class="oc-status">${isTaken ? '✓ Taken' : 'Pending'}</span>
-            <span class="oc-time">${time}</span>
+          <ul class="oc-items">
+            ${items.map(i => `<li><span>${esc(i.name)}</span><span class="qty">×${i.qty}</span></li>`).join('')}
+          </ul>
+          <div class="oc-foot">
+            <div class="oc-total">${money(o.total)}</div>
+            <div class="oc-actions">
+              ${isTaken
+                ? `<button class="done">✓ Order Taken</button>`
+                : `<button class="take" data-id="${o.id}">
+                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                     Mark Taken
+                   </button>`}
+              <button class="end" data-table="${o.table_num}">End Session</button>
+            </div>
           </div>
         </div>
-        <ul class="oc-items">
-          ${items.map(i => `<li><span>${esc(i.name)}</span><span class="qty">×${i.qty}</span></li>`).join('')}
-        </ul>
-        <div class="oc-foot">
-          <div class="oc-total">${money(o.total)}</div>
-          <div class="oc-actions">
-            ${isTaken
-              ? `<button class="done">✓ Order Taken</button>`
-              : `<button class="take" data-id="${o.id}">
-                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                   Mark Taken
-                 </button>`}
-            <button class="end" data-table="${o.table_num}">End Session</button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-  list.querySelectorAll('button.take').forEach(b => {
-    b.onclick = async () => {
-      await api('/admin/orders/' + b.dataset.id, { method: 'PATCH', body: JSON.stringify({ status: 'taken' }) });
-      toast('Order marked as taken ✓', true);
-      loadOrders();
-    };
-  });
-  list.querySelectorAll('button.end').forEach(b => {
-    b.onclick = async () => {
-      if (!confirm(`End session for Table ${b.dataset.table}? Orders will be archived and customer is freed.`)) return;
-      const r = await api('/admin/end-session', { method: 'POST', body: JSON.stringify({ table: b.dataset.table }) });
-      if (r.new_pin) toast(`Table ${b.dataset.table} session ended · New PIN: ${r.new_pin}`, true);
-      else toast(`Table ${b.dataset.table} session ended`, true);
-      loadOrders();
-    };
-  });
+      `;
+    }).join('');
+    list.querySelectorAll('button.take').forEach(b => {
+      b.onclick = async () => {
+        try {
+          await api('/admin/orders/' + b.dataset.id, { method: 'PATCH', body: JSON.stringify({ status: 'taken' }) });
+          toast('Order marked as taken ✓', 'green');
+          loadOrders();
+        } catch (e) { toast(e.message, 'red'); }
+      };
+    });
+    list.querySelectorAll('button.end').forEach(b => {
+      b.onclick = async () => {
+        if (!confirm(`End session for Table ${b.dataset.table}? Orders will be archived and customer is freed.`)) return;
+        try {
+          const r = await api('/admin/end-session', { method: 'POST', body: JSON.stringify({ table: b.dataset.table }) });
+          if (r.new_pin) toast(`Table ${b.dataset.table} session ended · New PIN: ${r.new_pin}`, 'green');
+          else toast(`Table ${b.dataset.table} session ended`, 'green');
+          loadOrders();
+        } catch (e) { toast(e.message, 'red'); }
+      };
+    });
+  } catch (e) { toast(e.message, 'red'); }
 }
 
 async function clearDay() {
   if (!confirm('Clear all orders? They will be archived. New orders will start from #1.')) return;
-  await api('/admin/orders/clear', { method: 'POST', body: JSON.stringify({}) });
-  toast('All orders cleared. Order numbers reset to #1.', true);
-  loadOrders();
+  try {
+    await api('/admin/orders/clear', { method: 'POST', body: JSON.stringify({}) });
+    toast('All orders cleared. Order numbers reset to #1.', 'green');
+    loadOrders();
+  } catch (e) { toast(e.message, 'red'); }
 }
 
 async function loadRequests() {
-  const reqs = await api('/admin/requests');
-  const banner = $('reqsBanner');
-  const list = $('reqsList');
-  if (!reqs.length) { banner.classList.add('empty'); lastReqCount = 0; return; }
-  if (lastReqCount > 0 && reqs.length > lastReqCount) audio.play().catch(() => {});
-  lastReqCount = reqs.length;
-  banner.classList.remove('empty');
-  list.innerHTML = reqs.map(r => `
-    <span class="req-chip">
-      ${r.type === 'call_waiter' ? '🔔 Waiter' : '🧾 Bill'} · Table ${esc(r.table_num)}
-      <button data-id="${r.id}">Done</button>
-    </span>
-  `).join('');
-  list.querySelectorAll('button').forEach(b => {
-    b.onclick = async () => {
-      await api('/admin/requests/' + b.dataset.id, { method: 'PATCH' });
-      loadRequests();
-    };
-  });
+  try {
+    const reqs = await api('/admin/requests');
+    const banner = $('reqsBanner');
+    const list = $('reqsList');
+    if (!reqs.length) { banner.classList.add('empty'); lastReqCount = 0; return; }
+    if (lastReqCount > 0 && reqs.length > lastReqCount) audio.play().catch(() => {});
+    lastReqCount = reqs.length;
+    banner.classList.remove('empty');
+    list.innerHTML = reqs.map(r => `
+      <span class="req-chip">
+        ${r.type === 'call_waiter' ? '🔔 Waiter' : '🧾 Bill'} · Table ${esc(r.table_num)}
+        <button data-id="${r.id}">Done</button>
+      </span>
+    `).join('');
+    list.querySelectorAll('button').forEach(b => {
+      b.onclick = async () => {
+        try { await api('/admin/requests/' + b.dataset.id, { method: 'PATCH' }); loadRequests(); }
+        catch (e) { toast(e.message, 'red'); }
+      };
+    });
+  } catch (e) {}
 }
 
 async function loadAnalytics() {
@@ -755,36 +770,38 @@ async function loadAnalytics() {
         <span class="top-rev">${money(t.revenue)}</span>
       </div>
     `).join('');
-  } catch (e) { toast('Analytics failed to load'); }
+  } catch (e) { toast(e.message, 'red'); }
 }
 
 async function loadMenu() {
-  menuItems = await api('/admin/menu');
-  const g = $('menuGrid');
-  if (!menuItems.length) {
-    g.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🍽️</div><div>No menu items yet</div></div>';
-    return;
-  }
-  g.innerHTML = menuItems.map(m => `
-    <div class="menu-card">
-      <div class="mi">${m.image_url ? `<img src="${m.image_url}">` : '<div class="noimg">🍽️</div>'}</div>
-      <div class="mb">
-        <h4>${esc(m.name)}</h4>
-        <div class="pr">${money(m.price)}</div>
-        <span class="cat">${esc(m.category)}</span>
+  try {
+    menuItems = await api('/admin/menu');
+    const g = $('menuGrid');
+    if (!menuItems.length) {
+      g.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🍽️</div><div>No menu items yet</div></div>';
+      return;
+    }
+    g.innerHTML = menuItems.map(m => `
+      <div class="menu-card">
+        <div class="mi">${m.image_url ? `<img src="${m.image_url}">` : '<div class="noimg">🍽️</div>'}</div>
+        <div class="mb">
+          <h4>${esc(m.name)}</h4>
+          <div class="pr">${money(m.price)}</div>
+          <span class="cat">${esc(m.category)}</span>
+        </div>
+        <div class="acts">
+          <button data-edit="${m.id}">Edit</button>
+          <button class="del" data-del="${m.id}">Delete</button>
+        </div>
       </div>
-      <div class="acts">
-        <button data-edit="${m.id}">Edit</button>
-        <button class="del" data-del="${m.id}">Delete</button>
-      </div>
-    </div>
-  `).join('');
-  g.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => openItem(parseInt(b.dataset.edit)));
-  g.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
-    if (!confirm('Delete this item?')) return;
-    await api('/admin/menu/' + b.dataset.del, { method: 'DELETE' });
-    toast('Deleted'); loadMenu();
-  });
+    `).join('');
+    g.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => openItem(parseInt(b.dataset.edit)));
+    g.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+      if (!confirm('Delete this item?')) return;
+      try { await api('/admin/menu/' + b.dataset.del, { method: 'DELETE' }); toast('Deleted', 'green'); loadMenu(); }
+      catch (e) { toast(e.message, 'red'); }
+    });
+  } catch (e) { toast(e.message, 'red'); }
 }
 
 function openItem(id) {
@@ -816,72 +833,74 @@ async function uploadImg(file) {
 }
 
 async function loadTables() {
-  tables = await api('/admin/tables');
-  $('tableCountDisplay').textContent = tables.length;
-  const g = $('tg');
-  if (!tables.length) {
-    g.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">📱</div><div>No tables yet. Click "Add Table" to start.</div></div>';
-    return;
-  }
-  g.innerHTML = tables.map(t => {
-    const qr = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(t.url)}`;
-    return `
-      <div class="table-card">
-        <div class="tc-num">Table ${t.number}</div>
-        <img class="tc-qr" src="${qr}" alt="QR">
-        <div class="tc-pin-box">
-          <div class="lbl">Current PIN</div>
-          <div class="val">${esc(t.pin)}</div>
-          <div class="helper">Auto-rotates every 3rd session</div>
+  try {
+    tables = await api('/admin/tables');
+    $('tableCountDisplay').textContent = tables.length;
+    const g = $('tg');
+    if (!tables.length) {
+      g.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">📱</div><div>No tables yet. Click "Add Table" to start.</div></div>';
+      return;
+    }
+    g.innerHTML = tables.map(t => {
+      const qr = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(t.url)}`;
+      return `
+        <div class="table-card">
+          <div class="tc-num">Table ${t.number}</div>
+          <img class="tc-qr" src="${qr}" alt="QR">
+          <div class="tc-pin-box">
+            <div class="lbl">Current PIN</div>
+            <div class="val">${esc(t.pin)}</div>
+            <div class="helper">Auto-rotates every 3rd session</div>
+          </div>
+          <div class="tc-actions">
+            <a href="${qr}" download="table-${t.number}-qr.png">Download QR</a>
+            <button class="remove" data-remove="${t.number}">Remove</button>
+          </div>
         </div>
-        <div class="tc-actions">
-          <a href="${qr}" download="table-${t.number}-qr.png">Download QR</a>
-          <button class="remove" data-remove="${t.number}">Remove</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-  g.querySelectorAll('[data-remove]').forEach(btn => {
-    btn.onclick = async () => {
-      const num = btn.dataset.remove;
-      if (!confirm(`Remove Table ${num}? Its QR code will stop working.`)) return;
-      await api('/admin/tables/remove', { method: 'POST', body: JSON.stringify({ number: num }) });
-      toast(`Table ${num} removed`);
-      loadTables();
-    };
-  });
+      `;
+    }).join('');
+    g.querySelectorAll('[data-remove]').forEach(btn => {
+      btn.onclick = async () => {
+        const num = btn.dataset.remove;
+        if (!confirm(`Remove Table ${num}? Its QR code will stop working.`)) return;
+        try { await api('/admin/tables/remove', { method: 'POST', body: JSON.stringify({ number: num }) }); toast(`Table ${num} removed`, 'green'); loadTables(); }
+        catch (e) { toast(e.message, 'red'); }
+      };
+    });
+  } catch (e) { toast(e.message, 'red'); }
 }
 
 async function addTable() {
   try {
     const r = await api('/admin/tables/add', { method: 'POST', body: JSON.stringify({}) });
-    toast(`Table ${r.number} added · PIN ${r.pin}`, true);
+    toast(`Table ${r.number} added · PIN ${r.pin}`, 'green');
     loadTables();
-  } catch { toast('Failed to add table'); }
+  } catch (e) { toast(e.message, 'red'); }
 }
 
 async function regenAll() {
   const count = tables.length;
   if (!confirm(`Reset all ${count} PINs? QRs stay the same — only PINs change.`)) return;
-  await api('/admin/tables/regenerate', { method: 'POST', body: JSON.stringify({ count }) });
-  toast('All PINs reset', true);
-  loadTables();
+  try { await api('/admin/tables/regenerate', { method: 'POST', body: JSON.stringify({ count }) }); toast('All PINs reset', 'green'); loadTables(); }
+  catch (e) { toast(e.message, 'red'); }
 }
 
 async function loadSettings() {
-  const s = await api('/admin/settings');
-  $('s-name').value = s.name;
-  $('s-name_ur').value = s.name_urdu || '';
-  $('s-address').value = s.address || '';
-  $('s-phone').value = s.phone || '';
-  $('s-gpid').value = s.google_place_id || '';
-  $('s-cur').value = s.currency || 'Rs';
-  $('s-cloud').value = s.cloud_name || '';
-  $('s-preset').value = s.upload_preset || '';
-  $('s-pin').checked = !!s.pin_enabled;
-  cloudName = s.cloud_name || '';
-  uploadPreset = s.upload_preset || '';
-  $('rname').textContent = s.name;
+  try {
+    const s = await api('/admin/settings');
+    $('s-name').value = s.name;
+    $('s-name_ur').value = s.name_urdu || '';
+    $('s-address').value = s.address || '';
+    $('s-phone').value = s.phone || '';
+    $('s-gpid').value = s.google_place_id || '';
+    $('s-cur').value = s.currency || 'Rs';
+    $('s-cloud').value = s.cloud_name || '';
+    $('s-preset').value = s.upload_preset || '';
+    $('s-pin').checked = !!s.pin_enabled;
+    cloudName = s.cloud_name || '';
+    uploadPreset = s.upload_preset || '';
+    $('rname').textContent = s.name;
+  } catch (e) { toast(e.message, 'red'); }
 }
 
 async function saveSettings(e) {
@@ -893,11 +912,13 @@ async function saveSettings(e) {
     cloud_name: $('s-cloud').value, upload_preset: $('s-preset').value,
     pin_enabled: $('s-pin').checked,
   };
-  await api('/admin/settings', { method: 'PUT', body: JSON.stringify(body) });
-  cloudName = body.cloud_name;
-  uploadPreset = body.upload_preset;
-  $('rname').textContent = body.name;
-  toast('Settings saved', true);
+  try {
+    await api('/admin/settings', { method: 'PUT', body: JSON.stringify(body) });
+    cloudName = body.cloud_name;
+    uploadPreset = body.upload_preset;
+    $('rname').textContent = body.name;
+    toast('Settings saved', 'green');
+  } catch (e) { toast(e.message, 'red'); }
 }
 
 function switchView(v) {
@@ -910,6 +931,8 @@ function switchView(v) {
   if (v === 'analytics') loadAnalytics();
   window.scrollTo(0, 0);
 }
+
+// ========== EVENT BINDINGS ==========
 document.querySelectorAll('.rail-btn, .nav-item').forEach(b => {
   b.onclick = () => switchView(b.dataset.v);
 });
@@ -935,19 +958,18 @@ $('i-img').onchange = e => {
   rd.readAsDataURL(f);
 };
 
-// Save item — attached to button click, not form submit
+// ========== SAVE MENU ITEM (button click — works on mobile) ==========
 $('saveItemBtn').onclick = async () => {
   const saveBtn = $('saveItemBtn');
   const originalText = saveBtn.textContent;
 
-  // Manual validation (works on mobile)
   const name = $('i-name').value.trim();
   const price = parseFloat($('i-price').value);
   const category = $('i-cat').value.trim();
 
-  if (!name) { toast('Please enter a name'); $('i-name').focus(); return; }
-  if (!category) { toast('Please enter a category'); $('i-cat').focus(); return; }
-  if (!price || price <= 0) { toast('Please enter a valid price'); $('i-price').focus(); return; }
+  if (!name) { toast('Please enter a name', 'red'); $('i-name').focus(); return; }
+  if (!category) { toast('Please enter a category', 'red'); $('i-cat').focus(); return; }
+  if (!price || price <= 0) { toast('Please enter a valid price', 'red'); $('i-price').focus(); return; }
 
   saveBtn.disabled = true;
   saveBtn.textContent = 'Saving...';
@@ -962,7 +984,7 @@ $('saveItemBtn').onclick = async () => {
       try {
         imgUrl = await uploadImg(pendingImg);
       } catch (err) {
-        toast('Photo upload failed: ' + err.message);
+        toast('Photo upload failed: ' + err.message, 'red');
         saveBtn.disabled = false;
         saveBtn.textContent = originalText;
         return;
@@ -994,52 +1016,36 @@ $('saveItemBtn').onclick = async () => {
       const match = oldImageUrl.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.\w+)?$/);
       if (match && match[1]) {
         try {
-          await api('/admin/menu/delete-image', {
-            method: 'POST',
-            body: JSON.stringify({ public_id: match[1] })
-          });
-        } catch (err) {
-          console.error('Old image cleanup failed:', err);
-        }
+          await api('/admin/menu/delete-image', { method: 'POST', body: JSON.stringify({ public_id: match[1] }) });
+        } catch (err) { console.error('Old image cleanup failed:', err); }
       }
     }
 
     $('itemModal').classList.remove('on');
-    toast('Saved ✓', true);
+    toast('Saved ✓', 'green');
     loadMenu();
   } catch (err) {
     console.error('Save error:', err);
-    toast('Failed: ' + err.message);
+    toast('Failed: ' + err.message, 'red');
   } finally {
     saveBtn.disabled = false;
     saveBtn.textContent = originalText;
   }
 };
 
-// Also allow Enter key in the form to trigger save (but not inside textarea)
-$('itemForm').addEventListener('keydown', e => {
-  if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-    e.preventDefault();
-    $('saveItemBtn').click();
-  }
-});
+// Prevent form submit (page reload) if user presses Enter
+$('itemForm').onsubmit = e => { e.preventDefault(); $('saveItemBtn').click(); };
 
-// Prevent default form submit (so mobile "Go" button doesn't reload page)
-$('itemForm').onsubmit = e => {
-  e.preventDefault();
-  $('saveItemBtn').click();
-};
-
-  $('itemModal').classList.remove('on');
-  toast('Saved', true); loadMenu();
-};
-
+// Settings form save
 $('setForm').onsubmit = saveSettings;
 
+// ========== AUTO-LOGIN ON LOAD ==========
 (async () => {
   if (token && slug) {
-    try { const r = await api('/admin/settings'); startAdmin(r.name); }
-    catch { logout(); }
+    try {
+      const r = await api('/admin/settings');
+      startAdmin(r.name);
+    } catch { logout(); }
   }
 })();
 </script>
