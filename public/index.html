@@ -175,37 +175,18 @@ a{color:inherit}
 .nav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .nav-item.flash .icn{animation:pulseGold 1s ease}
 
-/* Center Menu button — raised circle, gold */
-.nav-item.nav-center{
-  margin-top:-28px;
-  color:var(--navy);
-}
+/* Center Menu button — simple, gold tint */
 .nav-item.nav-center .icn{
-  width:60px;height:60px;
-  border-radius:50%;
-  background:linear-gradient(145deg,var(--gold-2),var(--gold));
-  color:var(--navy);
-  box-shadow:
-    0 6px 0 var(--gold-3),
-    0 10px 24px rgba(201,169,97,.45),
-    inset 0 2px 3px rgba(255,255,255,.5);
-  border:3px solid var(--navy);
-  transition:transform .18s ease;
-  animation:floaty 3s ease-in-out infinite;
-}
-.nav-item.nav-center .icn svg{width:26px;height:26px;stroke-width:2}
-.nav-item.nav-center:active .icn{
-  transform:translateY(3px);
-  box-shadow:
-    0 3px 0 var(--gold-3),
-    0 6px 14px rgba(201,169,97,.35),
-    inset 0 2px 3px rgba(255,255,255,.5);
+  color:var(--gold);
 }
 .nav-item.nav-center .lbl{
   color:var(--gold);
   font-weight:800;
-  margin-top:2px;
-  letter-spacing:.08em;
+}
+.nav-item.nav-center.on .icn,
+.nav-item.nav-center:hover .icn,
+.nav-item.nav-center:active .icn{
+  color:var(--gold-2);
 }
 
 /* ========== BILL / RECEIPT MODAL ========== */
