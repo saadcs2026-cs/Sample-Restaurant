@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin - My Café</title>
+<title>Admin — My Café</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#0a1628;--gold:#c9a961;--gold-2:#e0c584;--gold-3:#a8874a;
+  --navy:#0a1628;--navy-2:#0f2038;--gold:#c9a961;--gold-2:#e0c584;--gold-3:#a8874a;
   --cream:#f7f3ea;--cream-2:#ebe4d3;--ink:#121212;--muted:#7a7264;--line:#e2d9c5;
   --white:#ffffff;--green:#3d6b4a;--green-2:#4a8a5c;--red:#b8443a;--orange:#d97706;
 }
@@ -21,7 +21,9 @@ input,select,textarea{font-family:inherit}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes popIn{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 @keyframes pulseRed{0%,100%{box-shadow:0 0 0 0 rgba(184,68,58,.5)}50%{box-shadow:0 0 0 12px rgba(184,68,58,0)}}
+@keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 
+/* ========== LOGIN ========== */
 .login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--navy)}
 .lcard{background:var(--white);border-radius:20px;padding:36px 28px;max-width:400px;width:100%;animation:popIn .4s ease both}
 .lcard .brand{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:.16em;font-size:.72rem;color:var(--gold-3);text-transform:uppercase;margin-bottom:24px;text-align:center}
@@ -33,23 +35,100 @@ input,select,textarea{font-family:inherit}
 .lcard .lbtn:hover{background:var(--gold);color:var(--navy)}
 .lerr{color:var(--red);font-size:.85rem;margin-top:12px;text-align:center;min-height:18px}
 
-.app{display:none;min-height:100vh;padding-bottom:90px}
+/* ========== APP ========== */
+.app{display:none;min-height:100vh;padding-bottom:100px}
 .app.on{display:block}
 
-.topbar{background:var(--navy);color:var(--white);padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;position:sticky;top:0;z-index:60;border-bottom:1px solid rgba(201,169,97,.15)}
+/* ========== TOPBAR ========== */
+.topbar{
+  background:var(--navy);color:var(--white);
+  padding:14px 20px;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:60;
+  border-bottom:1px solid rgba(201,169,97,.15);
+}
 .topbar-left{display:flex;align-items:center;gap:12px;min-width:0}
-.topbar .brand{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:.08em;font-size:.9rem;color:var(--white);text-transform:uppercase;white-space:nowrap}
-.topbar .brand .dot{color:var(--gold)}
-.topbar .rname{font-size:.8rem;color:rgba(255,255,255,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
-.topbar-right{display:flex;align-items:center;gap:8px}
-.logout{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:var(--white);display:flex;align-items:center;justify-content:center}
+.brand-mark{
+  width:38px;height:38px;border-radius:12px;
+  background:var(--gold);color:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Archivo',sans-serif;font-weight:900;font-size:.9rem;
+  letter-spacing:-.02em;
+  flex-shrink:0;
+}
+.brand-info{display:flex;flex-direction:column;min-width:0;line-height:1.2}
+.brand-info .rname{
+  font-family:'Archivo',sans-serif;font-weight:800;font-size:.95rem;
+  color:var(--white);letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:200px;
+}
+.brand-info .rsub{
+  font-size:.68rem;color:rgba(255,255,255,.45);
+  letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+}
 
+/* Desktop-only center status area */
+.topbar-center{display:none;align-items:center;gap:10px;flex:1;justify-content:center}
+.status-chip{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 14px;border-radius:99px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  font-size:.78rem;color:rgba(255,255,255,.75);
+  font-weight:600;
+}
+.status-chip strong{color:var(--white);font-weight:800}
+.status-chip .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green-2);
+  box-shadow:0 0 0 3px rgba(74,138,92,.25);
+}
+.status-chip.alert{
+  background:rgba(184,68,58,.15);
+  border-color:rgba(184,68,58,.4);
+  color:var(--gold-2);
+}
+.status-chip.alert strong{color:var(--white)}
+.status-chip.alert .dot{
+  background:var(--red);
+  box-shadow:0 0 0 3px rgba(184,68,58,.3);
+  animation:pulseRed 1.6s ease infinite;
+}
+
+.topbar-right{display:flex;align-items:center;gap:8px}
+.logout{
+  padding:9px 16px;border-radius:10px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.1);
+  color:var(--white);
+  font-size:.78rem;font-weight:700;letter-spacing:.04em;
+  display:flex;align-items:center;gap:6px;
+  transition:background .15s;
+}
+.logout:hover{background:rgba(255,255,255,.14)}
+.logout svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ========== RAIL (desktop) ========== */
 .rail{display:none}
-.rail-btn{padding:10px 16px;border-radius:10px;color:rgba(255,255,255,.6);font-size:.85rem;font-weight:600;text-align:left;display:flex;align-items:center;gap:12px;transition:all .18s;width:100%}
+.rail-btn{
+  padding:11px 16px;border-radius:10px;
+  color:rgba(255,255,255,.6);font-size:.85rem;font-weight:600;
+  text-align:left;display:flex;align-items:center;gap:12px;
+  transition:all .18s;width:100%;position:relative;
+}
 .rail-btn:hover{background:rgba(255,255,255,.05);color:var(--white)}
 .rail-btn.on{background:rgba(201,169,97,.12);color:var(--gold)}
 .rail-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.rail-btn .rail-badge{
+  margin-left:auto;
+  background:var(--red);color:#fff;
+  font-size:.62rem;font-weight:800;
+  border-radius:99px;padding:2px 7px;
+  min-width:20px;text-align:center;
+}
 
+/* ========== CONTENT ========== */
 .content{padding:22px;max-width:1200px;margin:0 auto}
 .view{display:none;animation:fadeUp .35s ease both}
 .view.on{display:block}
@@ -71,15 +150,70 @@ input,select,textarea{font-family:inherit}
 .toolbar .danger{background:var(--red);color:var(--white);border-color:var(--red)}
 .toolbar .danger:hover{background:#8f2f27;border-color:#8f2f27}
 
-.reqs-banner{background:linear-gradient(90deg,rgba(184,68,58,.06),rgba(184,68,58,.02));border:1px solid rgba(184,68,58,.35);border-radius:14px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;animation:pulseRed 1.6s ease infinite}
-.reqs-banner.empty{display:none}
-.reqs-banner .rb-icon{width:40px;height:40px;flex-shrink:0;border-radius:10px;background:var(--red);color:var(--white);display:flex;align-items:center;justify-content:center}
-.reqs-banner .rb-body{flex:1;min-width:0}
-.reqs-banner .rb-title{font-family:'Archivo',sans-serif;font-weight:800;font-size:.92rem;color:var(--red);margin-bottom:2px}
-.reqs-banner .rb-list{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-.req-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--white);border-radius:99px;font-size:.78rem;font-weight:600;color:var(--ink);border:1px solid var(--line)}
-.req-chip button{background:var(--red);color:var(--white);border-radius:99px;padding:4px 12px;font-size:.72rem;font-weight:800;margin-left:6px}
+/* ========== SERVICE REQUESTS — PER TABLE ========== */
+.reqs-section{margin-bottom:18px}
+.reqs-section.empty{display:none}
+.reqs-head{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Archivo',sans-serif;font-weight:800;font-size:.92rem;
+  color:var(--red);margin-bottom:10px;
+}
+.reqs-head .live-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--red);
+  animation:pulseRed 1.4s ease infinite;
+}
+.reqs-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:10px;
+}
+.req-table-card{
+  background:var(--white);
+  border:1.5px solid rgba(184,68,58,.35);
+  border-radius:14px;
+  padding:14px 16px;
+  animation:fadeUp .35s ease both;
+  position:relative;
+}
+.req-table-card::before{
+  content:'';position:absolute;top:0;left:0;width:4px;height:100%;
+  background:var(--red);border-radius:14px 0 0 14px;
+}
+.req-table-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:10px;
+}
+.req-table-num{
+  font-family:'Archivo',sans-serif;font-weight:900;
+  font-size:1.05rem;letter-spacing:-.01em;color:var(--navy);
+}
+.req-table-num span{
+  font-size:.62rem;font-weight:800;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);
+  display:block;margin-bottom:2px;
+}
+.req-table-time{font-size:.7rem;color:var(--muted)}
+.req-actions{display:flex;flex-direction:column;gap:6px}
+.req-action-btn{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 12px;border-radius:9px;
+  background:var(--cream);
+  font-size:.8rem;font-weight:700;
+  transition:all .15s;
+  border:1px solid transparent;
+}
+.req-action-btn:hover{background:var(--cream-2)}
+.req-action-btn.call{border-color:rgba(217,119,6,.3)}
+.req-action-btn.bill{border-color:rgba(184,68,58,.3)}
+.req-action-btn .label{display:flex;align-items:center;gap:6px}
+.req-action-btn .done{
+  background:var(--navy);color:var(--white);
+  border-radius:6px;padding:3px 10px;font-size:.68rem;font-weight:800;
+}
+.req-action-btn .done:hover{background:var(--gold);color:var(--navy)}
 
+/* ========== ORDERS ========== */
 .orders-list{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:900px){.orders-list{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1300px){.orders-list{grid-template-columns:repeat(3,1fr)}}
@@ -130,35 +264,68 @@ input,select,textarea{font-family:inherit}
 .oc-actions .end{background:var(--white);color:var(--red);border:2px solid rgba(184,68,58,.35);padding:11px 18px}
 .oc-actions .end:hover{background:var(--red);color:var(--white);border-color:var(--red)}
 
-.orders-list.list-view{display:flex;flex-direction:column;gap:6px}
+/* ========== LIST VIEW (compact rows) ========== */
+.orders-list.list-view{display:flex;flex-direction:column;gap:8px}
 .orders-list.list-view .order-card{
   display:grid;
-  grid-template-columns:80px 100px 1fr auto auto;
+  grid-template-columns:70px 90px 1fr 100px auto;
   align-items:center;
-  gap:16px;
-  padding:14px 18px;
+  gap:18px;
+  padding:16px 20px;
   border-radius:12px;
 }
 .orders-list.list-view .order-card::before{width:3px}
-.orders-list.list-view .oc-table-num{font-size:1.6rem}
-.orders-list.list-view .oc-table-label{display:none}
-.orders-list.list-view .oc-side{flex-direction:row;align-items:center;gap:10px;justify-content:flex-end}
+.orders-list.list-view .oc-top{display:contents}
+.orders-list.list-view .oc-table-block{display:flex;flex-direction:column}
+.orders-list.list-view .oc-table-label{font-size:.58rem;letter-spacing:.18em}
+.orders-list.list-view .oc-table-num{font-size:1.5rem}
+.orders-list.list-view .oc-side{
+  grid-column:2;
+  flex-direction:row;align-items:center;gap:10px;justify-content:flex-start;
+}
+.orders-list.list-view .oc-order-num{font-size:.82rem}
+.orders-list.list-view .oc-status{font-size:.56rem;padding:4px 9px}
+.orders-list.list-view .oc-time{font-size:.68rem}
 .orders-list.list-view .oc-items{
+  grid-column:3;
   padding:0;background:transparent;
   flex-direction:row;flex-wrap:wrap;gap:4px 12px;border-radius:0;
+  overflow:hidden;
 }
-.orders-list.list-view .oc-items li{font-size:.78rem;gap:4px}
-.orders-list.list-view .oc-foot{flex-direction:row;gap:12px}
-.orders-list.list-view .oc-total{font-size:1.05rem}
-.orders-list.list-view .oc-actions button{padding:9px 14px;font-size:.78rem;box-shadow:none}
+.orders-list.list-view .oc-items li{font-size:.78rem;gap:4px;flex:0 0 auto}
+.orders-list.list-view .oc-foot{display:contents}
+.orders-list.list-view .oc-total{
+  grid-column:4;
+  font-size:1.05rem;text-align:right;
+}
+.orders-list.list-view .oc-actions{
+  grid-column:5;
+  flex-wrap:nowrap;
+  gap:6px;
+}
+.orders-list.list-view .oc-actions button{padding:9px 14px;font-size:.78rem;box-shadow:none;border-radius:8px}
 .orders-list.list-view .oc-actions .take{box-shadow:none}
-@media(max-width:700px){
-  .orders-list.list-view .order-card{grid-template-columns:60px 1fr auto;gap:10px;padding:12px 14px}
-  .orders-list.list-view .oc-side{grid-column:3}
-  .orders-list.list-view .oc-items{display:none}
+.orders-list.list-view .oc-actions .end{padding:8px 12px}
+
+@media(max-width:900px){
+  .orders-list.list-view .order-card{
+    grid-template-columns:1fr auto;
+    grid-template-areas:
+      "table side"
+      "items items"
+      "foot foot";
+    gap:10px;padding:14px;
+  }
+  .orders-list.list-view .oc-table-block{grid-area:table}
   .orders-list.list-view .oc-table-num{font-size:1.4rem}
+  .orders-list.list-view .oc-side{grid-area:side;grid-column:auto;flex-direction:row;align-items:center;gap:8px;justify-content:flex-end}
+  .orders-list.list-view .oc-items{grid-area:items;grid-column:auto;flex-direction:column;gap:4px;padding:10px 12px;background:var(--cream);border-radius:10px}
+  .orders-list.list-view .oc-foot{display:flex;grid-area:foot;flex-direction:row;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .orders-list.list-view .oc-total{grid-column:auto;font-size:1.15rem;text-align:left}
+  .orders-list.list-view .oc-actions{grid-column:auto;flex-wrap:wrap}
 }
 
+/* ========== MENU ========== */
 .addbtn{padding:13px 24px;background:var(--navy);color:var(--white);border-radius:12px;font-size:.9rem;font-weight:800;letter-spacing:.02em;display:inline-flex;align-items:center;gap:8px;box-shadow:0 3px 0 #050d17;transition:all .15s}
 .addbtn:hover{background:var(--gold);color:var(--navy);box-shadow:0 3px 0 var(--gold-3)}
 .addbtn:active{transform:translateY(2px);box-shadow:none}
@@ -185,6 +352,7 @@ input,select,textarea{font-family:inherit}
 .menu-card .acts button.del{color:var(--red);border-color:rgba(184,68,58,.3)}
 .menu-card .acts button.del:hover{background:var(--red);color:var(--white);border-color:var(--red)}
 
+/* ========== ANALYTICS ========== */
 .stats-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:20px}
 @media(min-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1000px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
@@ -203,6 +371,7 @@ input,select,textarea{font-family:inherit}
 .top-qty{font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;color:var(--navy)}
 .top-rev{font-family:'Archivo',sans-serif;font-weight:800;font-size:.88rem;color:var(--gold-3);min-width:80px;text-align:right}
 
+/* ========== TABLES ========== */
 .tables-toolbar{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap;justify-content:space-between}
 .tables-toolbar .info{font-size:.85rem;color:var(--muted)}
 .tables-toolbar .info strong{font-family:'Archivo',sans-serif;font-weight:900;color:var(--navy);font-size:1rem}
@@ -231,6 +400,7 @@ input,select,textarea{font-family:inherit}
 .tc-actions .remove{background:var(--white);color:var(--red);border:1.5px solid rgba(184,68,58,.3)}
 .tc-actions .remove:hover{background:var(--red);color:var(--white);border-color:var(--red)}
 
+/* ========== SETTINGS ========== */
 .settings-form{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px;max-width:720px}
 .form-row{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px}
 @media(min-width:600px){.form-row.two{grid-template-columns:1fr 1fr}}
@@ -246,6 +416,7 @@ input,select,textarea{font-family:inherit}
 .save-btn:hover{background:var(--gold);color:var(--navy);box-shadow:0 3px 0 var(--gold-3)}
 .save-btn:active{transform:translateY(2px);box-shadow:none}
 
+/* ========== MODAL ========== */
 .ov{position:fixed;inset:0;background:rgba(10,22,40,.7);display:none;align-items:center;justify-content:center;z-index:300;padding:20px;backdrop-filter:blur(6px)}
 .ov.on{display:flex}
 .mod{background:var(--white);border-radius:20px;padding:28px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;animation:popIn .3s ease both}
@@ -268,23 +439,119 @@ input,select,textarea{font-family:inherit}
 .img-preview{margin-top:10px}
 .img-preview img{max-width:180px;border-radius:10px;border:1px solid var(--line)}
 
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--navy);border-top:1px solid rgba(201,169,97,.15);padding:6px 0 max(6px,env(safe-area-inset-bottom));z-index:90;display:grid;grid-template-columns:repeat(5,1fr);max-width:720px;margin:0 auto}
-@media(min-width:900px){.bottom-nav{display:none}}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;color:rgba(255,255,255,.55);font-size:.6rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;transition:color .18s}
-.nav-item.on,.nav-item:hover{color:var(--gold)}
-.nav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+/* ========== BOTTOM NAV (mobile/tablet only) ========== */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  height:66px;
+  background:var(--navy);
+  border-top:1px solid rgba(201,169,97,.15);
+  padding-bottom:env(safe-area-inset-bottom,0);
+  z-index:90;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  max-width:720px;margin:0 auto;
+  overflow:visible;
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  color:rgba(255,255,255,.55);
+  font-size:.6rem;font-weight:600;letter-spacing:.05em;
+  transition:color .18s ease;text-transform:uppercase;
+  background:transparent;position:relative;
+}
+.nav-item:hover,.nav-item:active,.nav-item.on{color:var(--gold)}
+.nav-item .icn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;position:relative}
+.nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
+/* Notification dot on icon */
+.nav-badge{
+  position:absolute;top:-4px;right:-8px;
+  background:var(--red);color:#fff;
+  font-size:.58rem;font-weight:800;
+  border-radius:99px;padding:1px 5px;
+  min-width:16px;text-align:center;line-height:1.4;
+  border:2px solid var(--navy);
+  display:none;
+}
+.nav-badge.show{display:block;animation:badgePulse 2s ease infinite}
+
+/* Center circle slot */
+.nav-center-slot{
+  position:relative;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:9px;
+}
+.nav-center-slot::before{
+  content:'';
+  position:absolute;top:0;left:50%;
+  width:52px;height:52px;border-radius:50%;
+  background:var(--cream);
+  transform:translate(-50%,-50%);
+  z-index:0;pointer-events:none;
+}
+.circle-btn{
+  position:absolute;top:0;left:50%;
+  width:44px;height:44px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:var(--gold);color:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  border:0;
+  box-shadow:0 4px 10px rgba(201,169,97,.35);
+  z-index:1;
+  transition:transform .15s ease;
+  cursor:pointer;padding:0;
+}
+.circle-btn:active{transform:translate(-50%,-50%) scale(.92)}
+.circle-btn.on{background:var(--gold-2)}
+.circle-btn svg{
+  width:22px;height:22px;
+  stroke:currentColor;fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+}
+.circle-btn .circle-badge{
+  position:absolute;top:-3px;right:-3px;
+  background:var(--red);color:#fff;
+  font-size:.6rem;font-weight:800;
+  border-radius:99px;padding:2px 6px;
+  min-width:18px;text-align:center;
+  border:2px solid var(--cream);
+  display:none;
+}
+.circle-btn .circle-badge.show{display:block;animation:badgePulse 2s ease infinite}
+.menu-lbl{
+  position:relative;z-index:1;
+  color:var(--gold);
+  font-size:.6rem;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+/* ========== DESKTOP ========== */
 @media(min-width:900px){
   .app{display:grid !important;grid-template-columns:220px 1fr;grid-template-rows:auto 1fr;grid-template-areas:"rail top" "rail content";min-height:100vh;padding-bottom:0}
   .app.on{display:grid !important}
-  .topbar{grid-area:top;position:sticky;top:0}
-  .rail{grid-area:rail;display:flex;flex-direction:column;background:var(--navy);padding:20px 12px;gap:4px;border-right:1px solid rgba(201,169,97,.15);position:sticky;top:0;height:100vh}
-  .rail .rail-brand{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:.1em;font-size:.75rem;color:var(--gold);text-transform:uppercase;padding:8px 16px 20px;border-bottom:1px solid rgba(201,169,97,.15);margin-bottom:14px}
-  .content{grid-area:content;max-width:none}
+  .topbar{grid-area:top;position:sticky;top:0;padding:16px 28px}
+  .topbar-center{display:flex}
+  .rail{
+    grid-area:rail;display:flex;flex-direction:column;
+    background:var(--navy);
+    padding:20px 12px;gap:4px;
+    border-right:1px solid rgba(201,169,97,.15);
+    position:sticky;top:0;height:100vh;
+  }
+  .rail .rail-brand{
+    font-family:'Archivo',sans-serif;font-weight:900;
+    letter-spacing:.1em;font-size:.75rem;color:var(--gold);
+    text-transform:uppercase;
+    padding:8px 16px 20px;
+    border-bottom:1px solid rgba(201,169,97,.15);
+    margin-bottom:14px;
+  }
+  .content{grid-area:content;max-width:none;padding:28px}
   .bottom-nav{display:none !important}
 }
 
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:var(--white);padding:13px 22px;border-radius:12px;font-size:.85rem;font-weight:600;opacity:0;transition:all .3s;z-index:500;pointer-events:none;border:1px solid rgba(201,169,97,.3);max-width:calc(100% - 40px);text-align:center}
+/* ========== TOAST ========== */
+.toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:var(--white);padding:13px 22px;border-radius:12px;font-size:.85rem;font-weight:600;opacity:0;transition:all .3s;z-index:500;pointer-events:none;border:1px solid rgba(201,169,97,.3);max-width:calc(100% - 40px);text-align:center}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.green{background:var(--green);border-color:var(--green-2)}
 .toast.red{background:var(--red);border-color:#8f2f27}
@@ -295,11 +562,12 @@ input,select,textarea{font-family:inherit}
 </head>
 <body>
 
+<!-- ========== LOGIN ========== -->
 <div class="login" id="loginView">
   <div class="lcard">
     <div class="brand">— ADMIN PANEL —</div>
     <h1>Welcome back</h1>
-    <p>Sign in to manage your restaurant</p>
+    <p>Sign in to manage My Café</p>
     <input id="lslug" placeholder="Restaurant slug" autocomplete="username">
     <input id="lpass" type="password" placeholder="Password" autocomplete="current-password">
     <button class="lbtn" id="lbtn">Sign In</button>
@@ -307,12 +575,14 @@ input,select,textarea{font-family:inherit}
   </div>
 </div>
 
+<!-- ========== APP ========== -->
 <div class="app" id="app">
   <aside class="rail">
-    <div class="rail-brand">· ADMIN ·</div>
+    <div class="rail-brand">· MY CAFÉ ·</div>
     <button class="rail-btn on" data-v="orders">
       <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
       <span>Orders</span>
+      <span class="rail-badge" id="railOrdersBadge" style="display:none">0</span>
     </button>
     <button class="rail-btn" data-v="analytics">
       <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
@@ -334,12 +604,26 @@ input,select,textarea{font-family:inherit}
 
   <header class="topbar">
     <div class="topbar-left">
-      <div class="brand"><span class="dot"></span></div>
-      <div class="rname" id="rname">—</div>
+      <div class="brand-mark">MC</div>
+      <div class="brand-info">
+        <div class="rname" id="rname">My Café</div>
+        <div class="rsub">Admin Panel</div>
+      </div>
+    </div>
+    <div class="topbar-center">
+      <div class="status-chip" id="statusOrders">
+        <span class="dot"></span>
+        <span><strong id="activeCount">0</strong> active orders</span>
+      </div>
+      <div class="status-chip alert" id="statusRequests" style="display:none">
+        <span class="dot"></span>
+        <span><strong id="requestCount">0</strong> service requests</span>
+      </div>
     </div>
     <div class="topbar-right">
       <button class="logout" id="logoutBtn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Logout</span>
       </button>
     </div>
   </header>
@@ -367,14 +651,12 @@ input,select,textarea{font-family:inherit}
         <button id="clearDayBtn" class="danger">Clear All Orders</button>
       </div>
 
-      <div class="reqs-banner empty" id="reqsBanner">
-        <div class="rb-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <div class="reqs-section empty" id="reqsSection">
+        <div class="reqs-head">
+          <span class="live-dot"></span>
+          <span id="reqsHeadTxt">Service Requests</span>
         </div>
-        <div class="rb-body">
-          <div class="rb-title" id="reqsTitle">Service Requests</div>
-          <div class="rb-list" id="reqsList"></div>
-        </div>
+        <div class="reqs-grid" id="reqsGrid"></div>
       </div>
 
       <div class="orders-list" id="ordersList"></div>
@@ -499,30 +781,46 @@ input,select,textarea{font-family:inherit}
     </section>
   </main>
 
-  <nav class="bottom-nav">
-    <button class="nav-item on" data-v="orders">
-      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      <span>Orders</span>
-    </button>
+  <!-- Bottom nav — mobile/tablet only. Orders in the middle. -->
+  <nav class="bottom-nav" id="bottomNav">
     <button class="nav-item" data-v="analytics">
-      <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+      <span class="icn">
+        <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+      </span>
       <span>Stats</span>
     </button>
     <button class="nav-item" data-v="menu">
-      <svg viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2z"/></svg>
+      <span class="icn">
+        <svg viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2z"/></svg>
+      </span>
       <span>Menu</span>
     </button>
+    <div class="nav-center-slot">
+      <button class="circle-btn" id="navOrders" aria-label="Orders">
+        <svg viewBox="0 0 24 24">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+        <span class="circle-badge" id="navOrdersBadge"></span>
+      </button>
+      <span class="menu-lbl">Orders</span>
+    </div>
     <button class="nav-item" data-v="tables">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span class="icn">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </span>
       <span>QR</span>
     </button>
     <button class="nav-item" data-v="settings">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span class="icn">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </span>
       <span>Settings</span>
     </button>
   </nav>
 </div>
 
+<!-- ========== ITEM MODAL ========== -->
 <div class="ov" id="itemModal">
   <div class="mod">
     <h2 id="imTitle">Add Menu Item</h2>
@@ -645,6 +943,11 @@ async function loadOrders() {
     const s = $('fs').value;
     const orders = await api('/admin/orders' + (s ? '?status=' + s : ''));
     const list = $('ordersList');
+
+    // Update desktop status chip + nav badge with pending count
+    const pendingCount = orders.filter(o => o.status === 'pending').length;
+    updatePendingBadge(pendingCount);
+
     if (!orders.length) {
       list.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="big">🧾</div><div>No orders yet</div></div>';
       lastOrderCount = 0; return;
@@ -712,6 +1015,21 @@ async function loadOrders() {
   } catch (e) { toast(e.message, 'red'); }
 }
 
+function updatePendingBadge(count) {
+  // Desktop status chip
+  $('activeCount').textContent = count;
+
+  // Rail badge
+  const railBadge = $('railOrdersBadge');
+  if (count > 0) { railBadge.textContent = count; railBadge.style.display = 'inline-block'; }
+  else railBadge.style.display = 'none';
+
+  // Bottom nav circle badge
+  const circleBadge = $('navOrdersBadge');
+  if (count > 0) { circleBadge.textContent = count; circleBadge.classList.add('show'); }
+  else circleBadge.classList.remove('show');
+}
+
 async function clearDay() {
   if (!confirm('Clear all orders? They will be archived. New orders will start from #1.')) return;
   try {
@@ -724,19 +1042,60 @@ async function clearDay() {
 async function loadRequests() {
   try {
     const reqs = await api('/admin/requests');
-    const banner = $('reqsBanner');
-    const list = $('reqsList');
-    if (!reqs.length) { banner.classList.add('empty'); lastReqCount = 0; return; }
+    const section = $('reqsSection');
+    const grid = $('reqsGrid');
+
+    // Desktop status chip
+    if (reqs.length > 0) {
+      $('statusRequests').style.display = 'flex';
+      $('requestCount').textContent = reqs.length;
+    } else {
+      $('statusRequests').style.display = 'none';
+    }
+
+    if (!reqs.length) {
+      section.classList.add('empty');
+      lastReqCount = 0;
+      return;
+    }
     if (lastReqCount > 0 && reqs.length > lastReqCount) audio.play().catch(() => {});
     lastReqCount = reqs.length;
-    banner.classList.remove('empty');
-    list.innerHTML = reqs.map(r => `
-      <span class="req-chip">
-        ${r.type === 'call_waiter' ? '🔔 Waiter' : '🧾 Bill'} · Table ${esc(r.table_num)}
-        <button data-id="${r.id}">Done</button>
-      </span>
-    `).join('');
-    list.querySelectorAll('button').forEach(b => {
+    section.classList.remove('empty');
+
+    // Group by table
+    const byTable = {};
+    for (const r of reqs) {
+      const key = r.table_num;
+      if (!byTable[key]) byTable[key] = [];
+      byTable[key].push(r);
+    }
+
+    const tableNums = Object.keys(byTable).sort((a, b) => parseInt(a) - parseInt(b));
+    $('reqsHeadTxt').textContent = `Service Requests — ${tableNums.length} table${tableNums.length > 1 ? 's' : ''}`;
+
+    grid.innerHTML = tableNums.map(num => {
+      const items = byTable[num];
+      const latestTime = items.reduce((max, r) => Math.max(max, new Date(r.created_at).getTime()), 0);
+      const timeStr = new Date(latestTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return `
+        <div class="req-table-card">
+          <div class="req-table-head">
+            <div class="req-table-num"><span>Table</span>${esc(num)}</div>
+            <div class="req-table-time">${timeStr}</div>
+          </div>
+          <div class="req-actions">
+            ${items.map(r => `
+              <div class="req-action-btn ${r.type === 'call_waiter' ? 'call' : 'bill'}">
+                <span class="label">${r.type === 'call_waiter' ? '🔔 Call Waiter' : '🧾 Request Bill'}</span>
+                <button class="done" data-id="${r.id}">Done</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    grid.querySelectorAll('.done').forEach(b => {
       b.onclick = async () => {
         try { await api('/admin/requests/' + b.dataset.id, { method: 'PATCH' }); loadRequests(); }
         catch (e) { toast(e.message, 'red'); }
@@ -923,6 +1282,7 @@ async function saveSettings(e) {
 
 function switchView(v) {
   document.querySelectorAll('.rail-btn, .nav-item').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  $('navOrders').classList.toggle('on', v === 'orders');
   document.querySelectorAll('.view').forEach(x => x.classList.remove('on'));
   $('v-' + v).classList.add('on');
   if (v === 'menu') loadMenu();
@@ -936,6 +1296,7 @@ function switchView(v) {
 document.querySelectorAll('.rail-btn, .nav-item').forEach(b => {
   b.onclick = () => switchView(b.dataset.v);
 });
+$('navOrders').onclick = () => switchView('orders');
 
 $('lbtn').onclick = login;
 $('lpass').onkeydown = e => { if (e.key === 'Enter') login(); };
@@ -958,7 +1319,7 @@ $('i-img').onchange = e => {
   rd.readAsDataURL(f);
 };
 
-// ========== SAVE MENU ITEM (button click — works on mobile) ==========
+// Save menu item — button click (works on mobile)
 $('saveItemBtn').onclick = async () => {
   const saveBtn = $('saveItemBtn');
   const originalText = saveBtn.textContent;
@@ -1011,7 +1372,6 @@ $('saveItemBtn').onclick = async () => {
       await api('/admin/menu', { method: 'POST', body: JSON.stringify(body) });
     }
 
-    // Delete old Cloudinary image after successful save
     if (pendingImg && oldImageUrl) {
       const match = oldImageUrl.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.\w+)?$/);
       if (match && match[1]) {
@@ -1033,13 +1393,10 @@ $('saveItemBtn').onclick = async () => {
   }
 };
 
-// Prevent form submit (page reload) if user presses Enter
 $('itemForm').onsubmit = e => { e.preventDefault(); $('saveItemBtn').click(); };
-
-// Settings form save
 $('setForm').onsubmit = saveSettings;
 
-// ========== AUTO-LOGIN ON LOAD ==========
+// ========== AUTO-LOGIN ==========
 (async () => {
   if (token && slug) {
     try {
